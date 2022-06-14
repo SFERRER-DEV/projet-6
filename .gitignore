@@ -1,3 +1,7 @@
 assets/
+node_modules/
 .vscode/settings.json
 .vscode/launch.json
+package.json
+package-lock.json
+.eslintrc.json
