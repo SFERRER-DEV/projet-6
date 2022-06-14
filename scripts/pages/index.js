@@ -1,4 +1,4 @@
-import * as fac from "/scripts/factories/photographer.js";
+import * as fac from "./../factories/photographer.js";
 
 /**
  * Faire un appel au serveur pour obtenir
