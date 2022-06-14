@@ -6,7 +6,7 @@ import * as fac from "./../factories/photographer.js";
  * @returns {Array.<{city:string, country: string, id: number, name: string, portrait: string, price: number, tagline: string}>)
  */
 const _retrievePhotographersLocalData = () =>
-  fetch("./../data/photographers.json")
+  fetch("data/photographers.json")
     .then((res) => res.json())
     .then((data) => data.photographers)
     .catch((err) => console.log("Oh no", err));
