@@ -1,25 +1,15 @@
 import * as fac from "./../factories/photographer.js";
-
-/**
- * Faire un appel au serveur pour obtenir
- * la liste des photographes au format JSON
- * @returns {Array.<{city:string, country: string, id: number, name: string, portrait: string, price: number, tagline: string}>)
- */
-const _retrievePhotographersLocalData = () =>
-  fetch("data/photographers.json")
-    .then((res) => res.json())
-    .then((data) => data.photographers)
-    .catch((err) => console.log("Oh no", err));
+import singletonPhotograherApi from "../api/photographerApi.js";
+import singletonMeddiumApi from "../api/mediumApi.js";
 
 /**
  * Obtenir les données des photographes
  * @returns {Array.<{city:string, country: string, id: number, name: string, portrait: string, price: number, tagline: string}>)
  */
 async function getPhotographers() {
-  // Penser à remplacer par les données récupérées dans le json
-  const photographers = await _retrievePhotographersLocalData();
-
-  // et bien retourner le tableau photographers seulement une fois
+  // Obtenir les Photographes
+  const photographers = singletonPhotograherApi.getData();
+  // Retourner le tableau photographers seulement une fois
   return photographers;
 }
 
