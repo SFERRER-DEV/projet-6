@@ -50,7 +50,7 @@ export function photographerFactory(data) {
   const _addLink = (parent) => {
     const link = document.createElement("a");
     // création du lien pour acceder à la page du photographe
-    link.setAttribute("href", `/photographer?id=${id}`);
+    link.setAttribute("href", `/photographer.html?id=${id}`);
     link.setAttribute("aria-label", name);
     // Ajouter le lien vers la page du photgraphe
     parent.appendChild(link);
