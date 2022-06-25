@@ -1,0 +1,102 @@
+/*
+  Card HTML d'un photographe
+  .card-photograph__link__container : est la notation BEM spécifique dans la page index.hmtl. 
+                                      La Card contient un lien vers la page du photographe.
+  .card-photograph__container : est la notation BEM dans la page photographer.hmtl. 
+*/
+/* Article d'un photographe */
+.card-photograph {
+  justify-self: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+/* lien vers page photographe */
+.card-photograph__link {
+  text-decoration: none;
+}
+
+.card-photograph__link__container__heading:hover,
+.card-photograph__link__container__heading:focus {
+  color: black;
+}
+
+/* Conteneur dans le lien pour la photo et les infos du photographe */
+.card-photograph__link__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Nom */
+.card-photograph__container__heading,
+.card-photograph__link__container__heading {
+  display: flex;
+  justify-content: center;
+  color: #d3573c;
+  font-weight: 400;
+  margin-bottom: 0;
+}
+
+/* Nom sur index.html */
+.card-photograph__link__container__heading {
+  font-size: 2em;
+}
+
+/* Nom sur photographer.html */
+.card-photograph__container__heading {
+  font-size: 3em;
+  flex-basis: 100px;
+  width: 70%;
+  align-items: flex-end;
+  justify-content: flex-start;
+  margin: 0;
+}
+
+/* Portait */
+.card-photograph__link__container__portrait,
+.card-photograph__container__portrait {
+  height: 200px;
+  width: 200px;
+  object-fit: cover;
+  border-radius: 100%;
+  box-shadow: gray 0px 2px 6px 0px;
+}
+
+/* Ville, pays */
+.card-photograph__link__container__location,
+.card-photograph__container__location {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  font-size: 1.4em;
+  font-weight: 400;
+  color: #901c1c;
+}
+
+/* Ville, pays sur index.html */
+.card-photograph__link__container__location {
+  align-items: center;
+}
+
+/* Ville, pays sur photographer.html */
+.card-photograph__container__location {
+  flex-basis: 75px;
+  width: 70%;
+  justify-content: space-around;
+}
+
+/* Le slogan */
+.card-photograph__link__container__location__slogan,
+.card-photograph__container__location__slogan {
+  color: black;
+  font-size: 0.7em;
+}
+
+/* Le tarif jour */
+.card-photograph__link__container__location__tarif {
+  color: #525252;
+  font-size: 0.7em;
+}

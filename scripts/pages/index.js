@@ -1,6 +1,5 @@
 import * as fac from "./../factories/photographer.js";
 import singletonPhotograherApi from "../api/photographerApi.js";
-import singletonMeddiumApi from "../api/mediumApi.js";
 
 /**
  * Obtenir les données des photographes
@@ -15,22 +14,23 @@ async function getPhotographers() {
 
 /**
  * Afficher les données de tous les photographes
- * dans des html cards sur la page d'accueil
+ * dans des html cards sur la page d'accueil en utilisant
+ * la factory photographer
  * @param photographers - Une liste de photographes
  */
 async function displayData(photographers) {
   // Obtenir le conteneur html <div> pour l'affichage de la liste des photographes
-  const photographersSection = document.querySelector(".photographer_section");
+  const parent = document.querySelector(".photographer_section");
   // Parcourir la liste des photographes
   photographers.forEach((photographer) => {
     // Afficher les data du photographe lu sur la console
-    console.table(photographer);
-    // Créer l'usine pour instancier des cards html pour un photographe
-    const photographerModel = fac.photographerFactory(photographer);
-    // Créer une html card pour le photographe lu
-    const userCardDOM = photographerModel.getUserCardDOM();
-    // Ajouter la html card créée pour l'afficher dans la page html
-    photographersSection.appendChild(userCardDOM);
+    // console.table(photographer);
+    // Créer une fabrique pour instancier la card html du photographe lu
+    const photographerModel = fac.photographerFactory(photographer, parent);
+    // Créer une html card d'après le photographe lu en fonction du conteneur html parent
+    const userCardDOM = photographerModel.getUserCardDOM(parent);
+    // Ajouter la html card créée pour l'afficher dans la page
+    parent.appendChild(userCardDOM);
   });
 }
 
@@ -42,6 +42,7 @@ async function displayData(photographers) {
 async function init() {
   // Récupère les datas des photographes
   const photographers = await getPhotographers();
+  // Afficher les données
   displayData(photographers);
 }
 

@@ -29,37 +29,3 @@ h1 {
   gap: 70px;
   margin-top: 100px;
 }
-
-.photographer_section article {
-  justify-self: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
-.photographer_section article a {
-  text-decoration: none;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: #d3573c;
-}
-
-.photographer_section article a:hover,
-.photographer_section article a:focus {
-  color: black;
-}
-
-.photographer_section article h2 {
-  font-size: 36px;
-  margin-bottom: 0;
-}
-
-.photographer_section article img {
-  height: 200px;
-  width: 200px;
-  object-fit: cover;
-  border-radius: 100%;
-  box-shadow: gray 0px 2px 6px 0px;
-}
