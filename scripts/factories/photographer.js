@@ -1,3 +1,4 @@
+//import Photographer from "./../models/photographer.js";
 /** @type {Number} - Une constante utilisée pour gérer les deux affichage de la Card Photographe */
 const DIRECTION = {
   VERTICAL: 0,
@@ -12,15 +13,15 @@ const DIRECTION = {
  *  - la présentation est horizontale pour la page photographer.html.
  * La notation BEM des classes des éléments HTML de la card est spécifique d'une page à l'autre.
  *
- * @param  {Object} data - les données d'un photographe
+ * @param  {Photographer} myPhotographer - Un objet de la classe photographe
  * @param  {HTMLDivElement} parent - le conteneur html de la Card (un élément du DOM)
  * @returns id, name, picture, disposition, getUserCardDOM  - l'identifiant photographe, le nom photographe, le chemin de l'image, la disposition de la présentation de la Card Html, la Card html fabriquée
  */
-export function photographerFactory(data, parent) {
-  // Destructurer les propriétés de l'objet data dans des variables séparées
-  const { name, portrait, city, country, id, price, tagline } = data;
+export function photographerFactory(myPhotographer, parent) {
+  // Destructurer les propriétés de l'objet Photographer dans des variables séparées
+  const { id, name } = myPhotographer;
 
-  // La page d'index demande une disposition verticale, alors que la page photograph demande une disposition horizontale.
+  /** @type {number} La page d'index demande une disposition verticale, alors que la page photograph demande une disposition horizontale.*/
   let disposition;
   if (parent.classList.contains("photographer_section")) {
     // Page index.html
@@ -30,8 +31,6 @@ export function photographerFactory(data, parent) {
     disposition = DIRECTION.HORIZONTAL;
   }
 
-  /** @type {String} - chemin complet de la photo du photographe */
-  const picture = `assets/photographers/${portrait}`;
   /**
    * Créer un article html en utilisant le DOM
    * afin d'afficher les données d'un photographe
@@ -83,17 +82,17 @@ export function photographerFactory(data, parent) {
     div.appendChild(name);
 
     /** @type {HTMLParagraphElement} -  paragraphe contenant les informations du photographe */
-    const para = _getParagraph(`${city}, ${country}`);
+    const para = _getParagraph(myPhotographer.location);
     // Ajouter le paragaphe
     div.appendChild(para);
 
     /** @type {HTMLSpanElement} - élément en ligne pour afficher le slogan */
-    const span1 = _getSpan(tagline, "slogan");
+    const span1 = _getSpan(myPhotographer._tagline, "slogan");
     // Ajouter l'élément de ligne
     para.appendChild(span1);
 
     /** @type {HTMLSpanElement} - élément en ligne pour afficher le tarif jour */
-    const span2 = _getSpan(`${price}€/Jour`, "tarif");
+    const span2 = _getSpan(myPhotographer.pricePerDay, "tarif");
     // Ajouter l'élément de ligne
     para.appendChild(span2);
   }
@@ -111,12 +110,12 @@ export function photographerFactory(data, parent) {
     parent.appendChild(name);
 
     /** @type {HTMLElement} -  paragraphe contenant les informations du photographe */
-    const para = _getParagraph(`${city}, ${country}`);
+    const para = _getParagraph(myPhotographer.location);
     // Ajouter le paragaphe
     parent.appendChild(para);
 
     /** @type {HTMLElement} - élément en ligne pour afficher le slogan */
-    const span = _getSpan(tagline, "slogan");
+    const span = _getSpan(myPhotographer._tagline, "slogan");
 
     // Ajouter l'élément de ligne
     para.appendChild(span);
@@ -151,7 +150,7 @@ export function photographerFactory(data, parent) {
     const link = document.createElement("a");
     link.classList.add("card-photograph__link");
     // création du lien pour acceder à la page du photographe
-    link.setAttribute("href", `./photographer.html?id=${id}`);
+    link.setAttribute("href", `./photographer.html?id=${myPhotographer.id}`);
     link.setAttribute("aria-label", name);
 
     return link;
@@ -165,8 +164,8 @@ export function photographerFactory(data, parent) {
   const _getPhoto = () => {
     /** @type {HTMLImageElement} - balise img pour le portrait */
     const img = document.createElement("img");
-    img.setAttribute("src", picture);
-    img.setAttribute("alt", `Portrait du photographe ${name}`);
+    img.setAttribute("src", myPhotographer.portrait);
+    img.setAttribute("alt", `Portrait du photographe ${myPhotographer._name}`);
 
     if (disposition === DIRECTION.HORIZONTAL) {
       // photographer.html
@@ -197,7 +196,7 @@ export function photographerFactory(data, parent) {
       titre = document.createElement("h2");
       titre.classList.add("card-photograph__link__container__heading");
     }
-    titre.textContent = name;
+    titre.textContent = myPhotographer.name;
 
     return titre;
   };
@@ -249,5 +248,5 @@ export function photographerFactory(data, parent) {
     return span;
   };
 
-  return { id, name, picture, getUserCardDOM, disposition };
+  return { id, name, getUserCardDOM, disposition };
 }
