@@ -30,7 +30,7 @@ export default class Photographer {
    * @returns {string} chaine de caractères
    */
   toString() {
-    return `${this._id} ${this._name} ${this._country}`;
+    return `${this._id}-(${this._name} - ${this._country})`;
   }
 
   /**
@@ -48,7 +48,15 @@ export default class Photographer {
   }
 
   /**
-   * @property {function} portrait chemin du fichier de la photo du photographe: path/file.ext
+   * @property {function} medium obtenir le chemin du dossier des médias à partir du nom de ce photographe: path/
+   */
+  get medium() {
+    const [firstname] = this._name.split(" ");
+    return `assets/images/${firstname.replace("-", " ")}`;
+  }
+
+  /**
+   * @property {function} portrait obtenir le chemin du fichier de la photo du photographe: path/file.ext
    */
   get portrait() {
     return `assets/photographers/${this._portrait}`;
