@@ -21,7 +21,7 @@ export function photographerFactory(myPhotographer, parent) {
   // Destructurer les propriétés de l'objet Photographer dans des variables séparées
   const { id, name } = myPhotographer;
 
-  /** @type {number} La page d'index demande une disposition verticale, alors que la page photograph demande une disposition horizontale.*/
+  /** @type {number} - La page d'index demande une disposition verticale, alors que la page photographer demande une disposition horizontale.*/
   let disposition;
   if (parent.classList.contains("photographer_section")) {
     // Page index.html
@@ -75,6 +75,7 @@ export function photographerFactory(myPhotographer, parent) {
     const photo = _getPhoto();
     // Ajouter la photo dans le lien
     div.appendChild(photo);
+    photo.classList.add("card-photograph__link__container__portrait");
 
     /** @type {HTMLTitleElement} - titre contenant le nom du photographe  */
     const name = _getName();
@@ -83,16 +84,19 @@ export function photographerFactory(myPhotographer, parent) {
 
     /** @type {HTMLParagraphElement} -  paragraphe contenant les informations du photographe */
     const para = _getParagraph(myPhotographer.location);
+    para.classList.add("card-photograph__link__container__location");
     // Ajouter le paragaphe
     div.appendChild(para);
 
     /** @type {HTMLSpanElement} - élément en ligne pour afficher le slogan */
-    const span1 = _getSpan(myPhotographer._tagline, "slogan");
+    const span1 = _getSpan(myPhotographer._tagline);
+    span1.classList.add("card-photograph__link__container__location__slogan");
     // Ajouter l'élément de ligne
     para.appendChild(span1);
 
     /** @type {HTMLSpanElement} - élément en ligne pour afficher le tarif jour */
-    const span2 = _getSpan(myPhotographer.pricePerDay, "tarif");
+    const span2 = _getSpan(myPhotographer.pricePerDay);
+    span2.classList.add("card-photograph__link__container__location__tarif");
     // Ajouter l'élément de ligne
     para.appendChild(span2);
   }
@@ -106,17 +110,19 @@ export function photographerFactory(myPhotographer, parent) {
   function _addUSerCardDOMHorizontal(parent) {
     /** @type {HTMLElement} - titre contenant le nom du photographe  */
     const name = _getName();
+    name.classList.add("card-photograph__container__heading");
     // Ajouter le nom du photographe
     parent.appendChild(name);
 
     /** @type {HTMLElement} -  paragraphe contenant les informations du photographe */
     const para = _getParagraph(myPhotographer.location);
+    para.classList.add("card-photograph__container__location");
     // Ajouter le paragaphe
     parent.appendChild(para);
 
     /** @type {HTMLElement} - élément en ligne pour afficher le slogan */
-    const span = _getSpan(myPhotographer._tagline, "slogan");
-
+    const span = _getSpan(myPhotographer._tagline);
+    span.classList.add("card-photograph__container__location__slogan");
     // Ajouter l'élément de ligne
     para.appendChild(span);
 
@@ -167,14 +173,6 @@ export function photographerFactory(myPhotographer, parent) {
     img.setAttribute("src", myPhotographer.portrait);
     img.setAttribute("alt", `Portrait du photographe ${myPhotographer._name}`);
 
-    if (disposition === DIRECTION.HORIZONTAL) {
-      // photographer.html
-      img.classList.add("card-photograph__container__portrait");
-    } else if (disposition === DIRECTION.VERTICAL) {
-      // index.html
-      img.classList.add("card-photograph__link__container__portrait");
-    }
-
     return img;
   };
 
@@ -212,14 +210,6 @@ export function photographerFactory(myPhotographer, parent) {
     const para = document.createElement("p");
     para.appendChild(document.createTextNode(strTexte));
 
-    if (disposition === DIRECTION.HORIZONTAL) {
-      // photograher.html
-      para.classList.add("card-photograph__container__location");
-    } else if (disposition === DIRECTION.VERTICAL) {
-      // index.html
-      para.classList.add("card-photograph__link__container__location");
-    }
-
     return para;
   };
 
@@ -227,23 +217,12 @@ export function photographerFactory(myPhotographer, parent) {
    * Préparer et obtenir un élément d'une ligne de texte.
    *
    * @param {String} strTexte - le texte à mettre en forme avec css
-   * @param {String} srtClass - la classe BEM pour permettre la mise en forme css
    * @returns {HTMLSpanElement} span
    */
-  const _getSpan = (strTexte, strClass) => {
+  const _getSpan = (strTexte) => {
     /** @type {HTMLSpanElement} - texte en ligne */
     const span = document.createElement("span");
     span.appendChild(document.createTextNode(strTexte));
-
-    if (disposition === DIRECTION.HORIZONTAL) {
-      // photograher.html
-      span.classList.add(`card-photograph__container__location__${strClass}`);
-    } else if (disposition === DIRECTION.VERTICAL) {
-      // index.html
-      span.classList.add(
-        `card-photograph__link__container__location__${strClass}`
-      );
-    }
 
     return span;
   };
