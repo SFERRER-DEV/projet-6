@@ -66,7 +66,7 @@ export default class Photographer {
    * @property {function} tarif prix jour en euro: 100€/Jour
    */
   get pricePerDay() {
-    return `${this._price}€/Jour`;
+    return `${this._price}€ / jour`;
   }
 
   /**

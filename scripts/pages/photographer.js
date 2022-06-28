@@ -127,13 +127,33 @@ async function init() {
   const medium = await getMedium(photographer.id);
   // Afficher les données sur la console
   console.log(`${medium.length} medias trouvés`);
+
   // Afficher la HTML Card du photographe dans la page HTML
   displayDataPhotographer(photographer);
 
-  /** @type {string} folder - chemin du dossier contenant les medias de ce photographe */
+  /** @type {string} - chemin du dossier contenant les medias de ce photographe */
   const folder = `assets/images/${photographer.firstname}/`;
   // Afficher les HTML Cards des medias du photographe dans la page HTML
   displayDataMedium(medium, folder);
+
+  /** @type {HTMLSpanElement} - Encart tarif journalier du photographe et ses j'aime */
+  const priceperday = document.querySelector(
+    ".informations__rates__priceperday"
+  );
+  // Mettre à jour l'encart avec le tarif du photographe
+  priceperday.appendChild(document.createTextNode(photographer.pricePerDay));
+
+  /** @type {number} - Somme des j'aime des medias du photographe */
+  const res = medium
+    .map((item) => item["likes"])
+    .reduce((prev, next) => prev + next);
+
+  /** @type {HTMLSpanElement} - Encart tarif journalier du photographe */
+  const likes = document.querySelector(".informations__rates__likes");
+  /** @type {HTMLSpanElement} - Encart tarif journalier du photographe */
+  const ilike = document.querySelector(".informations__rates__likes_ilike");
+  // Mettre à jour l'encart avec le tarif du photographe
+  likes.insertBefore(document.createTextNode(res), ilike);
 }
 
 init();
