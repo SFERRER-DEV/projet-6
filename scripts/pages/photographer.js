@@ -1,5 +1,6 @@
-import * as fac from "./../factories/photographer.js";
-import Media from "./../models/media.js";
+import * as facHeader from "./../factories/photographer.js";
+import * as facGallery from "./../factories/media.js";
+//import * as Media from "./../models/media.js";
 import Photographer from "./../models/photographer.js";
 import singletonPhotograherApi from "./../api/photographerApi.js";
 import singletonMediumApi from "./../api/mediumApi.js";
@@ -60,7 +61,7 @@ async function getMedium(targetID) {
   /** @type {Array<Media>} - Un tableau pour contenir des objets de type Media */
   let medium = [];
   // en recherchant en mémoire locale d'abord ...
-  medium = singletonMediumApi.getAllDataByID(-targetID);
+  medium = singletonMediumApi.getAllDataByID(targetID);
   if (Array.isArray(medium) && !medium.length) {
     // ...sinon en recherchant avec l'API
     medium = await singletonMediumApi.getAllById(targetID);
@@ -68,7 +69,7 @@ async function getMedium(targetID) {
       //throw `Medias du photographe ${targetID} non trouvés`;
     }
   }
-  console.log(`${medium.length} medias trouvés`);
+
   return medium;
 }
 
@@ -78,17 +79,36 @@ async function getMedium(targetID) {
  *
  * @param {Photographer} photographer - Un objet de type photographe
  */
-async function displayData(photographer) {
+async function displayDataPhotographer(photographer) {
   /** @type {HTMLDivElement} - le conteneur html <div> pour afficher le photographe */
   const parent = document.querySelector(".photograph-header");
   /** @type {HTMLButtonElement} - le bouton de contact sur la page du photographe */
   const bouton = parent.querySelector(".contact_button");
   /** @type {Object} - Factory Method qui fabrique la HTML Card de photographe */
-  const photographerModel = fac.photographerFactory(photographer, parent); // Instancier une fabrique pour créer la card
+  const photographerModel = facHeader.photographerFactory(photographer, parent); // Instancier une fabrique pour créer la card
   /** @type {HTMLDivElement} - une card de photographe qui a été fabriquée dans une balise article */
   const userCardDOM = photographerModel.getUserCardDOM(parent); // Obtenir la card pour le photographe et en fonction du conteneur parent
   // Ajouter cette card créée et l'afficher avant la position du bouton de contact
   parent.insertBefore(userCardDOM, bouton);
+}
+
+/**
+ *
+ * @param {Array<Media>} medium - Un table d'objets de type Media
+ * @param {string} folder - le chemin complet du dossier contenant les medias de ce photographe
+ */
+async function displayDataMedium(medium, folder) {
+  /** @type {HTMLDivElement} - le conteneur html <div> pour afficher la gallerie de medias */
+  const parent = document.querySelector("#gallery");
+  medium.forEach((m) => {
+    console.table(m);
+    /** @type {Object} - Factory Method qui fabrique une HTML Card pour un Media */
+    const mediaModel = facGallery.mediaFactory(m); // Instancier une fabrique pour créer la card
+    /** @type {HTMLDivElement} - une card pour un media qui a été fabriquée dans une balise article */
+    const mediaCardDOM = mediaModel.getMediaCardDOM(folder); // Obtenir la card pour le photographe
+    // Afficher la Card Media dans la page HTML
+    parent.append(mediaCardDOM);
+  });
 }
 
 /**
@@ -105,8 +125,15 @@ async function init() {
   console.table(photographer);
   /** @type {Array<Media>} - un tableau contenant les données des médias du photographe */
   const medium = await getMedium(photographer.id);
+  // Afficher les données sur la console
+  console.log(`${medium.length} medias trouvés`);
+  // Afficher la HTML Card du photographe dans la page HTML
+  displayDataPhotographer(photographer);
 
-  displayData(photographer);
+  /** @type {string} folder - chemin du dossier contenant les medias de ce photographe */
+  const folder = `assets/images/${photographer.firstname}/`;
+  // Afficher les HTML Cards des medias du photographe dans la page HTML
+  displayDataMedium(medium, folder);
 }
 
 init();

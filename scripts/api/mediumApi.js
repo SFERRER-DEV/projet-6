@@ -80,6 +80,7 @@ class MediumApi {
       let m = new Media(
         obj.id,
         obj.photographerId,
+        obj.title,
         obj[prop], // prop est soit la propriété obj.image ou obj.video
         obj.likes,
         obj.date,
@@ -106,7 +107,7 @@ class MediumApi {
    */
   async get() {
     if (Array.isArray(this._data) && !this._data.length) {
-      console.log("fetch medium");
+      console.log("fetch mediumApi");
       return fetch(this._url)
         .then((res) => res.json())
         .then((res) => res.media)
@@ -125,6 +126,7 @@ class MediumApi {
    * @returns {Object} un objet json contenant un média
    */
   async getById(targetID, photographerId) {
+    console.log("fetch mediumApi");
     /** @type {Array<Object>} obj un tableau d'objet json contenant les médias d'un photographe spécifique */
     let obj = fetch(this._url) // Appel API  pour obtenir le media du photgraphe
       .then((res) => res.json())
@@ -147,6 +149,7 @@ class MediumApi {
    * @returns {Array<Object>} un objet json contenant un table des médias d'un photographe spécifique
    */
   async getAllById(targetID) {
+    console.log("fetch mediumApi");
     /** @type {Array<Object>} obj un tableau d'objet json contenant les médias d'un photographe spécifique */
     let obj = fetch(this._url) // Appel API  pour obtenir le photgraphe
       .then((res) => res.json())

@@ -1,5 +1,5 @@
 /** @type {Number} - Une constante utilisée pour gérer les deux affichage de la Card Photographe */
-const MEDIA = {
+export const MEDIUM = {
   IMAGE: 0,
   VIDEO: 1,
 };
@@ -8,16 +8,20 @@ export default class Media {
   /**
    * @param {number} id identifiant du media
    * @param {number} photographerId identifiant du photographe
+   * @param {string} title descriptif de la photo
    * @param {string} media nom d'un fichier média image ou vidéo: filename.ext
    * @param {number} likes nombre de j'aime du media
    * @param {date} date_media yyyy-mm-dd
    * @param {number} price tarif prix du média
    */
-  constructor(id, photographerId, media, likes, date_media, price) {
+
+  constructor(id, photographerId, title, media, likes, date_media, price) {
     /** @type {number} _id identifiant du media */
     this._id = id;
     /** @type {number} _photograpgerId identifiant du photographe */
     this._photographerId = photographerId;
+    /** @type {string} _filename nom du fichier media image ou vidéo */
+    this._title = title;
     /** @type {string} _filename nom du fichier media image ou vidéo */
     this._filename = media;
     /** @type {number} _likes nombre de j'aime de ce média */
@@ -26,7 +30,7 @@ export default class Media {
     this._date_media = date_media;
     /** @type {number} _price tarif prix */
     this._price = price;
-    /** @type {MEDIA.IMAGE|MEDIA.VIDEO} _media le nom du fichier de média est-il pour une image ou une vidéo ? */
+    /** @type {MEDIUM.IMAGE|MEDIUM.VIDEO} _media le nom du fichier de média est-il pour une image ou une vidéo ? */
     this._media = Media.isImageOrVideo(media);
   }
 
@@ -45,7 +49,14 @@ export default class Media {
   }
 
   /**
-   * @property {MEDIA.IMAGE | MEDIA.VIDEO} media  est une constante de type MEDIA: 0 => image ou 1 => vidéo
+   * @property {string} title  titre descriptif du media
+   */
+  get title() {
+    return this._title;
+  }
+
+  /**
+   * @property {MEDIUM.IMAGE | MEIDUM.VIDEO} media  est une constante de type MEDIUM: 0 => image ou 1 => vidéo
    */
   get media() {
     return this._media;
@@ -78,14 +89,14 @@ export default class Media {
    */
   toString() {
     /** @type {string} image ou vidéo */
-    const imageOrVideo = this.ImageOrVideo == MEDIA.IMAGE ? "IMAGE" : "VIDEO";
+    const imageOrVideo = this.ImageOrVideo == MEDIUM.IMAGE ? "IMAGE" : "VIDEO";
     return `${this._id}-${this._photograpgerId} ${imageOrVideo}`;
   }
 
   /**
    * @property {string} filename - nom du fichier image ou vidéo file.ext
    */
-  get fileName() {
+  get filename() {
     return this._filename;
   }
 
@@ -94,13 +105,13 @@ export default class Media {
    * est une image ou une vidéo
    *
    * @param {string} filename le nom de fichier d'un media
-   * @returns {MEDIA.IMAGE|MEDIA.VIDEO} une constante pour soit une image soit une vidéo
+   * @returns {MEDIUM.IMAGE|MEDIUM.VIDEO} une constante pour soit une image soit une vidéo
    */
   static isImageOrVideo(filename) {
     if (/\.(gif|jpg|jpeg|tiff|png)$/i.test(filename)) {
-      return MEDIA.IMAGE;
-    } else if (/\.(mp4|avi|mpg|webm|mov)$/i.test(filename)) {
-      return MEDIA.VIDEO;
+      return MEDIUM.IMAGE;
+    } else if (/\.(mp4|avi|ogm|ogv|ogg|webm)$/i.test(filename)) {
+      return MEDIUM.VIDEO;
     } else {
       throw new Error(
         `L'extension de ce fichier '${filename}' n'a pas permis de déterminer son type.`
@@ -108,3 +119,5 @@ export default class Media {
     }
   }
 }
+
+//export { Media, MEDIUM };

@@ -48,11 +48,11 @@ export default class Photographer {
   }
 
   /**
-   * @property {function} medium obtenir le chemin du dossier des médias à partir du nom de ce photographe: path/
+   * @property {function} firstname obtenir le prénom = dossier des medias du photographe
    */
-  get medium() {
+  get firstname() {
     const [firstname] = this._name.split(" ");
-    return `assets/images/${firstname.replace("-", " ")}`;
+    return firstname.replace("-", " "); // cas d'un prénom composé
   }
 
   /**
