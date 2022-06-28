@@ -10,7 +10,7 @@
 
 .card-media__container {
   width: 100%;
-  height: 90%;
+  height: 85%;
 }
 
 .card-media__container__photo,
@@ -25,7 +25,7 @@
 
 .card-media__heading {
   display: flex;
-  height: 10%;
+  height: 15%;
   justify-content: space-between;
   align-items: center;
   color: #901c1c;
