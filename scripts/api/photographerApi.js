@@ -82,6 +82,7 @@ class PhotograherApi {
    */
   async get() {
     if (Array.isArray(this._data) && !this._data.length) {
+      console.log("fetch photographerApi");
       return fetch(this._url)
         .then((res) => res.json())
         .then((res) => res.photographers)
@@ -99,6 +100,7 @@ class PhotograherApi {
    * @returns {Object} un objet json contenant un photographe
    */
   async getById(targetID) {
+    console.log("fetch photographerApi");
     /** @type {Object} obj un objet json contenant un photographe */
     let obj = fetch(this._url) // Appel API  pour obtenir le photgraphe
       .then((res) => res.json())

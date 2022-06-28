@@ -23,20 +23,90 @@ export function mediaFactory(myMedia) {
     // Ajouter le media dans l'article
     article.appendChild(divMedia);
 
+    /** @type {HTMLDivElement} - conteneur pour le titre du media et ses j'aime */
+    const divHeading = _getDiv("card-media__heading");
+
+    /** @type {HTMLParagraphElement} - le titre du média */
+    const h3 = _getTitle();
+    // Ajouter le titre du média
+    divHeading.appendChild(h3);
+
+    /** @type {HTMLSpanElement} - le nombre de likes du média */
+    const likes = _getSpan(myMedia.likes);
+    likes.classList.add("card-media__heading__likes");
+    // Ajouter le titre du média
+    divHeading.appendChild(likes);
+
+    /** @type {HTMLButtonElement} - un bouton pour incrémenter le nombre de j'aime */
+    const button = _getLike();
+    // Ajouter le bouton j'aime
+    divHeading.appendChild(button);
+
+    // Ajouter le conteneur de titre dans l'article
+    article.appendChild(divHeading);
+
     return article;
   }
 
   /**
-   * Obtenir un conteneur pour le média à présenter
+   * Obtenir un div avec sa classe
    *
+   * @param {string} strClass - une classe CSS
    * @returns {HTMLDivElement} div - balise div conteneur.
    */
-  const _getContainerDiv = () => {
+  const _getDiv = (strClass) => {
     /** @type {HTMLDivElement} - balise div */
     const div = document.createElement("div");
-    div.classList.add("card-media__container");
+    div.classList.add(strClass);
 
     return div;
+  };
+
+  /**
+   * Obtenir le titre du média.
+   *
+   * @returns {HTMLTitleElement} titre - balise titre h3 avec le nom de la vidéo ou de la photographie
+   */
+  const _getTitle = () => {
+    /** @type {HTMLTitleElement} - balise titre */
+    const titre = document.createElement("h3");
+    titre.textContent = myMedia.title;
+    titre.classList.add("card-media__heading__title");
+
+    return titre;
+  };
+
+  /**
+   * Préparer et obtenir un élément d'une ligne de texte.
+   *
+   * @param {String} strTexte - le texte à mettre en forme avec css
+   * @returns {HTMLSpanElement} span
+   */
+  const _getSpan = (strTexte) => {
+    /** @type {HTMLSpanElement} - texte en ligne */
+    const span = document.createElement("span");
+    span.appendChild(document.createTextNode(strTexte));
+
+    return span;
+  };
+
+  /**
+   *  Obtenir une balise button pour liker un media
+   *
+   *  @returns {HTMLButtonElement} balise bouton pour liker
+   */
+  const _getLike = () => {
+    /** @type {HTMLButtonElement} - balise bouton */
+    const bouton = document.createElement("button");
+    bouton.classList.add("card-media__heading__likes__ilike");
+
+    /** @type {HTMLElement} - balise de texte pour contenir l'icone coeur */
+    const icone = document.createElement("i");
+    icone.classList.add("fa-solid");
+    icone.classList.add("fa-heart");
+    bouton.append(icone);
+
+    return bouton;
   };
 
   /**
@@ -48,7 +118,7 @@ export function mediaFactory(myMedia) {
    */
   const _getMedia = (folder) => {
     /** @type {HTMLDivElement} - balise div */
-    const div = _getContainerDiv();
+    const div = _getDiv("card-media__container");
     /** @type {HTMLImageElement | HTMLVideoElement} - une image ou une vidéo */
     let media;
     if (myMedia.media === Media.MEDIUM.VIDEO) {
