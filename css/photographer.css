@@ -96,6 +96,7 @@ form input {
   box-shadow: gray 0px 2px 6px 0px;
 }
 
+/* encart */
 .informations__rates {
   width: 350px;
   height: 60px;
@@ -116,4 +117,32 @@ form input {
 
 .informations__rates__likes_ilike {
   margin-left: 10px;
+}
+
+/* Tri */
+.sorted {
+  margin: 0 100px;
+}
+
+.sorted__form {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.sorted__form label {
+  font-weight: 700;
+  font-size: 1.3em;
+}
+
+.sorted__form__list {
+  background-color: #901c1c;
+  color: white;
+  font-family: "DM Sans", sans-serif;
+  padding: 5px 20px 5px 20px;
+  margin: 10px 0 20px 10px;
+  font-weight: 500;
+  font-size: 1.3em;
+  cursor: pointer;
+  border-radius: 5px;
 }
