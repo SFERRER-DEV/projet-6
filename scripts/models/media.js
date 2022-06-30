@@ -80,6 +80,9 @@ export default class Media {
   get likes() {
     return this._likes;
   }
+  set likes(value) {
+    this._likes = value;
+  }
 
   /**
    * @property {number} price tarif du média

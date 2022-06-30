@@ -18,6 +18,8 @@ export function mediaFactory(myMedia) {
     /** @const {HTMLDivElement} - l'élement html article qui contient la card */
     const article = document.createElement("article");
     article.classList.add("card-media");
+    // Ce data attribut permet de marquer cette HTML Card pour l'identifier
+    article.setAttribute("data-id", id);
 
     /** @type {HTMLDivElement} - conteneur pour un media qui est soit une photo ou soit une video */
     const divMedia = _getMedia();

@@ -106,9 +106,13 @@ async function displayDataMedium(medium) {
     // renseigner le chemin du dossier conteneur de chaque média avec le prénom connu du photographe
     m.media_folder = `assets/images/${photographer.firstname}/`;
     /** @type {Object} - Factory Method qui fabrique une HTML Card avec un objet de type Media */
-    const mediaModel = facGallery.mediaFactory(m); // Instancier une fabrique pour créer la card
+    const mediaModel = facGallery.mediaFactory(m); // Instancier une fabrique pour créer la HTML Card
     /** @type {HTMLArticleElement} - une HTML Card d'un media qui est fabriquée dans une balise article */
     const mediaCardDOM = mediaModel.getMediaCardDOM(); // Fabriquer la HTML Card
+
+    // Ajouter l'évènement du click du bouton j'aime de ce média
+    addEventILike(mediaCardDOM, m);
+
     // Ajouter cette HTML Card Media à la liste
     cardsHtml.appendChild(mediaCardDOM);
   });
@@ -116,6 +120,62 @@ async function displayDataMedium(medium) {
   // Remplacer les medias existant et afficher les nouveaux medias fabriqués
   container.replaceChildren(cardsHtml);
 }
+
+/**
+ * Ajouter un évènement click au bouton j'aime d'une HTML Card de média
+ * puisqu' il n'est pas fourni par la fabrique de HTML Card
+ * car le bouton appelle la fonction iLike(media)
+ * qui est hors de la portée de la fabrique
+ *
+ * @param {HTMLArticleElement} mediaCardDOM - Un HTML Card de Media fabriquée
+ * @param {Media} media - Une instance de type Media
+ */
+const addEventILike = (mediaCardDOM, media) => {
+  /** @type {HTMLButtonElement} - le bouton j'aime dece  média */
+  const buttonIlike = mediaCardDOM.querySelector(
+    ".card-media__heading__likes__ilike"
+  );
+
+  // Ajouter l'évèvement click au bouton j'aime
+  buttonIlike.addEventListener("click", function () {
+    iLike(media); // Appeler la fonction iLike avec cette instance
+  });
+};
+
+/**
+ * Incrémenter le nombre de likes d'un média
+ * Retrouver la HTML Card du média passé en paramètre et le permutter
+ * avec une nouvelle HTML Card fabriquée
+ *
+ * Il faut rajouter l'évènement click au bouton j'aime de la nouvelle HTML Card
+ * car cet évènement n'est pas fourni par la fabrique
+ *
+ * @param {Media} media - Un objet de type Media
+ */
+const iLike = (media) => {
+  console.log("I like !");
+
+  // Ajouter un j'aime à ce media
+  media.likes += 1;
+
+  /** @type {Object} - Factory Method qui fabrique une HTML Card avec un objet de type Media */
+  const mediaModel = facGallery.mediaFactory(media); // Instancier une fabrique pour créer la HTML Card
+
+  /** @type {HTMLArticleElement} - une nouvelle HTML Card fabriquée pour ce média */
+  const newMediaCardDOM = mediaModel.getMediaCardDOM(); // Fabriquer la nouvelle HTML Card
+
+  // Ajouter l'évènement du click du bouton j'aime de ce média
+  addEventILike(newMediaCardDOM, media);
+
+  /** @type {HTMLDivElement} - Le conteneur html <div> qui contient toutes les HTML Cards */
+  const container = document.querySelector("#gallery");
+
+  /** @type {HTMLArticleElement} - l'ancienne HTML Card de ce media */
+  const oldMediaCardDom = container.querySelector(`[data-id="${media.id}"]`);
+
+  // Permutter les HTML Cards
+  container.replaceChild(newMediaCardDOM, oldMediaCardDom);
+};
 
 /**
  * Faire la somme des likes d'objets de type Media contenus dans un tableau
