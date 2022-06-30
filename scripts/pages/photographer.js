@@ -110,8 +110,13 @@ async function displayDataMedium(medium) {
     /** @type {HTMLArticleElement} - une HTML Card d'un media qui est fabriquée dans une balise article */
     const mediaCardDOM = mediaModel.getMediaCardDOM(); // Fabriquer la HTML Card
 
+    /** @type {HTMLButtonElement} - le bouton j'aime dans cette HTML Card*/
+    const buttonIlike = mediaCardDOM.querySelector(
+      ".card-media__heading__likes__ilike"
+    );
+
     // Ajouter l'évènement du click du bouton j'aime de ce média
-    addEventILike(mediaCardDOM, m);
+    addEventILike(buttonIlike, m.id, medium);
 
     // Ajouter cette HTML Card Media à la liste
     cardsHtml.appendChild(mediaCardDOM);
@@ -122,24 +127,26 @@ async function displayDataMedium(medium) {
 }
 
 /**
- * Ajouter un évènement click au bouton j'aime d'une HTML Card de média
- * puisqu' il n'est pas fourni par la fabrique de HTML Card
- * car le bouton appelle la fonction iLike(media)
- * qui est hors de la portée de la fabrique
+ * Ajouter un évènement click au bouton j'aime d'une HTML Card de média.
+ * Le bouton appelle la fonction iLike(media) qui est hors de la portée de la fabrique.
+ * L'évènement est donc ajouté ici.
  *
- * @param {HTMLArticleElement} mediaCardDOM - Un HTML Card de Media fabriquée
- * @param {Media} media - Une instance de type Media
+ * @param {HTMLButtonElement} buttonIlike - un bouton j'aime d'une HTML Card de Media fabriquée
+ * @param {number} mediaId - L'identifiant d'un media
+ * @param {Array<Medium>} - Le tableau des objets de type Media
+ *
  */
-const addEventILike = (mediaCardDOM, media) => {
-  /** @type {HTMLButtonElement} - le bouton j'aime dece  média */
-  const buttonIlike = mediaCardDOM.querySelector(
-    ".card-media__heading__likes__ilike"
-  );
-
-  // Ajouter l'évèvement click au bouton j'aime
-  buttonIlike.addEventListener("click", function () {
-    iLike(media); // Appeler la fonction iLike avec cette instance
-  });
+const addEventILike = (buttonIlike, mediaId, medium) => {
+  /** @type {number} - l'indice du objet de type Media retrouvé d'après sa propriété id dans le tableau des médias */
+  const index = medium.map((m) => m.id).indexOf(mediaId);
+  // Vérifier qu'une instance de type Media a été retrouvée pour cette id
+  if (index !== -1) {
+    // Ajouter l'évèvement click au bouton j'aime
+    buttonIlike.addEventListener("click", function () {
+      iLike(index, medium); // Appeler la fonction iLike
+      photographerLikes(medium); // Recalculer la somme des likes du photographe après une incrémentation
+    });
+  }
 };
 
 /**
@@ -152,26 +159,31 @@ const addEventILike = (mediaCardDOM, media) => {
  *
  * @param {Media} media - Un objet de type Media
  */
-const iLike = (media) => {
-  console.log("I like !");
-
+const iLike = (index, medium) => {
   // Ajouter un j'aime à ce media
-  media.likes += 1;
+  medium[index].likes += 1;
 
   /** @type {Object} - Factory Method qui fabrique une HTML Card avec un objet de type Media */
-  const mediaModel = facGallery.mediaFactory(media); // Instancier une fabrique pour créer la HTML Card
+  const mediaModel = facGallery.mediaFactory(medium[index]); // Instancier une fabrique pour créer la HTML Card
 
   /** @type {HTMLArticleElement} - une nouvelle HTML Card fabriquée pour ce média */
   const newMediaCardDOM = mediaModel.getMediaCardDOM(); // Fabriquer la nouvelle HTML Card
 
+  /** @type {HTMLButtonElement} - le bouton j'aime dans cette HTML Card*/
+  const buttonIlike = newMediaCardDOM.querySelector(
+    ".card-media__heading__likes__ilike"
+  );
+
   // Ajouter l'évènement du click du bouton j'aime de ce média
-  addEventILike(newMediaCardDOM, media);
+  addEventILike(buttonIlike, medium[index].id, medium); // Si cet évènement n'est pas ajouté alors les médias ne peuvent être aimés qu'une seule fois...
 
   /** @type {HTMLDivElement} - Le conteneur html <div> qui contient toutes les HTML Cards */
   const container = document.querySelector("#gallery");
 
   /** @type {HTMLArticleElement} - l'ancienne HTML Card de ce media */
-  const oldMediaCardDom = container.querySelector(`[data-id="${media.id}"]`);
+  const oldMediaCardDom = container.querySelector(
+    `[data-id="${medium[index].id}"]`
+  );
 
   // Permutter les HTML Cards
   container.replaceChild(newMediaCardDOM, oldMediaCardDom);
