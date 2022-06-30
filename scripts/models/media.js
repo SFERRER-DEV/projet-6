@@ -13,9 +13,19 @@ export default class Media {
    * @param {number} likes nombre de j'aime du media
    * @param {date} date_media yyyy-mm-dd
    * @param {number} price tarif prix du média
+   * @param {string} [media_folder=""] le chemin du dossier contenant le media est aussi constitué du prénom du photographe
    */
 
-  constructor(id, photographerId, title, media, likes, date_media, price) {
+  constructor(
+    id,
+    photographerId,
+    title,
+    media,
+    likes,
+    date_media,
+    price,
+    media_folder = ""
+  ) {
     /** @type {number} _id identifiant du media */
     this._id = id;
     /** @type {number} _photograpgerId identifiant du photographe */
@@ -32,6 +42,8 @@ export default class Media {
     this._price = price;
     /** @type {MEDIUM.IMAGE|MEDIUM.VIDEO} _media le nom du fichier de média est-il pour une image ou une vidéo ? */
     this._media = Media.isImageOrVideo(media);
+    /** @type {string} le chemin complet du dossier contenant le média */
+    this._media_folder = media_folder;
   }
 
   /**
@@ -98,6 +110,17 @@ export default class Media {
    */
   get filename() {
     return this._filename;
+  }
+
+  /**
+   * @property {string} media_folder - chemin complet du dossier contenant le media
+   */
+  get media_folder() {
+    return this._media_folder;
+  }
+
+  set media_folder(value) {
+    this._media_folder = value;
   }
 
   /**

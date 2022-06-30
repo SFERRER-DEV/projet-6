@@ -96,7 +96,7 @@ form input {
   box-shadow: gray 0px 2px 6px 0px;
 }
 
-/* encart */
+/* encart : les j'aime + tarif */
 .informations__rates {
   width: 350px;
   height: 60px;
@@ -115,8 +115,24 @@ form input {
   font-weight: 600;
 }
 
+/* Compteur de j'aime */
+.informations__rates__likes {
+  flex-basis: content;
+  margin-left: 15%;
+}
+
+/* Coeur */
 .informations__rates__likes_ilike {
-  margin-left: 10px;
+  flex-basis: auto;
+  flex-grow: 1;
+  margin-left: 5%;
+}
+
+/* Tarif journalier  */
+.informations__rates__priceperday {
+  flex-basis: 50%;
+  text-align: right;
+  margin-right: 15%;
 }
 
 /* Tri */

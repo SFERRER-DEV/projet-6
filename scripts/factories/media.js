@@ -4,6 +4,7 @@ import * as Media from "./../models/media.js";
  * @param {Media} myMedia - Un objet de la classe Media
  * @returns
  */
+
 export function mediaFactory(myMedia) {
   // Destructurer les propriétés de l'objet data dans des variables séparées
   const { id } = myMedia;
@@ -13,13 +14,13 @@ export function mediaFactory(myMedia) {
    * @param {string} folder - le chemin complet du dossier contenant les medias de ce photographe
    * @returns
    */
-  function getMediaCardDOM(folder) {
+  function getMediaCardDOM() {
     /** @const {HTMLDivElement} - l'élement html article qui contient la card */
     const article = document.createElement("article");
     article.classList.add("card-media");
 
     /** @type {HTMLDivElement} - conteneur pour un media qui est soit une photo ou soit une video */
-    const divMedia = _getMedia(`${folder}`);
+    const divMedia = _getMedia();
     // Ajouter le media dans l'article
     article.appendChild(divMedia);
 
@@ -116,15 +117,17 @@ export function mediaFactory(myMedia) {
    * @param {string} folder - le chemin complet du dossier contenant les medias de ce photographe
    * @returns {HTMLImageElement | HTMLVideoElement} balise img ou video pour le media
    */
-  const _getMedia = (folder) => {
+  const _getMedia = () => {
     /** @type {HTMLDivElement} - balise div */
     const div = _getDiv("card-media__container");
     /** @type {HTMLImageElement | HTMLVideoElement} - une image ou une vidéo */
     let media;
+    /** @type {string} - chemin complet avec le nom du fichier média: path/filename.ext */
+    const filename = myMedia.media_folder + myMedia.filename;
     if (myMedia.media === Media.MEDIUM.VIDEO) {
-      media = _getVideo(`${folder}${myMedia.filename}`);
+      media = _getVideo(filename);
     } else {
-      media = _getPhoto(`${folder}${myMedia.filename}`);
+      media = _getPhoto(filename);
     }
     div.appendChild(media);
 

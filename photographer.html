@@ -25,11 +25,11 @@
     <!-- filtres -->
     <section class="sorted">
       <form class="sorted__form" action="#" method="POST">
-        <label tabindex="0" for="sorted">Trier par</label>
+        <label for="sorted">Trier par</label>
         <select name="sorted" id="sorted" class="sorted__form__list">
-          <option value="popularité">Popularité</option>
-          <option value="date">Date</option>
-          <option value="Titre">Titre</option>
+          <option value="popularité" data-sort="popular">Popularité</option>
+          <option value="date" data-sort="date">Date</option>
+          <option value="Titre" data-sort="title">Titre</option>
         </select>
       </form>
     </section>
@@ -39,8 +39,8 @@
     <!-- encart -->
     <aside class="informations">
       <p class="informations__rates">
-        <span class="informations__rates__likes"><i
-            class="informations__rates__likes_ilike fa-solid fa-heart"></i></span>
+        <span class="informations__rates__likes"></span>
+        <i class="informations__rates__likes_ilike fa-solid fa-heart"></i>
         <span class="informations__rates__priceperday"></span>
       </p>
     </aside>

@@ -4,6 +4,8 @@ import * as facGallery from "./../factories/media.js";
 import Photographer from "./../models/photographer.js";
 import singletonPhotograherApi from "./../api/photographerApi.js";
 import singletonMediumApi from "./../api/mediumApi.js";
+import * as sort from "./../util/sort.js";
+import Media from "../models/media.js";
 
 /**
  * Obtenir les données d'un photographe
@@ -74,86 +76,152 @@ async function getMedium(targetID) {
 }
 
 /**
- * Afficher les données d'un photographe
- * dans une card html en utilisantla factory photographer
+ * Afficher un photographe
+ * dans une HTML Card en utilisant la factory photographer
  *
  * @param {Photographer} photographer - Un objet de type photographe
  */
 async function displayDataPhotographer(photographer) {
   /** @type {HTMLDivElement} - le conteneur html <div> pour afficher le photographe */
   const parent = document.querySelector(".photograph-header");
+
   /** @type {HTMLButtonElement} - le bouton de contact sur la page du photographe */
   const bouton = parent.querySelector(".contact_button");
+
   /** @type {Object} - Factory Method qui fabrique la HTML Card de photographe */
   const photographerModel = facHeader.photographerFactory(photographer, parent); // Instancier une fabrique pour créer la card
+
   /** @type {HTMLDivElement} - une card de photographe qui a été fabriquée dans une balise article */
   const userCardDOM = photographerModel.getUserCardDOM(parent); // Obtenir la card pour le photographe et en fonction du conteneur parent
+
   // Ajouter cette card créée et l'afficher avant la position du bouton de contact
   parent.insertBefore(userCardDOM, bouton);
 }
 
 /**
+ * Afficher tous les medias du photographe
+ * dans des HTML Cards en utilisant la factory media
  *
  * @param {Array<Media>} medium - Un table d'objets de type Media
- * @param {string} folder - le chemin complet du dossier contenant les medias de ce photographe
  */
-async function displayDataMedium(medium, folder) {
+async function displayDataMedium(medium) {
   /** @type {HTMLDivElement} - le conteneur html <div> pour afficher la gallerie de medias */
-  const parent = document.querySelector("#gallery");
+  const container = document.querySelector("#gallery");
+  /** @type {NodeList} - une liste pour contenir les HTML Cards fabriquées */
+  let cardsHtml = document.createDocumentFragment();
+
+  // Parcourir tous les médias du tableau
   medium.forEach((m) => {
-    console.table(m);
-    /** @type {Object} - Factory Method qui fabrique une HTML Card pour un Media */
+    // renseigner le chemin du dossier conteneur de chaque média avec le prénom connu du photographe
+    m.media_folder = `assets/images/${photographer.firstname}/`;
+    /** @type {Object} - Factory Method qui fabrique une HTML Card avec un objet de type Media */
     const mediaModel = facGallery.mediaFactory(m); // Instancier une fabrique pour créer la card
-    /** @type {HTMLDivElement} - une card pour un media qui a été fabriquée dans une balise article */
-    const mediaCardDOM = mediaModel.getMediaCardDOM(folder); // Obtenir la card pour le photographe
-    // Afficher la Card Media dans la page HTML
-    parent.append(mediaCardDOM);
+    /** @type {HTMLArticleElement} - une HTML Card d'un media qui est fabriquée dans une balise article */
+    const mediaCardDOM = mediaModel.getMediaCardDOM(); // Fabriquer la HTML Card
+    // Ajouter cette HTML Card Media à la liste
+    cardsHtml.appendChild(mediaCardDOM);
   });
+
+  // Remplacer les medias existant et afficher les nouveaux medias fabriqués
+  container.replaceChildren(cardsHtml);
 }
 
 /**
- * Point d'entrée de la page
- * Obtenir les données du photographe et de ses médias puis les afficher
+ * Faire la somme des likes d'objets de type Media contenus dans un tableau
+ *
+ * @param {Array<Media>} medium - Un tableau d'objets de type Media
  */
-async function init() {
-  let params = new URL(document.location).searchParams;
-  /** @type {number} - l'identifiant du photographe obtenu en paramètre url */
-  let tagetID = parseInt(params.get("id"));
-  /** @type {Object} - l'objet contenant les données du photographe */
-  const photographer = await getPhotographer(tagetID);
-  // Afficher les données sur la console
-  console.table(photographer);
-  /** @type {Array<Media>} - un tableau contenant les données des médias du photographe */
-  const medium = await getMedium(photographer.id);
-  // Afficher les données sur la console
-  console.log(`${medium.length} medias trouvés`);
+const likesCounter = (medium) => {
+  return medium
+    .map((item) => item["likes"])
+    .reduce((prev, next) => prev + next);
+};
 
-  // Afficher la HTML Card du photographe dans la page HTML
-  displayDataPhotographer(photographer);
+/**
+ * Afficher la somme des likes du photographe dans l'encart
+ *
+ * @param {Array<Media>} medium - Un tableau d'objets de type Media
+ */
+const photographerLikes = (medium) => {
+  /** @type {number} - Faire la somme des likes  */
+  const counter = likesCounter(medium);
+  /** @type {HTMLSpanElement} - Encart tarif journalier du photographe */
+  const likes = document.querySelector(".informations__rates__likes");
+  /** @type {HTMLSpanElement} - Encart tarif journalier du photographe */
+  //const ilike = document.querySelector(".informations__rates__likes_ilike");
+  // Mettre à jour l'encart avec le tarif du photographe
+  likes.textContent = counter;
+  //likes.insertBefore(document.createTextNode(counter), ilike);
+};
 
-  /** @type {string} - chemin du dossier contenant les medias de ce photographe */
-  const folder = `assets/images/${photographer.firstname}/`;
-  // Afficher les HTML Cards des medias du photographe dans la page HTML
-  displayDataMedium(medium, folder);
-
+/**
+ * Afficher le tarif du photographe dans l'encart
+ *
+ * @param {string} pricePerDay - une chaine de caractère ex: 500€ / jour
+ */
+const photographerPricePerDay = (pricePerDay) => {
   /** @type {HTMLSpanElement} - Encart tarif journalier du photographe et ses j'aime */
   const priceperday = document.querySelector(
     ".informations__rates__priceperday"
   );
   // Mettre à jour l'encart avec le tarif du photographe
-  priceperday.appendChild(document.createTextNode(photographer.pricePerDay));
+  priceperday.appendChild(document.createTextNode(pricePerDay));
+};
 
-  /** @type {number} - Somme des j'aime des medias du photographe */
-  const res = medium
-    .map((item) => item["likes"])
-    .reduce((prev, next) => prev + next);
+/**
+ * Obtenir les données médias du photographe
+ * éventuellement les trier puis les afficher.
+ * Compter et afficher le nombres de j'aime de ces médias.
+ *
+ * @param {string} sortOption - une chaine de caractère définissant un type de tri à appliquer sur l'ordre d
+ */
+async function init(sortOption = undefined) {
+  /** {Array<Media>} medium - un tableau contenant des objets de type Média */
+  let medium = await getMedium(photographer.id); // Remplir le tableau des medias pour l'identifiant du photographe
+  // Afficher le nombre de médias trouvés sur la console
+  console.log(`${medium.length} medias trouvés`);
 
-  /** @type {HTMLSpanElement} - Encart tarif journalier du photographe */
-  const likes = document.querySelector(".informations__rates__likes");
-  /** @type {HTMLSpanElement} - Encart tarif journalier du photographe */
-  const ilike = document.querySelector(".informations__rates__likes_ilike");
-  // Mettre à jour l'encart avec le tarif du photographe
-  likes.insertBefore(document.createTextNode(res), ilike);
+  if (Array.isArray(medium) && medium.length > 0) {
+    // Appliquer un type de tri au tableau des medias
+    if (sortOption !== undefined) {
+      sort.sorted(medium, sortOption);
+    }
+
+    // Afficher les HTML Cards des medias du photographe dans la page HTML
+    displayDataMedium(medium);
+
+    // Afficher le nombre de likes du photographe
+    photographerLikes(medium);
+  }
 }
+
+// Point d'entrée de la page
+/** */
+let params = new URL(document.location).searchParams;
+/** @type {number} - l'identifiant du photographe obtenu en paramètre url */
+const photograpgerId = parseInt(params.get("id"));
+
+/** @type {Object} - l'objet contenant les données du photographe */
+const photographer = await getPhotographer(photograpgerId);
+// Afficher les données sur la console
+console.table(photographer);
+
+// Afficher la HTML Card du photographe dans la page HTML
+displayDataPhotographer(photographer);
+
+// Afficher le tarif jour du photographe
+photographerPricePerDay(photographer.pricePerDay);
+
+/** @type {HTMLSelectElement} - La liste déroulante des différents tris */
+const sorted = document.querySelector(".sorted__form__list");
+// Ecouter l'action de changement de la liste et appeler la bonne fonction de tri
+sorted.addEventListener("change", function () {
+  /** @type {HTMLOptionElement} - L'option sélectionnée dans la liste de tri */
+  const selected = this.options[sorted.selectedIndex];
+  /** @type {string} - Le tri à appliquer est écrit dans un attribut data */
+  const sortOption = selected.getAttribute("data-sort");
+  // Trier les medias
+  init(sortOption);
+});
 
 init();
