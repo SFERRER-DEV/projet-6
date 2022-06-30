@@ -1,11 +1,14 @@
+// Importer le fabriques
 import * as facHeader from "./../factories/photographer.js";
 import * as facGallery from "./../factories/media.js";
-//import * as Media from "./../models/media.js";
+// Importer les classes
 import Photographer from "./../models/photographer.js";
+//import Media from "../models/media.js";
+// Importer les objets API
 import singletonPhotograherApi from "./../api/photographerApi.js";
 import singletonMediumApi from "./../api/mediumApi.js";
+// Importer les fonctions de tri
 import * as sort from "./../util/sort.js";
-import Media from "../models/media.js";
 
 /**
  * Obtenir les données d'un photographe
@@ -39,18 +42,6 @@ async function getPhotographer(targetID) {
   }
 
   return photographer;
-}
-
-/**
- * Obtenir les données de tous les médias de tous les photographes
- *
- * @returns {Array<Media>)
- */
-async function getAllMedium() {
-  /** @type {Array<Media>} - Un tableau contenant la liste de tous les médias de tous les photographes */
-  const medium = singletonMediumApi.getData();
-  // Retourner le tableau des médias seulement une fois
-  return medium;
 }
 
 /**
@@ -145,13 +136,10 @@ const likesCounter = (medium) => {
 const photographerLikes = (medium) => {
   /** @type {number} - Faire la somme des likes  */
   const counter = likesCounter(medium);
-  /** @type {HTMLSpanElement} - Encart tarif journalier du photographe */
+  /** @type {HTMLSpanElement} - Encart du compteur de likes */
   const likes = document.querySelector(".informations__rates__likes");
-  /** @type {HTMLSpanElement} - Encart tarif journalier du photographe */
-  //const ilike = document.querySelector(".informations__rates__likes_ilike");
-  // Mettre à jour l'encart avec le tarif du photographe
+  // Mettre à jour l'encart avec la somme du nombre de j'aime des medias du photographe
   likes.textContent = counter;
-  //likes.insertBefore(document.createTextNode(counter), ilike);
 };
 
 /**
@@ -196,7 +184,8 @@ async function init(sortOption = undefined) {
 }
 
 // Point d'entrée de la page
-/** */
+
+/** {URLSearchParams} - paramètres FET de l'URL de la page */
 let params = new URL(document.location).searchParams;
 /** @type {number} - l'identifiant du photographe obtenu en paramètre url */
 const photograpgerId = parseInt(params.get("id"));
