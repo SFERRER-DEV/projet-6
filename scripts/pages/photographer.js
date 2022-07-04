@@ -48,16 +48,13 @@ async function getPhotographer(targetID) {
  * Obtenir les données des médias d'un photographe
  *
  * @param {number} targetID - Identifiant du photographe passé en paramètre à l'url
- * @returns {Array<{Media}>)
+ * @returns {Array<{Media}>) - Un tableau contenant la liste des medias du photographe
  */
 async function getMedium(targetID) {
   /** @type {Array<Media>} - Un tableau pour contenir des objets de type Media */
-  let medium = [];
-  // en recherchant en mémoire locale d'abord ...
-  medium = singletonMediumApi.getAllDataByID(targetID);
+  let medium = singletonMediumApi.getAllDataByID(targetID); // en recherchant en mémoire locale d'abord ...
   if (Array.isArray(medium) && !medium.length) {
-    // ...sinon en recherchant avec l'API
-    medium = await singletonMediumApi.getAllById(targetID);
+    medium = await singletonMediumApi.getAllById(targetID); // ...sinon en recherchant avec l'API
     if (Array.isArray(medium) && !medium.length) {
       //throw `Medias du photographe ${targetID} non trouvés`;
     }
@@ -114,9 +111,8 @@ async function displayDataMedium(medium) {
     const buttonIlike = mediaCardDOM.querySelector(
       ".card-media__heading__likes__ilike"
     );
-
-    // Ajouter l'évènement du click du bouton j'aime de ce média
-    addEventILike(buttonIlike, m.id, medium);
+    // Ajouter l'évènement du click au bouton j'aime de ce média
+    addEventILike(buttonIlike, m);
 
     // Ajouter cette HTML Card Media à la liste
     cardsHtml.appendChild(mediaCardDOM);
@@ -127,26 +123,36 @@ async function displayDataMedium(medium) {
 }
 
 /**
+ * Determiner quel tri est selectionné dans la dropdownlist
+ *
+ * @param {HTMLSelectElement} sorted la liste déroulante des différents tris
+ */
+const getSortOption = () => {
+  /** @type {HTMLSelectElement} - La liste déroulante des différents tris */
+  const sorted = document.querySelector(".sorted__form__list");
+  /** @type {HTMLOptionElement} - L'option sélectionnée dans la liste de tri */
+  const selected = sorted.options[sorted.selectedIndex];
+  /** @type {string} - Le tri à appliquer est écrit dans un attribut data */
+  const sortOption = selected.getAttribute("data-sort");
+
+  return sortOption;
+};
+
+/**
  * Ajouter un évènement click au bouton j'aime d'une HTML Card de média.
  * Le bouton appelle la fonction iLike(media) qui est hors de la portée de la fabrique.
  * L'évènement est donc ajouté ici.
  *
  * @param {HTMLButtonElement} buttonIlike - un bouton j'aime d'une HTML Card de Media fabriquée
  * @param {number} mediaId - L'identifiant d'un media
- * @param {Array<Medium>} - Le tableau des objets de type Media
  *
  */
-const addEventILike = (buttonIlike, mediaId, medium) => {
-  /** @type {number} - l'indice du objet de type Media retrouvé d'après sa propriété id dans le tableau des médias */
-  const index = medium.map((m) => m.id).indexOf(mediaId);
-  // Vérifier qu'une instance de type Media a été retrouvée pour cette id
-  if (index !== -1) {
-    // Ajouter l'évèvement click au bouton j'aime
-    buttonIlike.addEventListener("click", function () {
-      iLike(index, medium); // Appeler la fonction iLike
-      photographerLikes(medium); // Recalculer la somme des likes du photographe après une incrémentation
-    });
-  }
+const addEventILike = (buttonIlike, media) => {
+  // Ajouter l'évèvement click au bouton j'aime
+  buttonIlike.addEventListener("click", function () {
+    iLike(media); // Ajouter un j'aime +1
+    photographerLikes(); // Recalculer la somme des likes du photographe après une incrémentation
+  });
 };
 
 /**
@@ -159,31 +165,30 @@ const addEventILike = (buttonIlike, mediaId, medium) => {
  *
  * @param {Media} media - Un objet de type Media
  */
-const iLike = (index, medium) => {
+const iLike = (media) => {
   // Ajouter un j'aime à ce media
-  medium[index].likes += 1;
+  media.likes += 1;
 
   /** @type {Object} - Factory Method qui fabrique une HTML Card avec un objet de type Media */
-  const mediaModel = facGallery.mediaFactory(medium[index]); // Instancier une fabrique pour créer la HTML Card
+  const mediaModel = facGallery.mediaFactory(media); // Instancier une fabrique pour créer la HTML Card
 
   /** @type {HTMLArticleElement} - une nouvelle HTML Card fabriquée pour ce média */
   const newMediaCardDOM = mediaModel.getMediaCardDOM(); // Fabriquer la nouvelle HTML Card
 
   /** @type {HTMLButtonElement} - le bouton j'aime dans cette HTML Card*/
+
   const buttonIlike = newMediaCardDOM.querySelector(
     ".card-media__heading__likes__ilike"
   );
-
   // Ajouter l'évènement du click du bouton j'aime de ce média
-  addEventILike(buttonIlike, medium[index].id, medium); // Si cet évènement n'est pas ajouté alors les médias ne peuvent être aimés qu'une seule fois...
+  // Si cet évènement n'est pas ajouté alors les médias ne peuvent être aimés qu'une seule fois...
+  addEventILike(buttonIlike, media);
 
   /** @type {HTMLDivElement} - Le conteneur html <div> qui contient toutes les HTML Cards */
   const container = document.querySelector("#gallery");
 
   /** @type {HTMLArticleElement} - l'ancienne HTML Card de ce media */
-  const oldMediaCardDom = container.querySelector(
-    `[data-id="${medium[index].id}"]`
-  );
+  const oldMediaCardDom = container.querySelector(`[data-id="${media.id}"]`);
 
   // Permutter les HTML Cards
   container.replaceChild(newMediaCardDOM, oldMediaCardDom);
@@ -205,7 +210,9 @@ const likesCounter = (medium) => {
  *
  * @param {Array<Media>} medium - Un tableau d'objets de type Media
  */
-const photographerLikes = (medium) => {
+const photographerLikes = () => {
+  /** @type {Array<Media>} - Un tableau pour contenir des objets de type Media */
+  const medium = singletonMediumApi.getAllDataByID(photographerId); //// obtenu en mémoire locale
   /** @type {number} - Faire la somme des likes  */
   const counter = likesCounter(medium);
   /** @type {HTMLSpanElement} - Encart du compteur de likes */
@@ -260,10 +267,10 @@ async function init(sortOption = undefined) {
 /** {URLSearchParams} - paramètres FET de l'URL de la page */
 let params = new URL(document.location).searchParams;
 /** @type {number} - l'identifiant du photographe obtenu en paramètre url */
-const photograpgerId = parseInt(params.get("id"));
+const photographerId = parseInt(params.get("id"));
 
 /** @type {Object} - l'objet contenant les données du photographe */
-const photographer = await getPhotographer(photograpgerId);
+const photographer = await getPhotographer(photographerId);
 // Afficher les données sur la console
 console.table(photographer);
 
@@ -277,11 +284,9 @@ photographerPricePerDay(photographer.pricePerDay);
 const sorted = document.querySelector(".sorted__form__list");
 // Ecouter l'action de changement de la liste et appeler la bonne fonction de tri
 sorted.addEventListener("change", function () {
-  /** @type {HTMLOptionElement} - L'option sélectionnée dans la liste de tri */
-  const selected = this.options[sorted.selectedIndex];
-  /** @type {string} - Le tri à appliquer est écrit dans un attribut data */
-  const sortOption = selected.getAttribute("data-sort");
-  // Trier les medias
+  console.log("change");
+  /** @type {string} - chaine de caractère du tri sélectionné dans la dropdownlist: popular, date, title */
+  const sortOption = getSortOption();
   init(sortOption);
 });
 
