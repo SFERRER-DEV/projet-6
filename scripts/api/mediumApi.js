@@ -65,28 +65,9 @@ class MediumApi {
    */
   setData(data) {
     data.forEach((obj) => {
-      let prop;
-      if (Object.prototype.hasOwnProperty.call(obj, "image")) {
-        prop = "image";
-      } else if (Object.prototype.hasOwnProperty.call(obj, "video")) {
-        prop = "video";
-      } else {
-        // obj[undefined] === undefined
-        // une exception sera levée lors de l'instanciation du type Media
-        prop = undefined;
-      }
-
       /** @type {Media} Un objet de type Media instancier à partir des données json*/
-      let m = new Media(
-        obj.id,
-        obj.photographerId,
-        obj.title,
-        obj[prop], // prop est soit la propriété obj.image ou obj.video
-        obj.likes,
-        obj.date,
-        obj.price
-      );
-      // Ajouter ce média en mémoire
+      let m = Media.createMedia(obj);
+
       this._data.push(m);
     });
   }
@@ -133,7 +114,7 @@ class MediumApi {
       .then((res) => res.media)
       .then((res) =>
         res.filter(function (el) {
-          return el.id === targetID && el.pphotographerId === photographerId;
+          return el.id === targetID && el.photographerId === photographerId;
         })
       )
       .catch((err) => console.log("an error occurs", err));

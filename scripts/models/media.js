@@ -54,7 +54,7 @@ export default class Media {
   }
 
   /**
-   * @property {number} photograpgerId identifiant d'un photographe
+   * @property {number} photographerId identifiant d'un photographe
    */
   get photographerId() {
     return this._photographerId;
@@ -143,6 +143,39 @@ export default class Media {
         `L'extension de ce fichier '${filename}' n'a pas permis de déterminer son type.`
       );
     }
+  }
+
+  /**
+   * Méthode statique pour instancier un média à partir d'un
+   * objet JSON.
+   *
+   * @param {*} obj
+   * @returns
+   */
+  static createMedia(obj) {
+    /** @type {string} - le nom de la propriété du média : image ou vidéo*/
+    let prop;
+    if (Object.prototype.hasOwnProperty.call(obj, "image")) {
+      prop = "image";
+    } else if (Object.prototype.hasOwnProperty.call(obj, "video")) {
+      prop = "video";
+    } else {
+      // obj[undefined] === undefined
+      // une exception sera levée lors de l'instanciation du type Media
+      prop = undefined;
+    }
+
+    /** @type {Media} Un objet de type Media instancier à partir des données json*/
+    let m = new Media(
+      obj.id,
+      obj.photographerId,
+      obj.title,
+      obj[prop], // prop est soit la propriété obj.image ou obj.video
+      obj.likes,
+      obj.date,
+      obj.price
+    );
+    return m;
   }
 }
 

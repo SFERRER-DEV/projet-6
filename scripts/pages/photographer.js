@@ -3,7 +3,7 @@ import * as facHeader from "./../factories/photographer.js";
 import * as facGallery from "./../factories/media.js";
 // Importer les classes
 import Photographer from "./../models/photographer.js";
-//import Media from "../models/media.js";
+import Media from "../models/media.js";
 // Importer les objets API
 import singletonPhotograherApi from "./../api/photographerApi.js";
 import singletonMediumApi from "./../api/mediumApi.js";
@@ -112,7 +112,7 @@ async function displayDataMedium(medium) {
       ".card-media__heading__likes__ilike"
     );
     // Ajouter l'évènement du click au bouton j'aime de ce média
-    addEventILike(buttonIlike, m);
+    addEventILike(buttonIlike, m.id);
 
     // Ajouter cette HTML Card Media à la liste
     cardsHtml.appendChild(mediaCardDOM);
@@ -147,52 +147,75 @@ const getSortOption = () => {
  * @param {number} mediaId - L'identifiant d'un media
  *
  */
-const addEventILike = (buttonIlike, media) => {
+const addEventILike = (buttonIlike, mediaId) => {
   // Ajouter l'évèvement click au bouton j'aime
   buttonIlike.addEventListener("click", function () {
-    iLike(media); // Ajouter un j'aime +1
-    photographerLikes(); // Recalculer la somme des likes du photographe après une incrémentation
+    iLike(mediaId); // Ajouter un j'aime +1
   });
 };
 
 /**
  * Incrémenter le nombre de likes d'un média
- * Retrouver la HTML Card du média passé en paramètre et le permutter
+ * Remplacer la HTML Card à partir de l'identifiant du média passé en paramètre et le permutter
  * avec une nouvelle HTML Card fabriquée
- *
- * Il faut rajouter l'évènement click au bouton j'aime de la nouvelle HTML Card
+ * L'objet de type media est obtenu à nouveau à partir de son id depuis l'API.
+ * Ainsi son compte de likes sera toujours incrémenté à partir de sa valeur d'origine dans le fichier JSON
+ * et le média ne pourra être liké qu'une seule fois.
+ * Il faut rajouter ici l'évènement click au bouton j'aime de la nouvelle HTML Card
  * car cet évènement n'est pas fourni par la fabrique
  *
- * @param {Media} media - Un objet de type Media
+ * @param {number} mediaId - L'identifiant d'un media
  */
-const iLike = (media) => {
-  // Ajouter un j'aime à ce media
-  media.likes += 1;
+async function iLike(mediaId) {
+  /**  @type {Object} obj - un objet JSON obtenu d'après l'identifiant du média à créer*/
+  const obj = await singletonMediumApi.getById(mediaId, photographerId);
+  if (Array.isArray(obj) && obj.length === 1) {
+    /** @type {Media} media - un objet de type média créé à partir des donnés json*/
+    const media = Media.createMedia(obj[0]);
+    // Renseigner le chemin du dossier conteneur du média avec le prénom du photographe
+    media.media_folder = `assets/images/${photographer.firstname}/`;
 
-  /** @type {Object} - Factory Method qui fabrique une HTML Card avec un objet de type Media */
-  const mediaModel = facGallery.mediaFactory(media); // Instancier une fabrique pour créer la HTML Card
+    // Incrémenter d'un seul j'aime ce media obtenu depuis l'API
+    media.likes += 1;
 
-  /** @type {HTMLArticleElement} - une nouvelle HTML Card fabriquée pour ce média */
-  const newMediaCardDOM = mediaModel.getMediaCardDOM(); // Fabriquer la nouvelle HTML Card
+    /** @type {Object} - Factory Method qui fabrique une HTML Card avec un objet de type Media */
+    const mediaModel = facGallery.mediaFactory(media); // Instancier une fabrique pour créer la HTML Card
 
-  /** @type {HTMLButtonElement} - le bouton j'aime dans cette HTML Card*/
+    /** @type {HTMLArticleElement} - une nouvelle HTML Card à fabriquer pour ce média */
+    const newMediaCardDOM = mediaModel.getMediaCardDOM(); // Fabriquer la nouvelle HTML Card
 
-  const buttonIlike = newMediaCardDOM.querySelector(
-    ".card-media__heading__likes__ilike"
-  );
-  // Ajouter l'évènement du click du bouton j'aime de ce média
-  // Si cet évènement n'est pas ajouté alors les médias ne peuvent être aimés qu'une seule fois...
-  addEventILike(buttonIlike, media);
+    /** @type {HTMLButtonElement} - le bouton j'aime dans cette HTML Card*/
+    const buttonIlike = newMediaCardDOM.querySelector(
+      ".card-media__heading__likes__ilike"
+    );
 
-  /** @type {HTMLDivElement} - Le conteneur html <div> qui contient toutes les HTML Cards */
-  const container = document.querySelector("#gallery");
+    // Ajouter l'évènement du click du bouton j'aime de ce média (puisque la factory ne le fait pas)
+    // Si cet évènement n'est pas ajouté à nouveau alors les médias ne pourraientt être cliqués qu'une seule et première fois.
+    addEventILike(buttonIlike, media.id);
 
-  /** @type {HTMLArticleElement} - l'ancienne HTML Card de ce media */
-  const oldMediaCardDom = container.querySelector(`[data-id="${media.id}"]`);
+    /** @type {HTMLDivElement} - Le conteneur html <div> qui contient toutes les HTML Cards */
+    const container = document.querySelector("#gallery");
 
-  // Permutter les HTML Cards
-  container.replaceChild(newMediaCardDOM, oldMediaCardDom);
-};
+    /** @type {} - l'ancienne HTML Card de ce media */
+    const oldMediaCardDom = container.querySelector(`[data-id="${media.id}"]`);
+
+    // Permutter les HTML Cards
+    container.replaceChild(newMediaCardDOM, oldMediaCardDom);
+
+    /** {Array<Media>} medium - un tableau contenant les objets de type Média du photographe */
+    let medium = await getMedium(photographer.id); // Remplir le tableau des medias pour le photographe
+    /** @type {number} - trouver l'indice du média d'après sa propriété id dans le tableau de médias */
+    const index = medium.map((m) => m.id).indexOf(mediaId);
+    // Vérifier qu'une instance de type Media a été retrouvée pour l'id
+    if (index !== -1) {
+      medium[index].likes = media.likes; // Mettre à jour le tableau afin de tenir le compte total des likes juste
+    }
+    // Recalculer la somme des likes du photographe
+    photographerLikes();
+  } else {
+    throw `Echec du like: Media ${mediaId} non trouvé pour photographe ${photographerId}`;
+  }
+}
 
 /**
  * Faire la somme des likes d'objets de type Media contenus dans un tableau
@@ -258,7 +281,7 @@ async function init(sortOption = undefined) {
     displayDataMedium(medium);
 
     // Afficher le nombre de likes du photographe
-    photographerLikes(medium);
+    photographerLikes();
   }
 }
 
