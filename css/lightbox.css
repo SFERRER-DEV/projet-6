@@ -1,0 +1,73 @@
+.lightbox {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  z-index: 100;
+  border: 5px blue dotted;
+}
+
+.lightbox__container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5em;
+  height: 100vh;
+  border: 3px blueviolet dotted;
+}
+
+.lightbox__container__media {
+  border: 3px red dotted;
+}
+
+/* Média : vidéo et photo */
+.lightbox__container__media__video,
+.lightbox__container__media__photo {
+  width: 1000px;
+  max-width: 100%;
+}
+/* Média : photo */
+.lightbox__container__media__photo {
+  height: 700px;
+  object-fit: cover;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+}
+
+/* titre du média */
+.lightbox__container__media__title {
+  color: #901c1c;
+}
+
+.lightbox__container__buttons {
+  border: 1px blueviolet dotted;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+/* boutons icones */
+.lightbox__container__previous,
+.lightbox__container__buttons__close,
+.lightbox__container__buttons__next {
+  border: none;
+  background-color: transparent;
+  color: #901c1c;
+  font-size: 3rem;
+  cursor: pointer;
+}
+
+.lightbox__container__buttons__close {
+  position: absolute;
+}
+
+.lightbox__container__previous,
+.lightbox__container__buttons__next {
+  margin-top: auto;
+  margin-bottom: auto;
+}

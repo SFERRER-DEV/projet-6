@@ -1,4 +1,4 @@
-// Importer le fabriques
+// Importer les fabriques
 import * as facHeader from "./../factories/photographer.js";
 import * as facGallery from "./../factories/media.js";
 // Importer les classes
@@ -11,6 +11,8 @@ import singletonMediumApi from "./../api/mediumApi.js";
 import * as sort from "../utils/sort.js";
 // Importer les fonctions du formulaire de contact
 import * as fm from "../utils/contactForm.js";
+// Importer les fonctions de la lightbox
+import * as lbx from "../utils/lightbox.js";
 
 /**
  * Obtenir les données d'un photographe
@@ -109,6 +111,11 @@ async function displayDataMedium(medium) {
     /** @type {HTMLArticleElement} - une HTML Card d'un media qui est fabriquée dans une balise article */
     const mediaCardDOM = mediaModel.getMediaCardDOM(); // Fabriquer la HTML Card
 
+    /** @type {HTMLDivElement} - un conteneur <div> qui contient soit une image soit une vidéo */
+    const cardMedia = mediaCardDOM.querySelector(".card-media__container");
+    // Ajouter l'évènement du click pour ouvrir la lightbox sur ce media
+    addEventOpenLightbox(cardMedia, m);
+
     /** @type {HTMLButtonElement} - le bouton j'aime dans cette HTML Card*/
     const buttonIlike = mediaCardDOM.querySelector(
       ".card-media__heading__likes__ilike"
@@ -120,7 +127,7 @@ async function displayDataMedium(medium) {
     cardsHtml.appendChild(mediaCardDOM);
   });
 
-  // Remplacer les medias existant et afficher les nouveaux medias fabriqués
+  // Remplacer les medias existant en affichant les nouveaux medias fabriqués
   container.replaceChildren(cardsHtml);
 }
 
@@ -157,6 +164,53 @@ const addEventILike = (buttonIlike, mediaId) => {
 };
 
 /**
+ * Ajouter un évènement click au div container d'un média dans une HTML Card de média.
+ *
+ * @param {HTMLDivElement} cardMedia - un conteneur <div> qui contient soit une image soit une vidéo
+ * @param {Media} media - un objet de type Media
+ */
+const addEventOpenLightbox = (cardMedia, media) => {
+  /** @type {HTMLSectionElement} - le conteneur <section> pour afficher la lightbox */
+  const container = document.querySelector("#lightbox");
+
+  /** @type {Array<Media>} - Un tableau pour contenir des objets de type Media */
+  let medium = singletonMediumApi.getAllDataByID(photographerId); // Utiliser le tavleau  en mémoire locale
+  /** @type {number} - trouver l'indice du média d'après sa propriété id dans le tableau de médias */
+  const index = getMediaIndex(media.id, medium);
+  /** @type {Media} - l'objet de type Media ayant l'indice précédent dans le tableau */
+  let previous;
+  /** @type {number} - l'identifiant du média précédent */
+  let previousId;
+  /** @type {Media} - l'objet de type Media ayant l'indice suivant dans le tableau */
+  let next;
+  /** @type {number} - l'identifiant du média suivant */
+  let nextId;
+  // Vérifier qu'un Media a été retrouvée pour cet id
+  if (index !== -1) {
+    previous = medium[index - 1]; // Le média qui le précéde
+    if (previous === undefined) {
+      previousId = -1;
+    } else {
+      previousId = previous.id;
+    }
+    next = medium[index + 1]; // Le média qui le suit
+    if (next === undefined) {
+      nextId = -1;
+    } else {
+      nextId = next.id;
+    }
+
+    // Ajouter l'évènement du click qui ouvre la lightbox pour ce media
+    cardMedia.addEventListener("click", function (event) {
+      // Afficher la lightbox
+      lbx.showLightbox(event, container, media, previousId, nextId);
+    });
+  } else {
+    throw `Echec du like: Media ${media.id} non trouvé pour photographe ${photographer.id}`;
+  }
+};
+
+/**
  * Incrémenter le nombre de likes d'un média
  * Remplacer la HTML Card à partir de l'identifiant du média passé en paramètre et le permutter
  * avec une nouvelle HTML Card fabriquée
@@ -190,10 +244,13 @@ async function iLike(mediaId) {
     const buttonIlike = newMediaCardDOM.querySelector(
       ".card-media__heading__likes__ilike"
     );
-
-    // Ajouter l'évènement du click du bouton j'aime de ce média (puisque la factory ne le fait pas)
-    // Si cet évènement n'est pas ajouté à nouveau alors les médias ne pourraientt être cliqués qu'une seule et première fois.
+    // Ajouter l'évènement du click du bouton j'aime de ce média
     addEventILike(buttonIlike, media.id);
+
+    /** @type {HTMLDivElement} - un conteneur <div> qui contient soit une image soit une vidéo */
+    const cardMedia = newMediaCardDOM.querySelector(".card-media__container");
+    // Ajouter l'évènement du click pour ouvrir la lightbox sur ce media
+    addEventOpenLightbox(cardMedia, media);
 
     /** @type {HTMLDivElement} - Le conteneur html <div> qui contient toutes les HTML Cards */
     const container = document.querySelector("#gallery");
@@ -206,9 +263,11 @@ async function iLike(mediaId) {
 
     /** {Array<Media>} medium - un tableau contenant les objets de type Média du photographe */
     let medium = await getMedium(photographer.id); // Remplir le tableau des medias pour le photographe
+
     /** @type {number} - trouver l'indice du média d'après sa propriété id dans le tableau de médias */
-    const index = medium.map((m) => m.id).indexOf(mediaId);
-    // Vérifier qu'une instance de type Media a été retrouvée pour l'id
+    const index = getMediaIndex(mediaId, medium);
+
+    // Vérifier qu'un Media a été retrouvée pour cet id
     if (index !== -1) {
       medium[index].likes = media.likes; // Mettre à jour le tableau afin de tenir le compte total des likes juste
     }
@@ -218,6 +277,21 @@ async function iLike(mediaId) {
     throw `Echec du like: Media ${mediaId} non trouvé pour photographe ${photographerId}`;
   }
 }
+
+/**
+ * Trouver l'indice d'un media dans le tableau des médias
+ * stocké en mémoire locale.
+ *
+ * @param {Array<Media>} medium - unn tableau contenant des objets de type Media
+ * @param {number} mediaId - l'identifiant d'un média
+ * @returns {number} - l'indice de l'élément dans le tableau des Medias
+ */
+const getMediaIndex = (mediaId, medium) => {
+  /** @type {number} - trouver l'indice du média d'après sa propriété id dans le tableau de médias */
+  const index = medium.map((m) => m.id).indexOf(mediaId);
+
+  return index;
+};
 
 /**
  * Faire la somme des likes d'objets de type Media contenus dans un tableau
@@ -315,12 +389,9 @@ sorted.addEventListener("change", function () {
   init(sortOption);
 });
 
-// Gestion des évènements de u formulaire de contact
+// Gestion des évènements du formulaire de contact
 
 const btnContact = document.getElementById("btn-modal-open");
 btnContact.addEventListener("click", () => fm.displayModal(photographer.name));
-
-const btnClose = document.getElementById("btn-modal-close");
-btnClose.addEventListener("click", () => fm.closeModal());
 
 init();
