@@ -173,41 +173,11 @@ const addEventOpenLightbox = (cardMedia, media) => {
   /** @type {HTMLSectionElement} - le conteneur <section> pour afficher la lightbox */
   const container = document.querySelector("#lightbox");
 
-  /** @type {Array<Media>} - Un tableau pour contenir des objets de type Media */
-  let medium = singletonMediumApi.getAllDataByID(photographerId); // Utiliser le tavleau  en mémoire locale
-  /** @type {number} - trouver l'indice du média d'après sa propriété id dans le tableau de médias */
-  const index = getMediaIndex(media.id, medium);
-  /** @type {Media} - l'objet de type Media ayant l'indice précédent dans le tableau */
-  let previous;
-  /** @type {number} - l'identifiant du média précédent */
-  let previousId;
-  /** @type {Media} - l'objet de type Media ayant l'indice suivant dans le tableau */
-  let next;
-  /** @type {number} - l'identifiant du média suivant */
-  let nextId;
-  // Vérifier qu'un Media a été retrouvée pour cet id
-  if (index !== -1) {
-    previous = medium[index - 1]; // Le média qui le précéde
-    if (previous === undefined) {
-      previousId = -1;
-    } else {
-      previousId = previous.id;
-    }
-    next = medium[index + 1]; // Le média qui le suit
-    if (next === undefined) {
-      nextId = -1;
-    } else {
-      nextId = next.id;
-    }
-
-    // Ajouter l'évènement du click qui ouvre la lightbox pour ce media
-    cardMedia.addEventListener("click", function (event) {
-      // Afficher la lightbox
-      lbx.showLightbox(event, container, media, previousId, nextId);
-    });
-  } else {
-    throw `Echec du like: Media ${media.id} non trouvé pour photographe ${photographer.id}`;
-  }
+  // Ajouter l'évènement du click qui ouvre la lightbox pour ce media
+  cardMedia.addEventListener("click", function (event) {
+    // Afficher la lightbox
+    lbx.showLightbox(event, container, media);
+  });
 };
 
 /**
@@ -265,7 +235,7 @@ async function iLike(mediaId) {
     let medium = await getMedium(photographer.id); // Remplir le tableau des medias pour le photographe
 
     /** @type {number} - trouver l'indice du média d'après sa propriété id dans le tableau de médias */
-    const index = getMediaIndex(mediaId, medium);
+    const index = singletonMediumApi.getMediaIndex(mediaId);
 
     // Vérifier qu'un Media a été retrouvée pour cet id
     if (index !== -1) {
@@ -277,21 +247,6 @@ async function iLike(mediaId) {
     throw `Echec du like: Media ${mediaId} non trouvé pour photographe ${photographerId}`;
   }
 }
-
-/**
- * Trouver l'indice d'un media dans le tableau des médias
- * stocké en mémoire locale.
- *
- * @param {Array<Media>} medium - unn tableau contenant des objets de type Media
- * @param {number} mediaId - l'identifiant d'un média
- * @returns {number} - l'indice de l'élément dans le tableau des Medias
- */
-const getMediaIndex = (mediaId, medium) => {
-  /** @type {number} - trouver l'indice du média d'après sa propriété id dans le tableau de médias */
-  const index = medium.map((m) => m.id).indexOf(mediaId);
-
-  return index;
-};
 
 /**
  * Faire la somme des likes d'objets de type Media contenus dans un tableau

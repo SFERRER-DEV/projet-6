@@ -21,6 +21,67 @@ class MediumApi {
   }
 
   /**
+   * Trouver l'indice d'un media dans le tableau des médias
+   * stocké en mémoire locale.
+   *
+   * @param {number} mediaId - l'identifiant d'un média
+   * @returns {number} - l'indice de l'élément dans le tableau des Medias
+   */
+  getMediaIndex(mediaId) {
+    /** @type {number} - trouver l'indice du média d'après sa propriété id dans le tableau de médias */
+    const index = this._data.map((m) => m.id).indexOf(mediaId);
+
+    return index;
+  }
+
+  /**
+   * Obtenir l'identifiant du média qui précède dans la liste des médias
+   *
+   * @param {number} mediaId - l'identifiant d'un média
+   * @returns {number} - L'identifiant du média précédent dans le tableau ou -1
+   */
+  getMediaPreviousId(mediaId) {
+    // /** @type {number} - trouver l'indice du média d'après sa propriété id dans le tableau de médias */
+    const index = this.getMediaIndex(mediaId);
+    /** @type {Media} - l'objet de type Media ayant l'indice précédent dans le tableau */
+    let previous;
+    /** @type {number} - l'identifiant du média précédent */
+    let previousId;
+    previous = this._data[index - 1]; // Le média qui le précède
+    if (previous === undefined) {
+      previousId = -1;
+    } else {
+      previousId = previous.id;
+    }
+
+    return previousId;
+  }
+
+  /**
+   *
+   * Obtenir l'identifiant du média qui suit dans la liste des médias
+   *
+   * @param {number} mediaId - l'identifiant d'un média
+   * @returns {number} - l'identifiant du média suivant dans le tableau ou -1
+   */
+  getMediaNextId(mediaId) {
+    // /** @type {number} - trouver l'indice du média d'après sa propriété id dans le tableau de médias */
+    const index = this.getMediaIndex(mediaId);
+    /** @type {Media} - l'objet de type Media ayant l'indice suivant dans le tableau */
+    let next;
+    /** @type {number} - l'identifiant du média suivant */
+    let nextId;
+    next = this._data[index + 1]; // Le média qui le suit
+    if (next === undefined) {
+      nextId = -1;
+    } else {
+      nextId = next.id;
+    }
+
+    return nextId;
+  }
+
+  /**
    * Obtenir le tableau des objets stockés en mémoire
    * Ce tableau est rempli lors de l'instanciation du Singleton
    *
@@ -34,10 +95,13 @@ class MediumApi {
    * Obtenir un objet de type Media stocké dans le tableau en mémoire
    *
    * @param {number} targetID les éléments du tableau doivent avoir une propriété id
+   * @param {number} photographerId
    * @returns {Media} retourne le media trouvé
    */
-  getDataByID(targetID) {
-    return this._data.find((el) => el.id == targetID);
+  getDataByID(targetID, photographerId) {
+    return this._data.find(
+      (el) => el.id === targetID && el.photographerId === photographerId
+    );
   }
 
   /**
