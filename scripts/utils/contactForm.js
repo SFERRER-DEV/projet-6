@@ -1,9 +1,22 @@
-function displayModal() {
-    const modal = document.getElementById("contact_modal");
-	modal.style.display = "block";
+/**
+ *
+ * @param {*} name
+ */
+export function displayModal(name) {
+  /** @type {*} */
+  const modal = document.getElementById("contact_modal");
+  modal.style.display = "block";
+  /** @type {*} */
+  const who = document.querySelector(
+    ".contact-container__modal__heading__contact__who"
+  );
+  who.replaceChildren(document.createTextNode(name));
 }
 
-function closeModal() {
-    const modal = document.getElementById("contact_modal");
-    modal.style.display = "none";
+/**
+ *
+ */
+export function closeModal() {
+  const modal = document.getElementById("contact_modal");
+  modal.style.display = "none";
 }

@@ -1,0 +1,96 @@
+/* Formulaire de contact */
+
+.contact-container {
+  display: none;
+  position: fixed;
+  top: 90px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  overflow-y: scroll;
+  z-index: 100;
+}
+
+.contact-container__modal {
+  border-radius: 5px;
+  background-color: #db8876;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 35px;
+  margin: auto;
+}
+
+.contact-container__modal * {
+  outline-offset: 5px;
+  box-sizing: border-box;
+}
+
+.contact-container__modal *:focus-visible {
+  outline-color: #2176ff;
+  outline-offset: 10px;
+}
+
+.contact-container__modal__heading {
+  border: 1px blueviolet dotted;
+  color: black;
+  font-size: 1.5rem;
+  font-weight: normal;
+  width: 100%;
+  margin-bottom: 0.2em;
+}
+
+.contact-container__modal__heading__contact__who {
+  border: 1px blueviolet dotted;
+}
+
+.contact-container__modal__heading__close {
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  border: 1px blueviolet dotted;
+}
+
+form {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+form label {
+  color: #312e2e;
+  font-size: 1.3rem;
+  margin-bottom: 0.5em;
+}
+
+form div {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: self-start;
+  margin-bottom: 26px;
+}
+
+form input {
+  width: 100%;
+  height: 68px;
+  border: none;
+  border-radius: 5px;
+  padding-left: 0.5em;
+  font-size: 1.2rem;
+  margin-bottom: 1em;
+}
+
+textarea {
+  width: 100%;
+  resize: none;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.2rem;
+  padding: 0.5em;
+  margin-bottom: 1em;
+}

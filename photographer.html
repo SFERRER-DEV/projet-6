@@ -20,7 +20,7 @@
   </header>
   <main id="main">
     <div class="photograph-header">
-      <button class="contact_button" onclick="displayModal()">Contactez-moi</button>
+      <button id="btn-modal-open" class="photograph-header__contact contact_button">Contactez-moi</button>
     </div>
     <!-- filtres -->
     <section class="sorted">
@@ -45,24 +45,40 @@
       </p>
     </aside>
   </main>
-  <div id="contact_modal">
-    <div class="modal">
-      <header>
-        <h2>Contactez-moi</h2>
-        <img src="assets/icons/close.svg" onclick="closeModal()" />
+  <div id="contact_modal" class="contact-container">
+    <div class="contact-container__modal">
+
+      <header class="contact-container__modal__heading">
+        <h2 id="contact-container__modal__heading__contact">Contactez-moi<br /><span
+            class="contact-container__modal__heading__contact__who"></span></h1>
+          <button class="contact-container__modal__heading__close" aria-label="Close Contact form" id="btn-modal-close">
+            <img src="assets/icons/close.svg" alt="" />
+          </button>
       </header>
-      <form>
-        <div>
-          <label>Prénom</label>
-          <input />
-        </div>
-        <button class="contact_button">Envoyer</button>
+      <form id="form" class="contact-container__modal__form" action="#">
+
+        <label for="firstname">Prénom</label>
+        <input type="text" name="firstname" id="firstname" minlength="2" maxlength="30" required aria-required="true"
+          autocomplete="true">
+
+        <label for="lastname">Nom</label>
+        <input type="text" name="lastname" id="lastname" minlength="2" maxlength="30" required aria-required="true"
+          autocomplete="true">
+
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" pattern="^\w+([\.-]?\w+)*@\w+\.\w+$" required aria-required="true"
+          autocomplete="true">
+
+        <label for="message">Votre message</label>
+        <textarea name="message" id="message" cols="30" rows="10" minlength="10" maxlength="100" required
+          aria-required="true"></textarea>
+        <input id="submit-form" class="contact_button" type="submit" value="Envoyer" aria-label="Send">
       </form>
+
     </div>
   </div>
   <script type="module" src="scripts/factories/photographer.js"></script>
   <script type="module" src="scripts/pages/photographer.js"></script>
-  <script src="/scripts/utils/contactForm.js"></script>
 </body>
 
 </html>
