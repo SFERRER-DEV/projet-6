@@ -8,7 +8,9 @@ import Media from "../models/media.js";
 import singletonPhotograherApi from "./../api/photographerApi.js";
 import singletonMediumApi from "./../api/mediumApi.js";
 // Importer les fonctions de tri
-import * as sort from "./../util/sort.js";
+import * as sort from "../utils/sort.js";
+// Importer les fonctions du formulaire de contact
+import * as fm from "../utils/contactForm.js";
 
 /**
  * Obtenir les données d'un photographe
@@ -312,5 +314,13 @@ sorted.addEventListener("change", function () {
   const sortOption = getSortOption();
   init(sortOption);
 });
+
+// Gestion des évènements de u formulaire de contact
+
+const btnContact = document.getElementById("btn-modal-open");
+btnContact.addEventListener("click", () => fm.displayModal(photographer.name));
+
+const btnClose = document.getElementById("btn-modal-close");
+btnClose.addEventListener("click", () => fm.closeModal());
 
 init();
