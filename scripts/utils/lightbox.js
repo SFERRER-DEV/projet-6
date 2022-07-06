@@ -42,14 +42,14 @@ export function showLightbox(event, container, media) {
 
   btnPrevious.addEventListener("click", () => {
     console.log(`Previous ${previousId}`);
-    const media = singletonMediumApi.getDataByID(previousId, photographerId);
+    //const media = singletonMediumApi.getDataByID(previousId, photographerId);
     // Afficher la lightbox
     showLightbox(event, container, media);
   });
 
   btnNext.addEventListener("click", () => {
     console.log(`Next ${nextId}`);
-    const media = singletonMediumApi.getDataByID(nextId, photographerId);
+    //const media = singletonMediumApi.getDataByID(nextId, photographerId);
     // Afficher la lightbox
     showLightbox(event, container, media);
   });
