@@ -4,7 +4,7 @@ import * as facGallery from "./../factories/media.js";
 // Importer les classes
 import Photographer from "./../models/photographer.js";
 import Media from "../models/media.js";
-// Importer les objets API
+// Importer les singletons API
 import singletonPhotograherApi from "./../api/photographerApi.js";
 import singletonMediumApi, { MediumApi } from "./../api/mediumApi.js";
 // Importer les fonctions de tri
@@ -95,7 +95,7 @@ async function displayDataMedium(medium) {
     /** @type {HTMLDivElement} - un conteneur <div> qui contient soit une image soit une vidéo */
     const container = mediaCardDOM.querySelector(".card-media__container");
     // Ajouter l'évènement du click pour ouvrir la lightbox sur ce media
-    addEventOpenLightbox(container, m);
+    addEventOpenLightbox(container, m, medium);
 
     /** @type {HTMLButtonElement} - le bouton j'aime dans cette HTML Card*/
     const buttonIlike = mediaCardDOM.querySelector(
@@ -113,9 +113,7 @@ async function displayDataMedium(medium) {
 }
 
 /**
- * Determiner quel tri est selectionné dans la dropdownlist
- *
- * @param {HTMLSelectElement} sorted la liste déroulante des différents tris
+ * Déterminer quel tri est selectionné dans la dropdownlist
  */
 const getSortOption = () => {
   /** @type {HTMLSelectElement} - La liste déroulante des différents tris */
@@ -153,15 +151,16 @@ const addEventILike = (buttonIlike, mediaId, medium) => {
  *
  * @param {HTMLDivElement} container - un conteneur <div> qui contient soit une image soit une vidéo
  * @param {Media} media - un objet de type Media
+ * @param {Array<Media>} medium - Un tableau d'objets de type Media
  */
-const addEventOpenLightbox = (container, media) => {
+const addEventOpenLightbox = (container, media, medium) => {
   /** @type {HTMLSectionElement} - le conteneur <section> pour afficher la lightbox */
   const lightbox = document.querySelector("#lightbox");
 
   // Ajouter l'évènement du click qui ouvre la lightbox pour ce media
   container.addEventListener("click", function (event) {
     // Afficher la lightbox
-    lbx.showLightbox(event, lightbox, media);
+    lbx.showLightbox(event, lightbox, media, medium);
   });
 };
 
@@ -209,7 +208,7 @@ async function iLike(mediaId, medium) {
     /** @type {HTMLDivElement} -  le conteneur <div> de l'image ou la vidéo et qui peuvent être ouvertes dans une lightbox */
     const container = newMediaCardDOM.querySelector(".card-media__container");
     // Ajouter l'évènement du click pour ouvrir la lightbox sur ce media
-    addEventOpenLightbox(container, media);
+    addEventOpenLightbox(container, media, medium);
 
     /** @type {HTMLDivElement} - Le conteneur html <div> qui contient toutes les HTML Cards */
     const gallery = document.querySelector("#gallery");
@@ -275,20 +274,24 @@ const photographerPricePerDay = (pricePerDay) => {
 };
 
 /**
- * Obtenir les données médias du photographe
- * éventuellement les trier puis les afficher.
+ * Obtenir les données des médias du photographe
+ * et éventuellement les trier puis les afficher.
  * Compter et afficher le nombres de j'aime de ces médias.
  *
- * @param {string} sortOption - une chaine de caractère définissant un type de tri à appliquer sur l'ordre d
+ * @param {string} sortOption - une chaine de caractère définissant le type de tri à appliquer
+ * @param {Array<Media>} medium - Un tableau d'objets de type Media pour ce photographe
  */
-async function init(sortOption = undefined) {
-  /** @type {Array<Media>} - Un tableau pour contenir des objets de type Media pour ce photographe */
-  let medium = singletonMediumApi.getDataMediumById(photographerId); // en recherchant en locale
-  if (Array.isArray(medium) && !medium.length) {
-    throw `Medias du photographe ${photographerId} non trouvés`;
-  } else {
-    // Afficher le nombre de médias trouvés sur la console
-    console.log(`${medium.length} medias trouvés`);
+function init(sortOption = undefined, medium = []) {
+  // Au premier appel de la fonction init le tableau medium est vide
+  if (!medium.length) {
+    // Obtenir le medias pour ce photographe en les recherchant en locale
+    medium = singletonMediumApi.getDataMediumById(photographerId);
+    if (Array.isArray(medium) && !medium.length) {
+      throw `Medias du photographe ${photographerId} non trouvés`;
+    } else {
+      // Afficher le nombre de médias trouvés sur la console
+      console.log(`${medium.length} medias trouvés`);
+    }
   }
 
   // Appliquer un type de tri au tableau des medias
@@ -301,6 +304,16 @@ async function init(sortOption = undefined) {
 
   // Afficher le nombre de likes du photographe
   displayLikes(medium);
+
+  /** @type {HTMLSelectElement} - La liste déroulante pour choisir un tri différents */
+  const sortList = document.querySelector(".sorted__form__list");
+  // Ecouter l'action de changement de la liste et appeler la bonne fonction de tri
+  sortList.addEventListener("change", function () {
+    /** @type {string} - chaine de caractère du tri sélectionné dans la dropdownlist: popular, date ou title */
+    const sortOption = getSortOption();
+    // Obtenir les données des médias du photographe
+    init(sortOption, medium);
+  });
 }
 
 // Point d'entrée de la page : Obtenir le photographe, puis obtenir les médias du photographe
@@ -321,7 +334,7 @@ displayDataPhotographer(photographer);
 // Afficher le tarif jour du photographe
 photographerPricePerDay(photographer.pricePerDay);
 
-// Obtenir les données des médias du photographe
+// Afficher les médias du photographe
 init();
 
 // Gestion des évènements
@@ -331,13 +344,12 @@ const btnContact = document.getElementById("btn-modal-open");
 // Ecouter l'action du clic  pour ouvrir la modale
 btnContact.addEventListener("click", () => fm.displayModal(photographer.name));
 
-/** @type {HTMLSelectElement} - La liste déroulante pour choisir un tri différents */
-const sorted = document.querySelector(".sorted__form__list");
-// Ecouter l'action de changement de la liste et appeler la bonne fonction de tri
-sorted.addEventListener("change", function () {
-  console.log("change");
-  /** @type {string} - chaine de caractère du tri sélectionné dans la dropdownlist: popular, date, title */
-  const sortOption = getSortOption();
-  // Obtenir les données des médias du photographe
-  init(sortOption);
-});
+// /** @type {HTMLSelectElement} - La liste déroulante pour choisir un tri différents */
+// const sortList = document.querySelector(".sorted__form__list");
+// // Ecouter l'action de changement de la liste et appeler la bonne fonction de tri
+// sortList.addEventListener("change", function () {
+//   /** @type {string} - chaine de caractère du tri sélectionné dans la dropdownlist: popular, date ou title */
+//   const sortOption = getSortOption();
+//   // Obtenir les données des médias du photographe
+//   init(sortOption);
+// });
