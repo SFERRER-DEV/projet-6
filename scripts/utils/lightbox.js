@@ -8,7 +8,7 @@ import singletonMediumApi, { MediumApi } from "./../api/mediumApi.js";
  * Fabriquer un HTML Card et l'afficher dans la lightbox
  *
  * @param {*} event -
- * @param {HTMLSectionElement} container - La section HTML à afficher ou masquer et qui contient la HTML Card
+ * @param {HTMLSectionElement} container - La section HTML à afficher ou à masquer contenant la HTML Card lightbox
  * @param {Media} media - L'objet de type Media à afficher dans la lightbox
  * @param {Array<Media>} medium - Un tableau d'objets de type Media
  */
@@ -36,45 +36,70 @@ export function showLightbox(event, container, media, medium) {
   // Ajouter l'évènement sur la croix pour masquer la section HTML contenant la lightbox
   btnClose.addEventListener("click", () => (container.style.display = "none"));
 
-  // Configurer l'évènement du Bouton précédent sauf pour le premier média
-  if (previousId !== undefined && previousId != -1) {
-    /** @type {HTMLButtonElement} -  bouton précédent */
-    const btnPrevious = cardHtml.querySelector(
-      ".lightbox__container__previous"
-    );
-    // Ajouter l'évènement suivant
-    addEventPreviousOrNext(
-      event,
-      container,
-      btnPrevious,
-      medium,
-      previousId,
-      photographerId
-    );
-  }
+  addEventPrevious(
+    event,
+    container,
+    cardHtml,
+    medium,
+    previousId,
+    photographerId
+  );
 
-  // Configurer l'évènement du Bouton suivant sauf pour le dernier média
-  if (nextId !== undefined && nextId != -1) {
-    /** @type {HTMLButtonElement} -  bouton suivant */
-    const btnNext = cardHtml.querySelector(
-      ".lightbox__container__buttons__next"
-    );
-    // Ajouter l'évènement précédent
-    addEventPreviousOrNext(
-      event,
-      container,
-      btnNext,
-      medium,
-      nextId,
-      photographerId
-    );
-  }
+  addEventNext(event, container, cardHtml, medium, nextId, photographerId);
 
   // Remplacer le media existant en affichant le nouveau media fabriqué
   container.replaceChildren(cardHtml);
   // Afficher la section HTML contenant la lightbox
   container.style.display = "block";
 }
+
+/**
+ ** Ajouter un évènement clic au bouton précédent
+
+ * @param {*} event
+ * @param {HTMLSectionElement} container - La section HTML à afficher ou masquer et qui contient la HTML Card
+ * @param {HTMLArticleElement} cardHtml - HMTL Card pour afficher un média dans la lightbox
+ * @param {Array<Media>} medium - Un tableau d'objets de type Media
+ * @param {number} previousId - l'identifiant du média précédent
+ * @param {number} photographerId - l'identifiant du photographe des médias
+ */
+const addEventPrevious = (
+  event,
+  container,
+  cardHtml,
+  medium,
+  previousId,
+  photographerId
+) => {
+  /** @type {HTMLButtonElement} -  bouton précédent */
+  const btnPrevious = cardHtml.querySelector(".lightbox__container__previous");
+  // Ajouter l'évènement suivant ou précédent
+  addEvent(event, container, btnPrevious, medium, previousId, photographerId);
+};
+
+/**
+ * Ajouter un évènement clic au bouton suivant
+ *
+ * @param {*} event
+ * @param {HTMLSectionElement} container - La section HTML à afficher ou masquer et qui contient la HTML Card
+ * @param {HTMLArticleElement} cardHtml - HMTL Card pour afficher un média dans la lightbox
+ * @param {Array<Media>} medium - Un tableau d'objets de type Media
+ * @param {number} nextId - l'identifiant du média précédent
+ * @param {number} photographerId - l'identifiant du photographe des médias
+ */
+const addEventNext = (
+  event,
+  container,
+  cardHtml,
+  medium,
+  nextId,
+  photographerId
+) => {
+  /** @type {HTMLButtonElement} -  bouton suivant */
+  const btnNext = cardHtml.querySelector(".lightbox__container__buttons__next");
+  // Ajouter l'évènement suivant ou précédent
+  addEvent(event, container, btnNext, medium, nextId, photographerId);
+};
 
 /**
  * Ajouter soit l'évènement au bouton précédent pour afficher le média précédent
@@ -88,7 +113,7 @@ export function showLightbox(event, container, media, medium) {
  * @param {number} mediaId - l'identifiant du média précédent
  * @param {number} photographerId - l'identifiant du photographe des médias
  */
-const addEventPreviousOrNext = (
+const addEvent = (
   event,
   container,
   button,
@@ -96,11 +121,17 @@ const addEventPreviousOrNext = (
   mediaId,
   photographerId
 ) => {
-  // Ajouter l'évènement pour afficher le média suivant dans la lightbox
-  button.addEventListener("click", () => {
-    /** @type {Media} - le media suivant de ce photographe */
-    const media = singletonMediumApi.getDataMediaById(mediaId, photographerId);
-    // Afficher la lightbox
-    showLightbox(event, container, media, medium);
-  });
+  // L'évènement n'est ajouté que si il y a au moins suivant bouton Next ou au moins un précédent pour le bouton Previous
+  if (mediaId !== undefined && mediaId != -1) {
+    // Ajouter l'évènement pour afficher le média suivant dans la lightbox
+    button.addEventListener("click", () => {
+      /** @type {Media} - le media suivant de ce photographe */
+      const media = singletonMediumApi.getDataMediaById(
+        mediaId,
+        photographerId
+      );
+      // Afficher la lightbox
+      showLightbox(event, container, media, medium);
+    });
+  }
 };
