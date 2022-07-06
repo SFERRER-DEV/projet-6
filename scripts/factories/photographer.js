@@ -37,7 +37,7 @@ export function photographerFactory(myPhotographer, parent) {
    * afin d'afficher les données d'un photographe
    * avec un template spécifique suivant la page
    *
-   * @returns une html card d'un photographe
+   * @returns {HTMLArticleElement} une HTLK Card d'un photographe
    */
   function getUserCardDOM() {
     /** @const {HTMLDivElement} - l'élement html article qui contient la card */
@@ -46,135 +46,126 @@ export function photographerFactory(myPhotographer, parent) {
 
     if (disposition === DIRECTION.VERTICAL) {
       // index.html
-      _addUSerCardDOMVertical(article);
+      addUSerCardDOMVertical(article, myPhotographer, disposition);
     } else if (disposition === DIRECTION.HORIZONTAL) {
       // photographer.html
-      _addUSerCardDOMHorizontal(article);
+      addUSerCardDOMHorizontal(article, myPhotographer, disposition);
     }
 
     return article;
   }
 
-  /**
-   * Ajouter les éléments au DOM de la page index.html
-   * avec une présentation verticale specifique.
-   *
-   * @param {HTMLDivElement} parent - est une balise article
-   */
-  function _addUSerCardDOMVertical(parent) {
-    /** @type {HTMLAnchorElement} - lien vers la page du photographe */
-    const link = _getLink();
-    // Ajouter le lien vers la page du photographe dans l'article
-    parent.appendChild(link);
-
-    /** @type {HTMLDivElement} - un conteneur pour regrouper la photo et les informations du photographe */
-    const div = Dom.getDiv("card-photograph__link__container");
-
-    // Ajouter le div conteneur dans le lien
-    link.appendChild(div);
-
-    /** @type {HTMLImageElement} - image contenant la photo du portrait */
-    const photo = Dom.getPhoto(
-      "card-photograph__link__container__portrait",
-      myPhotographer.portrait,
-      `Portrait du photographe ${myPhotographer._name}`
-    );
-    // Ajouter la photo dans le lien
-    div.appendChild(photo);
-
-    /** @type {HTMLTitleElement} - titre contenant le nom du photographe  */
-    const name = getName(disposition, myPhotographer);
-    // Ajouter le nom du photographe dans le lien
-    div.appendChild(name);
-
-    /** @type {HTMLParagraphElement} -  paragraphe contenant les informations du photographe */
-    const para = Dom.getTitle(
-      "card-photograph__link__container__location",
-      "p",
-      myPhotographer.location
-    );
-    // Ajouter le paragaphe
-    div.appendChild(para);
-
-    /** @type {HTMLSpanElement} - élément en ligne pour afficher le slogan */
-    const span1 = Dom.getTitle(
-      "card-photograph__link__container__location__slogan",
-      "span",
-      myPhotographer._tagline
-    );
-
-    // Ajouter l'élément de ligne
-    para.appendChild(span1);
-
-    /** @type {HTMLSpanElement} - élément en ligne pour afficher le tarif jour */
-    const span2 = Dom.getTitle(
-      "card-photograph__link__container__location__tarif",
-      "span",
-      myPhotographer.pricePerDay
-    );
-
-    // Ajouter l'élément de ligne
-    para.appendChild(span2);
-  }
-
-  /**
-   * Ajouter les éléments au DOM de la page photograph.html
-   * avec une présentation horizontale spécifique.
-   *
-   * @param {HTMLDivElement} parent - est une balise article.
-   */
-  function _addUSerCardDOMHorizontal(parent) {
-    /** @type {HTMLElement} - titre contenant le nom du photographe  */
-    const name = getName(disposition, myPhotographer);
-    // Ajouter le nom du photographe
-    parent.appendChild(name);
-
-    /** @type {HTMLParagraphElement} -  paragraphe contenant les informations du photographe */
-    const para = Dom.getTitle(
-      "card-photograph__container__location",
-      "p",
-      myPhotographer.location
-    );
-    // Ajouter le paragaphe
-    parent.appendChild(para);
-
-    /** @type {HTMLElement} - élément en ligne pour afficher le slogan */
-    const span = Dom.getTitle(
-      "card-photograph__container__location__slogan",
-      "span",
-      myPhotographer._tagline
-    );
-    // Ajouter l'élément de ligne
-    para.appendChild(span);
-
-    /** @type {HTMLImageElement} - image contenant la photo du portrait */
-    const photo = Dom.getPhoto(
-      "",
-      myPhotographer.portrait,
-      `Portrait du photographe ${myPhotographer._name}`
-    );
-
-    // Ajouter la photo
-    parent.appendChild(photo);
-  }
-
-  /**
-   * Obtenir un lien vers la page du photographe et le renvoyer.
-   *
-   * @returns {HTMLAnchorElement} link - balise a pointant vers une page photographe.
-   */
-  const _getLink = () => {
-    /** @type {HTMLAnchorElement} - balise a */
-    const link = document.createElement("a");
-    link.classList.add("card-photograph__link");
-    // création du lien pour acceder à la page du photographe
-    link.setAttribute("href", `./photographer.html?id=${myPhotographer.id}`);
-    link.setAttribute("aria-label", name);
-
-    return link;
-  };
-
   return { id, name, getUserCardDOM, disposition };
+}
+
+/**
+ * Ajouter les éléments au DOM de la page photograph.html
+ * avec une présentation horizontale spécifique.
+ *
+ * @param {Photographer} myPhotographer - Un objet de la classe photographe
+ * @param {HTMLDivElement} parent - est une balise article
+ * @param {number} disposition - une constante pour définir l'orientation de la HTML Card
+ */
+function addUSerCardDOMHorizontal(parent, myPhotographer, disposition) {
+  /** @type {HTMLElement} - titre contenant le nom du photographe  */
+  const name = getName(disposition, myPhotographer);
+  // Ajouter le nom du photographe
+  parent.appendChild(name);
+
+  /** @type {HTMLParagraphElement} -  paragraphe contenant les informations du photographe */
+  const para = Dom.getTitle(
+    "card-photograph__container__location",
+    "p",
+    myPhotographer.location
+  );
+  // Ajouter le paragaphe
+  parent.appendChild(para);
+
+  /** @type {HTMLElement} - élément en ligne pour afficher le slogan */
+  const span = Dom.getTitle(
+    "card-photograph__container__location__slogan",
+    "span",
+    myPhotographer._tagline
+  );
+  // Ajouter l'élément de ligne
+  para.appendChild(span);
+
+  /** @type {HTMLImageElement} - image contenant la photo du portrait */
+  const photo = Dom.getPhoto(
+    "",
+    myPhotographer.portrait,
+    `Portrait du photographe ${myPhotographer._name}`
+  );
+
+  // Ajouter la photo
+  parent.appendChild(photo);
+}
+/**
+ * Ajouter les éléments au DOM de la page index.html
+ * avec une présentation verticale specifique.
+ *
+ * @param {HTMLDivElement} parent - est une balise article
+ * @param {Photographer} myPhotographer - Un objet de la classe photographe
+ * @param {number} disposition - une constante pour définir l'orientation de la HTML Card
+ */
+function addUSerCardDOMVertical(parent, myPhotographer, disposition) {
+  /** @type {HTMLAnchorElement} - lien vers la page du photographe */
+  const link = Dom.getLink(
+    "card-photograph__link",
+    `./photographer.html?id=${myPhotographer.id}`,
+    ""
+  );
+  // Ajouter le lien vers la page du photographe dans l'article
+  parent.appendChild(link);
+
+  /** @type {HTMLDivElement} - un conteneur pour regrouper la photo et les informations du photographe */
+  const div = Dom.getDiv("card-photograph__link__container");
+
+  // Ajouter le div conteneur dans le lien
+  link.appendChild(div);
+
+  /** @type {HTMLImageElement} - image contenant la photo du portrait */
+  const photo = Dom.getPhoto(
+    "card-photograph__link__container__portrait",
+    myPhotographer.portrait,
+    `Portrait du photographe ${myPhotographer._name}`
+  );
+  // Ajouter la photo dans le lien
+  div.appendChild(photo);
+
+  /** @type {HTMLTitleElement} - titre contenant le nom du photographe  */
+  const name = getName(disposition, myPhotographer);
+  // Ajouter le nom du photographe dans le lien
+  div.appendChild(name);
+
+  /** @type {HTMLParagraphElement} -  paragraphe contenant les informations du photographe */
+  const para = Dom.getTitle(
+    "card-photograph__link__container__location",
+    "p",
+    myPhotographer.location
+  );
+  // Ajouter le paragaphe
+  div.appendChild(para);
+
+  /** @type {HTMLSpanElement} - élément en ligne pour afficher le slogan */
+  const span1 = Dom.getTitle(
+    "card-photograph__link__container__location__slogan",
+    "span",
+    myPhotographer._tagline
+  );
+
+  // Ajouter l'élément de ligne
+  para.appendChild(span1);
+
+  /** @type {HTMLSpanElement} - élément en ligne pour afficher le tarif jour */
+  const span2 = Dom.getTitle(
+    "card-photograph__link__container__location__tarif",
+    "span",
+    myPhotographer.pricePerDay
+  );
+
+  // Ajouter l'élément de ligne
+  para.appendChild(span2);
 }
 
 /**
@@ -182,7 +173,7 @@ export function photographerFactory(myPhotographer, parent) {
  *
  * @param {number} - Une constante utilisée pour gérer les deux affichage de la Card Photographe
  * @param  {Photographer} myPhotographer - Un objet de la classe photographe
- * @returns {HTMLTitleElement} titre - balise titre h1 ou h2 avec le nom du photographe
+ * @returns {HTMLTitleElement} balise titre h1 ou h2 avec le nom du photographe
  */
 const getName = (disposition, myPhotographer) => {
   /** @type {HTMLTitleElement} - balise titre h1 ou h2 */

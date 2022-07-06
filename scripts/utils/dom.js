@@ -146,3 +146,23 @@ export const getButton = (
 
   return bouton;
 };
+
+/**
+ * Obtenir un lien vers la page du photographe et le renvoyer.
+ *
+ * @param {string} strClass - Une classe CSS pour le lien
+ * @param {string} strRelativeUrl - Une classe CSS pour le lien
+ * @param {string} strAriaLabel - le text de l'aria label de l'icône
+ * @returns {HTMLAnchorElement} - balise a pointant vers une page photographe.
+ */
+export const getLink = (strClass, strRelativeUrl, strAriaLabel) => {
+  /** @type {HTMLAnchorElement} - balise a */
+  const link = document.createElement("a");
+  if (strClass !== undefined && strClass !== "") {
+    link.classList.add(strClass);
+  }
+  link.setAttribute("href", strRelativeUrl);
+  link.setAttribute("aria-label", strAriaLabel);
+
+  return link;
+};
