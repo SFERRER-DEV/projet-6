@@ -1,4 +1,5 @@
 //import Photographer from "./../models/photographer.js";
+import * as Dom from "./../utils/dom.js";
 /** @type {Number} - Une constante utilisée pour gérer les deux affichage de la Card Photographe */
 const DIRECTION = {
   VERTICAL: 0,
@@ -66,37 +67,52 @@ export function photographerFactory(myPhotographer, parent) {
     // Ajouter le lien vers la page du photographe dans l'article
     parent.appendChild(link);
 
-    /** @type {HTMLDivElement} - conteneur */
-    const div = _getContainerDiv();
+    /** @type {HTMLDivElement} - un conteneur pour regrouper la photo et les informations du photographe */
+    const div = Dom.getDiv("card-photograph__link__container");
+
     // Ajouter le div conteneur dans le lien
     link.appendChild(div);
 
     /** @type {HTMLImageElement} - image contenant la photo du portrait */
-    const photo = _getPhoto();
+    const photo = Dom.getPhoto(
+      "card-photograph__link__container__portrait",
+      myPhotographer.portrait,
+      `Portrait du photographe ${myPhotographer._name}`
+    );
     // Ajouter la photo dans le lien
     div.appendChild(photo);
-    photo.classList.add("card-photograph__link__container__portrait");
 
     /** @type {HTMLTitleElement} - titre contenant le nom du photographe  */
-    const name = _getName();
+    const name = getName(disposition, myPhotographer);
     // Ajouter le nom du photographe dans le lien
     div.appendChild(name);
 
     /** @type {HTMLParagraphElement} -  paragraphe contenant les informations du photographe */
-    const para = _getParagraph(myPhotographer.location);
-    para.classList.add("card-photograph__link__container__location");
+    const para = Dom.getTitle(
+      "card-photograph__link__container__location",
+      "p",
+      myPhotographer.location
+    );
     // Ajouter le paragaphe
     div.appendChild(para);
 
     /** @type {HTMLSpanElement} - élément en ligne pour afficher le slogan */
-    const span1 = _getSpan(myPhotographer._tagline);
-    span1.classList.add("card-photograph__link__container__location__slogan");
+    const span1 = Dom.getTitle(
+      "card-photograph__link__container__location__slogan",
+      "span",
+      myPhotographer._tagline
+    );
+
     // Ajouter l'élément de ligne
     para.appendChild(span1);
 
     /** @type {HTMLSpanElement} - élément en ligne pour afficher le tarif jour */
-    const span2 = _getSpan(myPhotographer.pricePerDay);
-    span2.classList.add("card-photograph__link__container__location__tarif");
+    const span2 = Dom.getTitle(
+      "card-photograph__link__container__location__tarif",
+      "span",
+      myPhotographer.pricePerDay
+    );
+
     // Ajouter l'élément de ligne
     para.appendChild(span2);
   }
@@ -109,42 +125,38 @@ export function photographerFactory(myPhotographer, parent) {
    */
   function _addUSerCardDOMHorizontal(parent) {
     /** @type {HTMLElement} - titre contenant le nom du photographe  */
-    const name = _getName();
-    name.classList.add("card-photograph__container__heading");
+    const name = getName(disposition, myPhotographer);
     // Ajouter le nom du photographe
     parent.appendChild(name);
 
-    /** @type {HTMLElement} -  paragraphe contenant les informations du photographe */
-    const para = _getParagraph(myPhotographer.location);
-    para.classList.add("card-photograph__container__location");
+    /** @type {HTMLParagraphElement} -  paragraphe contenant les informations du photographe */
+    const para = Dom.getTitle(
+      "card-photograph__container__location",
+      "p",
+      myPhotographer.location
+    );
     // Ajouter le paragaphe
     parent.appendChild(para);
 
     /** @type {HTMLElement} - élément en ligne pour afficher le slogan */
-    const span = _getSpan(myPhotographer._tagline);
-    span.classList.add("card-photograph__container__location__slogan");
+    const span = Dom.getTitle(
+      "card-photograph__container__location__slogan",
+      "span",
+      myPhotographer._tagline
+    );
     // Ajouter l'élément de ligne
     para.appendChild(span);
 
-    /** @type {HTMLElement} - image contenant la photo du portrait */
-    const photo = _getPhoto();
+    /** @type {HTMLImageElement} - image contenant la photo du portrait */
+    const photo = Dom.getPhoto(
+      "",
+      myPhotographer.portrait,
+      `Portrait du photographe ${myPhotographer._name}`
+    );
+
     // Ajouter la photo
     parent.appendChild(photo);
   }
-
-  /**
-   * Obtenir un conteneur pour regrouper
-   * la photo et les informations du photographe
-   *
-   * @returns {HTMLDivElement} div - balise div conteneur.
-   */
-  const _getContainerDiv = () => {
-    /** @type {HTMLDivElement} - balise div */
-    const div = document.createElement("div");
-    div.classList.add("card-photograph__link__container");
-
-    return div;
-  };
 
   /**
    * Obtenir un lien vers la page du photographe et le renvoyer.
@@ -162,70 +174,35 @@ export function photographerFactory(myPhotographer, parent) {
     return link;
   };
 
-  /**
-   * Obtenir une image pour la photo du photographe.
-   *
-   * @returns {HTMLImageElement} img - balise img pour le portrait
-   */
-  const _getPhoto = () => {
-    /** @type {HTMLImageElement} - balise img pour le portrait */
-    const img = document.createElement("img");
-    img.setAttribute("src", myPhotographer.portrait);
-    img.setAttribute("alt", `Portrait du photographe ${myPhotographer._name}`);
-
-    return img;
-  };
-
-  /**
-   * Obtenir un titre pour le nom du photographe.
-   *
-   * @returns {HTMLTitleElement} titre - balise titre h1 ou h2 avec le nom du photographe
-   */
-  const _getName = () => {
-    /** @type {HTMLTitleElement} - balise titre */
-    let titre;
-
-    if (disposition === DIRECTION.HORIZONTAL) {
-      // photograher.html
-      titre = document.createElement("h1");
-      titre.classList.add("card-photograph__container__heading");
-    } else if (disposition === DIRECTION.VERTICAL) {
-      // index.html
-      titre = document.createElement("h2");
-      titre.classList.add("card-photograph__link__container__heading");
-    }
-    titre.textContent = myPhotographer.name;
-
-    return titre;
-  };
-
-  /**
-   * Préparer et obtenir un paragraphe de texte.
-   *
-   * @param {String} strTexte - une chaine de caractère à afficher
-   * @returns {HTMLParagraphElement} para - balise p avec le texte mis en forme
-   */
-  const _getParagraph = (strTexte) => {
-    /** @type {HTMLParagraphElement} - un paragraphe de texte */
-    const para = document.createElement("p");
-    para.appendChild(document.createTextNode(strTexte));
-
-    return para;
-  };
-
-  /**
-   * Préparer et obtenir un élément d'une ligne de texte.
-   *
-   * @param {String} strTexte - le texte à mettre en forme avec css
-   * @returns {HTMLSpanElement} span
-   */
-  const _getSpan = (strTexte) => {
-    /** @type {HTMLSpanElement} - texte en ligne */
-    const span = document.createElement("span");
-    span.appendChild(document.createTextNode(strTexte));
-
-    return span;
-  };
-
   return { id, name, getUserCardDOM, disposition };
 }
+
+/**
+ * Obtenir un titre pour le nom du photographe.
+ *
+ * @param {number} - Une constante utilisée pour gérer les deux affichage de la Card Photographe
+ * @param  {Photographer} myPhotographer - Un objet de la classe photographe
+ * @returns {HTMLTitleElement} titre - balise titre h1 ou h2 avec le nom du photographe
+ */
+const getName = (disposition, myPhotographer) => {
+  /** @type {HTMLTitleElement} - balise titre h1 ou h2 */
+  let title;
+
+  if (disposition === DIRECTION.HORIZONTAL) {
+    // photographer.html
+    title = Dom.getTitle(
+      "card-photograph__container__heading",
+      "h1",
+      myPhotographer.name
+    );
+  } else if (disposition === DIRECTION.VERTICAL) {
+    // index.html
+    title = Dom.getTitle(
+      "card-photograph__link__container__heading",
+      "h2",
+      myPhotographer.name
+    );
+  }
+
+  return title;
+};
