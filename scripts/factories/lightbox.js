@@ -5,14 +5,13 @@ import * as Dom from "./../utils/dom.js";
  * @param {Media} myMedia - Un objet de la classe Media
  * @returns
  */
-
 export function lightboxFactory(myMedia) {
   // Destructurer les propriétés de l'objet data dans des variables séparées
   const { id } = myMedia;
 
   /**
    * @param {number} previousId - l'identifiant du Média ayant l'indice précédent dans le tableau des médias
-   * @param {number} nextId -  l'identifiant du Média ayant l'indice suivant dans le tableau des médias
+   * @param {number} nextId - l'identifiant du Média ayant l'indice suivant dans le tableau des médias
    * @returns {HTMLArticleElement} HMTL Card pour afficher un média dans la lightbox
    */
   function getLightboxCardDOM(previousId, nextId) {
@@ -21,45 +20,16 @@ export function lightboxFactory(myMedia) {
     article.classList.add("lightbox__container");
     // Ce data attribut permet de marquer cette HTML Card pour l'identifier
     article.setAttribute("data-id", id);
-    /** @type {string} - une chaine de caractères pour le label aria */
-    const strAriaLabel =
+    // Aria label
+    article.setAttribute(
+      "aria-label",
       myMedia.media === Media.MEDIUM.VIDEO
-        ? "Vidéo agrandie"
-        : "Image en vue rapprochée";
-    article.setAttribute("aria-label", strAriaLabel);
-
-    /** @type {string} - texte spécifique pour aria-label  */
-    const strMedia = myMedia.media === Media.MEDIUM.VIDEO ? "Vidéo" : "Image";
+        ? `${myMedia.strMedia} agrandie`
+        : `${myMedia.strMedia} en vue rapprochée`
+    );
 
     /** @type {HTMLButtonElement} - bouton image précédente < */
-    const button1 = Dom.getButton(
-      "lightbox__container__previous",
-      "fa-chevron-left",
-      "fa-solid",
-      `${strMedia} précédente`
-    );
-
-    // Ce data attribut permet d'identifier le média précédent si il existe
-    button1.setAttribute("data-id", previousId);
-
-    /** @type {HTMLButtonElement} - bouton image suivante > */
-    const button2 = Dom.getButton(
-      "lightbox__container__buttons__next",
-      "fa-chevron-right",
-      "fa-solid",
-      `${strMedia} suivante`
-    );
-    // Ce data attribut permet d'identifier le média suivant si il existe
-    button2.setAttribute("data-id", nextId);
-
-    /** @type {HTMLButtonElement} - bouton fermer X */
-    const button3 = Dom.getButton(
-      "lightbox__container__buttons__close",
-      "fa-times",
-      "fa-solid",
-      "Fermer cette fenêtre"
-    );
-
+    const button1 = getButton(myMedia, previousId, false);
     // Ajouter le bouton précédent
     article.appendChild(button1); // <
 
@@ -80,8 +50,20 @@ export function lightboxFactory(myMedia) {
 
     // Ajouter le paragraphe pour le titre
     divMedia.appendChild(title);
+
     // Ajouter le conteneur media
     article.appendChild(divMedia);
+
+    /** @type {HTMLButtonElement} - bouton image précédente < */
+    const button2 = getButton(myMedia, nextId, true);
+
+    /** @type {HTMLButtonElement} - bouton fermer X */
+    const button3 = Dom.getButton(
+      "lightbox__container__buttons__close",
+      "fa-times",
+      "fa-solid",
+      "Fermer cette fenêtre"
+    );
 
     /** @type {HTMLDivElement} - conteneur des deux autres boutons */
     const divButtons = Dom.getDiv("lightbox__container__buttons");
@@ -97,3 +79,37 @@ export function lightboxFactory(myMedia) {
 
   return { id, getLightboxCardDOM };
 }
+
+/**
+ * Créer et paramètrer les boutons précédent et suivant
+ * de la lightbox
+ *
+ * @param {Media} myMedia - un objet de la classe Media
+ * @param {number} previousId - l'identifiant du Média ayant l'indice précédent dans le tableau des médias
+ * @param {boolean} flag - false pour le bouton précédent ou true pour le bouton suivant
+ */
+const getButton = (myMedia, mediaId, flag) => {
+  /** @type {HTMLButtonElement} - bouton précdent < ou bouton suivant > */
+  let button;
+
+  if (!flag) {
+    button = Dom.getButton(
+      "lightbox__container__previous",
+      "fa-chevron-left",
+      "fa-solid",
+      `${myMedia.strMedia} précédente`
+    );
+  } else {
+    button = Dom.getButton(
+      "lightbox__container__buttons__next",
+      "fa-chevron-right",
+      "fa-solid",
+      `${myMedia.strMedia} suivante`
+    );
+  }
+
+  // Ce data attribut permet d'identifier le média précédent si il existe
+  button.setAttribute("data-id", mediaId);
+
+  return button;
+};

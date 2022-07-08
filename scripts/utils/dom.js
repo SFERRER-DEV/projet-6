@@ -38,7 +38,8 @@ export const getTitle = (strClass, balise, strText) => {
 
 /**
  * Obtenir une balise image pour afficher une photographie
- * ou une balise vidéo pour jouer une vidéo
+ * ou
+ * obtenir une balise vidéo pour jouer une vidéo
  *
  * @param {Media} myMedia - Un objet de la classe Media
  * @param {string} strClass1 - Une classe CSS pour la balise conteneur div
@@ -117,7 +118,7 @@ export const getVideo = (strClass, src, strAlt) => {
  * @param {string} strClass2 - Une classe CSS pour la forme de l'icône
  * @param {string} strClass3 - Une classe CSS pour le style de l'icône
  * @param {string} strAriaLabel - le text de l'aria label de l'icône
- * @returns {HTMLButtonElement} balise bouton pour liker
+ * @returns {HTMLButtonElement} balise bouton avec une icône
  */
 export const getButton = (
   strClass1,

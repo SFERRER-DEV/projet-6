@@ -68,10 +68,17 @@ export default class Media {
   }
 
   /**
-   * @property {MEDIUM.IMAGE | MEIDUM.VIDEO} media  est une constante de type MEDIUM: 0 => image ou 1 => vidéo
+   * @property {MEDIUM.IMAGE | MEDIUM.VIDEO} media  est une constante de type MEDIUM: 0 => image ou 1 => vidéo
    */
   get media() {
     return this._media;
+  }
+
+  /**
+   * @property {string} strMedia obtenir la chaine de caractère pour le  type de ce média
+   */
+  get strMedia() {
+    return this._media === MEDIUM.VIDEO ? "Vidéo" : "Image";
   }
 
   /**
