@@ -25,12 +25,15 @@ export const getDiv = (strClass) => {
  * @param {string} balise - une notation pour un type de balise html
  * @returns {HTMLTitleElement | HTMLParagraphElement | HTMLSpanElement} balise titre h3, h2, h1 ou un paragraphe contenant une chaine de caractères
  */
-export const getTitle = (strClass, balise, strText) => {
+export const getTitle = (strClass, balise, strText, strAriaLabel = "") => {
   /** @type {HTMLTitleElement |HTMLParagraphElement | HTMLSpanElement} - balise contenant la chaine de caractères */
   const titre = document.createElement(balise);
   titre.textContent = strText;
   if (strClass !== undefined && strClass !== "") {
     titre.classList.add(strClass);
+  }
+  if (strAriaLabel !== "") {
+    titre.setAttribute("aria-label", strAriaLabel);
   }
 
   return titre;
@@ -84,6 +87,9 @@ export const getPhoto = (strClass, src, strAlt) => {
   img.setAttribute("alt", strAlt);
   if (strClass !== undefined && strClass !== "") {
     img.classList.add(strClass);
+    if (strClass === "lightbox__container__media__photo") {
+      img.setAttribute("tabindex", 5);
+    }
   }
 
   return img;
@@ -99,13 +105,19 @@ export const getVideo = (strClass, src, strAlt) => {
   /** @type {HTMLImageElement} - balise vidéo pour les medias */
   const video = document.createElement("video");
   video.src = src;
-  video.autoplay = false;
-  video.controls = true;
-  video.muted = false;
-  video.setAttribute("alt", strAlt);
   if (strClass !== undefined && strClass !== "") {
     video.classList.add(strClass);
+    if (strClass === "lightbox__container__media__video") {
+      video.controls = true;
+      video.autoplay = true;
+      video.muted = false;
+      video.setAttribute("tabindex", 5);
+    } else {
+      video.controls = false;
+    }
   }
+
+  video.setAttribute("alt", strAlt);
 
   return video;
 };
@@ -139,7 +151,9 @@ export const getButton = (
     icone.classList.add(strClass2);
     if (strAriaLabel !== "") {
       icone.setAttribute("aria-hidden", true);
-      icone.setAttribute("aria-label", strAriaLabel);
+      if (strAriaLabel !== "") {
+        icone.setAttribute("aria-label", strAriaLabel);
+      }
     }
 
     bouton.append(icone);

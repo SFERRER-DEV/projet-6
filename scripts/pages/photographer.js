@@ -94,7 +94,9 @@ async function displayDataMedium(medium) {
 
     /** @type {HTMLDivElement} - un conteneur <div> qui contient soit une image soit une vidéo */
     const container = mediaCardDOM.querySelector(".card-media__container");
-    // Ajouter l'évènement du click pour ouvrir la lightbox sur ce media
+    container.setAttribute("tabindex", "0");
+    container.setAttribute("role", "link");
+    // Ajouter l'évènement du click pour ouvrir la lightbox sur le div container de ce média
     addEventOpenLightbox(container, m, medium);
 
     /** @type {HTMLButtonElement} - le bouton j'aime dans cette HTML Card*/
@@ -343,13 +345,7 @@ init();
 const btnContact = document.getElementById("btn-modal-open");
 // Ecouter l'action du clic  pour ouvrir la modale
 btnContact.addEventListener("click", () => fm.displayModal(photographer.name));
-
-// /** @type {HTMLSelectElement} - La liste déroulante pour choisir un tri différents */
-// const sortList = document.querySelector(".sorted__form__list");
-// // Ecouter l'action de changement de la liste et appeler la bonne fonction de tri
-// sortList.addEventListener("change", function () {
-//   /** @type {string} - chaine de caractère du tri sélectionné dans la dropdownlist: popular, date ou title */
-//   const sortOption = getSortOption();
-//   // Obtenir les données des médias du photographe
-//   init(sortOption);
-// });
+/** @type {HTMLButtonElement} - Le bouton pour contacter le photographe */
+const btnClose = document.getElementById("btn-modal-close");
+// Ecouter l'action du clic  pour fermer la modale
+btnClose.addEventListener("click", () => fm.closeModal());

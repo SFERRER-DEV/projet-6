@@ -16,20 +16,24 @@
 
 <body>
   <header>
-    <img src="assets/images/logo.png" class="logo" />
+    <a tabindex="0" href="index.html" alt="Fisheye page d'accueil">
+      <img src="assets/images/logo.png" class="logo" alt="Fisheye page d'accueil" class="logo">
+    </a>
   </header>
   <main id="main">
     <div class="photograph-header">
-      <button id="btn-modal-open" class="photograph-header__contact contact_button">Contactez-moi</button>
+      <button id="btn-modal-open" class="photograph-header__contact contact_button"
+        aria-label="Contactez moi">Contactez-moi</button>
     </div>
     <!-- filtres -->
     <section class="sorted">
       <form class="sorted__form" action="#" method="POST">
-        <label for="sorted">Trier par</label>
-        <select name="sorted" id="sorted" class="sorted__form__list">
-          <option value="popularité" data-sort="popular">Popularité</option>
-          <option value="date" data-sort="date">Date</option>
-          <option value="Titre" data-sort="title">Titre</option>
+        <label tabindex="0" for="sorted">Trier par</label>
+        <select name="sorted" id="sorted" class="sorted__form__list" aria-label="tri des médias par catégories"
+          tabindex="0">
+          <option value="popularité" data-sort="popular" class="sorted__form__list__item">Popularité</option>
+          <option value="date" data-sort="date" class="sorted__form__list__item">Date</option>
+          <option value="Titre" data-sort="title" class="sorted__form__list__item">Titre</option>
         </select>
       </form>
     </section>
@@ -51,35 +55,36 @@
       <header class="contact-container__modal__heading">
         <h2 id="contact-container__modal__heading__contact">Contactez-moi<br /><span
             class="contact-container__modal__heading__contact__who"></span></h1>
-          <button class="contact-container__modal__heading__close" aria-label="Close Contact form" id="btn-modal-close">
+          <button class="contact-container__modal__heading__close" aria-label="Fermle le formulaire de contact"
+            id="btn-modal-close">
             <img src="assets/icons/close.svg" alt="" />
           </button>
       </header>
       <form id="form" class="contact-container__modal__form" action="#">
 
-        <label for="firstname">Prénom</label>
+        <label for="firstname" tabindex="0">Prénom</label>
         <input type="text" name="firstname" id="firstname" minlength="2" maxlength="30" required aria-required="true"
-          autocomplete="true">
+          autocomplete="true" aria-labelledby="prénom">
 
-        <label for="lastname">Nom</label>
+        <label for="lastname" tabindex="0">Nom</label>
         <input type="text" name="lastname" id="lastname" minlength="2" maxlength="30" required aria-required="true"
-          autocomplete="true">
+          autocomplete="true" aria-labelledby="nom">
 
-        <label for="email">Email</label>
+        <label for="email" tabindex="0">Email</label>
         <input type="email" name="email" id="email" pattern="^\w+([\.-]?\w+)*@\w+\.\w+$" required aria-required="true"
-          autocomplete="true">
+          autocomplete="true" aria-labelledby="adresse de courriel">
 
-        <label for="message">Votre message</label>
+        <label for="message" tabindex="0">Votre message</label>
         <textarea name="message" id="message" cols="30" rows="10" minlength="10" maxlength="100" required
-          aria-required="true"></textarea>
-        <input id="submit-form" class="contact_button" type="submit" value="Envoyer" aria-label="Send">
+          aria-required="true" aria-labelledby="Votre message"></textarea>
+
+        <input id="submit-form" class="contact_button" type="submit" value="Envoyer" aria-label="Envoyer">
       </form>
 
     </div>
   </div>
 
-  <section id="lightbox" class="lightbox" tabindex="-1" aria-hidden="false" role="dialog"
-    aria-labelledby="lightbox-title">
+  <section id="lightbox" class="lightbox">
   </section>
 
   <script type="module" src="scripts/factories/photographer.js"></script>

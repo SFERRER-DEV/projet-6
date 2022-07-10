@@ -68,12 +68,13 @@ export function photographerFactory(myPhotographer, parent) {
 function addUSerCardDOMHorizontal(parent, myPhotographer) {
   /** @type {HTMLTitleElement} - titre contenant le nom du photographe  */
   const name = getName(myPhotographer, DIRECTION.HORIZONTAL);
+  name.setAttribute("tabindex", "0");
   // Ajouter le nom du photographe
   parent.appendChild(name);
 
   /** @type {HTMLParagraphElement} -  paragraphe contenant les informations du photographe */
   const para = getInformations(myPhotographer, DIRECTION.HORIZONTAL);
-
+  para.setAttribute("tabindex", "0");
   // Ajouter le paragaphe
   parent.appendChild(para);
 
@@ -81,9 +82,9 @@ function addUSerCardDOMHorizontal(parent, myPhotographer) {
   const photo = Dom.getPhoto(
     "",
     myPhotographer.portrait,
-    `Portrait du photographe ${myPhotographer._name}`
+    `Portrait du photographe ${myPhotographer.name}`
   );
-
+  photo.setAttribute("tabindex", 0);
   // Ajouter la photo
   parent.appendChild(photo);
 }
@@ -126,8 +127,9 @@ function addUSerCardDOMVertical(parent, myPhotographer) {
 
   /** @type {HTMLParagraphElement} -  paragraphe contenant les informations du photographe */
   const para = getInformations(myPhotographer, DIRECTION.VERTICAL);
+  para.setAttribute("tabindex", 0);
   // Ajouter le paragaphe
-  div.appendChild(para);
+  parent.appendChild(para);
 }
 
 /**
@@ -146,6 +148,7 @@ const getName = (myPhotographer, disposition) => {
     title = Dom.getTitle(
       "card-photograph__container__heading",
       "h1",
+      myPhotographer.name,
       myPhotographer.name
     );
   } else if (disposition === DIRECTION.VERTICAL) {
@@ -153,6 +156,7 @@ const getName = (myPhotographer, disposition) => {
     title = Dom.getTitle(
       "card-photograph__link__container__heading",
       "h2",
+      myPhotographer.name,
       myPhotographer.name
     );
   }

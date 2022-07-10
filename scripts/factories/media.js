@@ -21,6 +21,9 @@ export function mediaFactory(myMedia) {
     article.classList.add("card-media");
     // Ce data attribut permet de marquer cette HTML Card pour l'identifier
     article.setAttribute("data-id", id);
+    article.setAttribute("role", "dialog");
+    article.setAttribute("tabindex", "-1");
+    article.setAttribute("aria-label", "i");
 
     /** @type {HTMLDivElement} - conteneur avec un media (photo ou video) */
     const divMedia = Dom.getMedia(
@@ -37,6 +40,7 @@ export function mediaFactory(myMedia) {
 
     /** @type {HTMLParagraphElement} - le titre du média h3 avec le nom de la vidéo ou de la photographie */
     const title = Dom.getTitle("media__heading__title", "h3", myMedia.title);
+    title.setAttribute("tabindex", "0");
     // Ajouter le titre du média
     divHeading.appendChild(title);
 
@@ -55,7 +59,7 @@ export function mediaFactory(myMedia) {
       "card-media__heading__likes__ilike",
       "fa-heart"
     );
-
+    button.setAttribute("arial-label", "j'aime");
     // Ajouter le bouton j'aime
     divHeading.appendChild(button);
 

@@ -21,6 +21,12 @@ h1 {
 .logo {
   height: 50px;
   margin-left: 100px;
+  padding-bottom: 5px;
+  border-bottom: 3px solid white;
+}
+
+.logo:hover {
+  border-bottom: 3px solid #901c1c;
 }
 
 .photographer_section {

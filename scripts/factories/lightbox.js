@@ -30,6 +30,7 @@ export function lightboxFactory(myMedia) {
 
     /** @type {HTMLButtonElement} - bouton image précédente < */
     const button1 = getButton(myMedia, previousId, false);
+    button1.setAttribute("tabindex", 1);
     // Ajouter le bouton précédent
     article.appendChild(button1); // <
 
@@ -47,7 +48,7 @@ export function lightboxFactory(myMedia) {
       "p",
       myMedia.title
     );
-
+    title.setAttribute("tabindex", 5);
     // Ajouter le paragraphe pour le titre
     divMedia.appendChild(title);
 
@@ -67,8 +68,12 @@ export function lightboxFactory(myMedia) {
 
     /** @type {HTMLDivElement} - conteneur des deux autres boutons */
     const divButtons = Dom.getDiv("lightbox__container__buttons");
+
     // Ajouter les deux autres boutons
+    button2.setAttribute("tabindex", 2);
     divButtons.appendChild(button2); // >
+
+    button3.setAttribute("tabindex", 3);
     divButtons.appendChild(button3); // X
 
     // Ajouter le conteneur de boutons
