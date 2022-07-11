@@ -17,6 +17,6 @@ export function displayModal(name) {
  *
  */
 export function closeModal() {
-  const modal = document.getElementById("contact_modal");
+  const modal = document.getElementById("lightbox");
   modal.style.display = "none";
 }

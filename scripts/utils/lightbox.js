@@ -33,8 +33,18 @@ export function showLightbox(event, container, media, medium) {
   const btnClose = cardHtml.querySelector(
     ".lightbox__container__buttons__close"
   );
+
   // Ajouter l'évènement sur la croix pour masquer la section HTML contenant la lightbox
   btnClose.addEventListener("click", () => (container.style.display = "none"));
+  // Ajouter l'évènement de la touche clavier escape pour fermer la lightbox
+  container.addEventListener("keyup", (e) => {
+    if (e.key === "Escape") {
+      console.log("Escape");
+      document.querySelector(".lightbox__container__buttons__close").focus();
+      btnClose.click();
+    }
+  });
+
   // Ajouter l'évènement sur le bouton Précédent
   addEvent(event, container, cardHtml, medium, previousId, photographerId);
   // Ajouter l'évènement sur le bouton Suivant
@@ -42,6 +52,8 @@ export function showLightbox(event, container, media, medium) {
 
   // Remplacer le media existant en affichant le nouveau media fabriqué
   container.replaceChildren(cardHtml);
+  document.querySelector(".lightbox__container__media__photo").focus();
+
   // Afficher la section HTML contenant la lightbox
   container.style.display = "block";
 }
@@ -69,17 +81,18 @@ const addEvent = (
   photographerId,
   flag = false
 ) => {
-  /** @type {HTMLButtonElement} -  précédent suivant ou bouton suivant */
-  let button;
-  // Déterminer de quel bouton il s'agit < ou >
-  if (flag) {
-    button = cardHtml.querySelector(".lightbox__container__buttons__next");
-  } else {
-    button = cardHtml.querySelector(".lightbox__container__previous");
-  }
-
-  // L'évènement n'est ajouté que si il y a au moins suivant bouton Next ou au moins un précédent pour le bouton Previous
+  // L'évènement n'est ajouté que si il y a au moins un mdia suivant pour le bouton Next
+  // ou au moins un média un précédent pour le bouton Previous
   if (mediaId !== undefined && mediaId != -1) {
+    /** @type {HTMLButtonElement} -  précédent suivant ou bouton suivant */
+    let button;
+    // Déterminer de quel bouton il s'agit < ou >
+    if (!flag) {
+      button = cardHtml.querySelector(".lightbox__container__previous");
+    } else {
+      button = cardHtml.querySelector(".lightbox__container__buttons__next");
+    }
+
     // Ajouter l'évènement pour afficher le média suivant dans la lightbox
     button.addEventListener("click", () => {
       /** @type {Media} - le media suivant de ce photographe */
@@ -90,5 +103,23 @@ const addEvent = (
       // Afficher la lightbox
       showLightbox(event, container, media, medium);
     });
+
+    if (!flag) {
+      // Ajouter l'évènement de la touche clavier flèche gauche pour afficher le media précédent
+      cardHtml.addEventListener("keyup", (e) => {
+        if (e.key === "ArrowLeft") {
+          button.click();
+          document.querySelector(".lightbox__container__previous").focus();
+        }
+      });
+    } else {
+      // Ajouter l'évènement de la touche clavier flèche droite pour afficher le media suivant
+      cardHtml.addEventListener("keyup", (e) => {
+        if (e.key === "ArrowRight") {
+          button.click();
+          document.querySelector(".lightbox__container__buttons__next").focus();
+        }
+      });
+    }
   }
 };

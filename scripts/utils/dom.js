@@ -88,7 +88,7 @@ export const getPhoto = (strClass, src, strAlt) => {
   if (strClass !== undefined && strClass !== "") {
     img.classList.add(strClass);
     if (strClass === "lightbox__container__media__photo") {
-      img.setAttribute("tabindex", 5);
+      img.setAttribute("tabindex", 0);
     }
   }
 
@@ -109,9 +109,9 @@ export const getVideo = (strClass, src, strAlt) => {
     video.classList.add(strClass);
     if (strClass === "lightbox__container__media__video") {
       video.controls = true;
-      video.autoplay = true;
+      video.autoplay = false;
       video.muted = false;
-      video.setAttribute("tabindex", 5);
+      video.setAttribute("tabindex", 0);
     } else {
       video.controls = false;
     }
