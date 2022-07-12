@@ -1,4 +1,4 @@
-//import * as Media from "./../models/media.js";
+import { MEDIUM } from "../models/media.js";
 import * as Dom from "./../utils/dom.js";
 /**
  *
@@ -25,15 +25,18 @@ export function mediaFactory(myMedia) {
     article.setAttribute("tabindex", "0");
     article.setAttribute("aria-label", "i");
 
-    /** @type {HTMLDivElement} - conteneur avec un media (photo ou video) */
-    const divMedia = Dom.getMedia(
-      myMedia,
-      "card-media__container",
-      "card-media__container__video",
-      "card-media__container__photo"
-    );
+    /** @type {HTMLImageElement | HTMLVideoElement} - une image ou une vidéo */
+    let media;
+    /** @type {string} - chemin complet avec le nom du fichier média: path/filename.ext */
+    const filename = myMedia.media_folder + myMedia.filename;
+    if (myMedia.media === MEDIUM.VIDEO) {
+      media = Dom.getVideo("card-media__video", filename, myMedia.title);
+    } else {
+      media = Dom.getPhoto("card-media__photo", filename, myMedia.title);
+    }
+
     // Ajouter le media dans l'article
-    article.appendChild(divMedia);
+    article.appendChild(media);
 
     /** @type {HTMLDivElement} - conteneur pour le titre du media et ses j'aime */
     const divHeading = Dom.getDiv("card-media__heading");

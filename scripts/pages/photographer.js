@@ -3,7 +3,7 @@ import * as facHeader from "./../factories/photographer.js";
 import * as facGallery from "./../factories/media.js";
 // Importer les classes
 import Photographer from "./../models/photographer.js";
-import Media from "../models/media.js";
+import Media, { MEDIUM } from "../models/media.js";
 // Importer les singletons API
 import singletonPhotograherApi from "./../api/photographerApi.js";
 import singletonMediumApi, { MediumApi } from "./../api/mediumApi.js";
@@ -92,12 +92,19 @@ async function displayDataMedium(medium) {
     /** @type {HTMLArticleElement} - une HTML Card d'un media qui est fabriquée dans une balise article */
     const mediaCardDOM = mediaModel.getMediaCardDOM(); // Fabriquer la HTML Card
 
-    /** @type {HTMLDivElement} - un conteneur <div> qui contient soit une image soit une vidéo */
-    const container = mediaCardDOM.querySelector(".card-media__container");
-    container.setAttribute("tabindex", "0");
-    container.setAttribute("role", "link");
+    /** @type {HTMLImageElement | HTMLVideoElement} - une image ou une vidéo */
+    let imageOrVideo;
+    if (m.media === MEDIUM.VIDEO) {
+      imageOrVideo = mediaCardDOM.querySelector(".card-media__video");
+    } else {
+      imageOrVideo = mediaCardDOM.querySelector(".card-media__photo");
+    }
+
+    imageOrVideo.setAttribute("tabindex", "0");
+    imageOrVideo.setAttribute("role", "link");
+
     // Ajouter l'évènement du click pour ouvrir la lightbox sur le div container de ce média
-    addEventOpenLightbox(container, m, medium);
+    addEventOpenLightbox(imageOrVideo, m, medium);
 
     /** @type {HTMLButtonElement} - le bouton j'aime dans cette HTML Card*/
     const buttonIlike = mediaCardDOM.querySelector(
@@ -151,18 +158,24 @@ const addEventILike = (buttonIlike, mediaId, medium) => {
  * La fonction d'ouverture appellée qui est hors de la portée de la fabrique de HTML Card Media
  * L'évènement est donc ajouté ici, cette fonction de callback est référencée par ce script.
  *
- * @param {HTMLDivElement} container - un conteneur <div> qui contient soit une image soit une vidéo
+ * @param {HTMLImageElement | HTMLVideoElement} container - soit une image soit une vidéo
  * @param {Media} media - un objet de type Media
  * @param {Array<Media>} medium - Un tableau d'objets de type Media
  */
-const addEventOpenLightbox = (container, media, medium) => {
+const addEventOpenLightbox = (photoOrVideo, media, medium) => {
   /** @type {HTMLSectionElement} - le conteneur <section> pour afficher la lightbox */
   const lightbox = document.querySelector("#lightbox");
 
   // Ajouter l'évènement du click qui ouvre la lightbox pour ce media
-  container.addEventListener("click", function (event) {
+  photoOrVideo.addEventListener("click", function (event) {
     // Afficher la lightbox
     lbx.showLightbox(event, lightbox, media, medium);
+    // Donner le focus pour permettre l'utilisation des raccourcis clavier
+    if (media.media === MEDIUM.VIDEO) {
+      lightbox.querySelector(".lightbox__container__video").focus();
+    } else {
+      lightbox.querySelector(".lightbox__container__photo").focus();
+    }
   });
 };
 
@@ -207,10 +220,15 @@ async function iLike(mediaId, medium) {
     // Ajouter l'évènement du click du bouton j'aime de ce média
     addEventILike(buttonIlike, media.id, medium);
 
-    /** @type {HTMLDivElement} -  le conteneur <div> de l'image ou la vidéo et qui peuvent être ouvertes dans une lightbox */
-    const container = newMediaCardDOM.querySelector(".card-media__container");
+    /** @type {HTMLImageElement | HTMLVideoElement} -  une image ou une vidéo et qui peuvent être ouvertes dans une lightbox */
+    let photoOrVideo;
+    if (media.media === MEDIUM.VIDEO) {
+      photoOrVideo = newMediaCardDOM.querySelector(".card-media__video");
+    } else {
+      photoOrVideo = newMediaCardDOM.querySelector(".card-media__photo");
+    }
     // Ajouter l'évènement du click pour ouvrir la lightbox sur ce media
-    addEventOpenLightbox(container, media, medium);
+    addEventOpenLightbox(photoOrVideo, media, medium);
 
     /** @type {HTMLDivElement} - Le conteneur html <div> qui contient toutes les HTML Cards */
     const gallery = document.querySelector("#gallery");

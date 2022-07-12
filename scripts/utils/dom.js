@@ -1,4 +1,4 @@
-import * as Media from "./../models/media.js";
+import { MEDIUM } from "../models/media.js";
 /**
  * Obtenir un div avec sa classe
  *
@@ -45,26 +45,22 @@ export const getTitle = (strClass, balise, strText, strAriaLabel = "") => {
  * obtenir une balise vidéo pour jouer une vidéo
  *
  * @param {Media} myMedia - Un objet de la classe Media
- * @param {string} strClass1 - Une classe CSS pour la balise conteneur div
- * @param {string} strClass2 - Une classe CSS pour la balise video
- * @param {string} strClass3 - Une classe CSS pour la balise image
+ * @param {string} strClass1 - Une classe CSS pour la balise video
+ * @param {string} strClass2 - Une classe CSS pour la balise image
  * @returns {HTMLDivElement} balise div avec une image ou une video
  */
-export const getMedia = (myMedia, strClass1, strClass2, strClass3) => {
-  /** @type {HTMLDivElement} - balise div */
-  const div = getDiv(strClass1);
+export const getMedia = (myMedia, strClass1, strClass2) => {
   /** @type {HTMLImageElement | HTMLVideoElement} - une image ou une vidéo */
   let media;
   /** @type {string} - chemin complet avec le nom du fichier média: path/filename.ext */
   const filename = myMedia.media_folder + myMedia.filename;
-  if (myMedia.media === Media.MEDIUM.VIDEO) {
-    media = getVideo(strClass2, filename, myMedia.title);
+  if (myMedia.media === MEDIUM.VIDEO) {
+    media = getVideo(strClass1, filename, myMedia.title);
   } else {
-    media = getPhoto(strClass3, filename, myMedia.title);
+    media = getPhoto(strClass2, filename, myMedia.title);
   }
-  div.appendChild(media);
 
-  return div;
+  return media;
 };
 
 /**
@@ -83,7 +79,7 @@ export const getPhoto = (strClass, src, title) => {
   img.setAttribute("alt", `Une photographie nommée ${title}`);
   if (strClass !== undefined && strClass !== "") {
     img.classList.add(strClass);
-    if (strClass === "lightbox__container__media__photo") {
+    if (strClass === "lightbox__container__photo") {
       img.setAttribute("tabindex", 0);
       img.setAttribute(
         "aria-label",
@@ -111,7 +107,7 @@ export const getVideo = (strClass, src, title) => {
   video.setAttribute("type", "video/mp4");
   if (strClass !== undefined && strClass !== "") {
     video.classList.add(strClass);
-    if (strClass === "lightbox__container__media__video") {
+    if (strClass === "lightbox__container__video") {
       video.controls = true;
       video.muted = false;
       video.setAttribute("tabindex", 0);

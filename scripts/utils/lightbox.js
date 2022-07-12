@@ -30,9 +30,7 @@ export function showLightbox(event, container, media, medium) {
   const cardHtml = mediaModel.getLightboxCardDOM(previousId, nextId);
 
   /** @type {HTMLButtonElement} - la croix pour fermer la lightbox */
-  const btnClose = cardHtml.querySelector(
-    ".lightbox__container__buttons__close"
-  );
+  const btnClose = cardHtml.querySelector(".lightbox__container__close");
 
   // Ajouter l'évènement sur la croix pour masquer la section HTML contenant la lightbox
   btnClose.addEventListener("click", () => (container.style.display = "none"));
@@ -40,7 +38,7 @@ export function showLightbox(event, container, media, medium) {
   container.addEventListener("keyup", (e) => {
     if (e.key === "Escape") {
       console.log("Escape");
-      document.querySelector(".lightbox__container__buttons__close").focus();
+      document.querySelector(".lightbox__container__close").focus();
       btnClose.click();
     }
   });
@@ -52,7 +50,7 @@ export function showLightbox(event, container, media, medium) {
 
   // Remplacer le media existant en affichant le nouveau media fabriqué
   container.replaceChildren(cardHtml);
-  document.querySelector(".lightbox__container").focus();
+  //document.querySelector(".lightbox__container__photo").focus();
 
   // Afficher la section HTML contenant la lightbox
   container.style.display = "block";
@@ -90,7 +88,7 @@ const addEvent = (
     if (!flag) {
       button = cardHtml.querySelector(".lightbox__container__previous");
     } else {
-      button = cardHtml.querySelector(".lightbox__container__buttons__next");
+      button = cardHtml.querySelector(".lightbox__container__next");
     }
 
     // Ajouter l'évènement pour afficher le média suivant dans la lightbox
@@ -117,7 +115,7 @@ const addEvent = (
       cardHtml.addEventListener("keyup", (e) => {
         if (e.key === "ArrowRight") {
           button.click();
-          document.querySelector(".lightbox__container__buttons__next").focus();
+          document.querySelector(".lightbox__container__next").focus();
         }
       });
     }

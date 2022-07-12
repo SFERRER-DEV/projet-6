@@ -1,4 +1,3 @@
-import * as Media from "./../models/media.js";
 import * as Dom from "./../utils/dom.js";
 /**
  *
@@ -20,14 +19,7 @@ export function lightboxFactory(myMedia) {
     article.classList.add("lightbox__container");
     // Ce data attribut permet de marquer cette HTML Card pour l'identifier
     article.setAttribute("data-id", id);
-    // Aria label
-    article.setAttribute(
-      "aria-label",
-      myMedia.media === Media.MEDIUM.VIDEO
-        ? `${myMedia.strMedia} agrandie`
-        : `${myMedia.strMedia} en vue rapprochée`
-    );
-    article.setAttribute("tabindex", 0);
+
     /** @type {HTMLButtonElement} - bouton image précédente < */
     const button1 = getButton(myMedia, previousId, false);
     button1.setAttribute("tabindex", 0);
@@ -35,49 +27,39 @@ export function lightboxFactory(myMedia) {
     article.appendChild(button1); // <
 
     /** @type {HTMLDivElement} - conteneur du média image ou vidéo */
-    const divMedia = Dom.getMedia(
+    const media = Dom.getMedia(
       myMedia,
-      "lightbox__container__media",
-      "lightbox__container__media__video",
-      "lightbox__container__media__photo"
+      "lightbox__container__video",
+      "lightbox__container__photo"
     );
-
-    /** @type {HTMLParagraphElement} - le titre du média */
-    const title = Dom.getTitle(
-      "lightbox__container__media__title",
-      "p",
-      myMedia.title
-    );
-    title.setAttribute("tabindex", 0);
-    // Ajouter le paragraphe pour le titre
-    divMedia.appendChild(title);
-
     // Ajouter le conteneur media
-    article.appendChild(divMedia);
-
-    /** @type {HTMLButtonElement} - bouton image précédente < */
-    const button2 = getButton(myMedia, nextId, true);
+    article.appendChild(media);
 
     /** @type {HTMLButtonElement} - bouton fermer X */
     const button3 = Dom.getButton(
-      "lightbox__container__buttons__close",
+      "lightbox__container__close",
       "fa-times",
       "fa-solid",
       "Fermer cette fenêtre"
     );
 
-    /** @type {HTMLDivElement} - conteneur des deux autres boutons */
-    const divButtons = Dom.getDiv("lightbox__container__buttons");
-
-    // Ajouter les deux autres boutons
-    button2.setAttribute("tabindex", 0);
-    divButtons.appendChild(button2); // >
-
     button3.setAttribute("tabindex", 0);
-    divButtons.appendChild(button3); // X
+    article.appendChild(button3); // X
 
-    // Ajouter le conteneur de boutons
-    article.appendChild(divButtons);
+    /** @type {HTMLButtonElement} - bouton image précédente < */
+    const button2 = getButton(myMedia.strMedia, nextId, true);
+    button2.setAttribute("tabindex", 0);
+    article.appendChild(button2); // >
+
+    /** @type {HTMLParagraphElement} - le titre du média */
+    const title = Dom.getTitle(
+      "lightbox__container__title",
+      "p",
+      myMedia.title
+    );
+    title.setAttribute("tabindex", 0);
+    // Ajouter le paragraphe pour le titre
+    article.appendChild(title);
 
     return article;
   }
@@ -86,14 +68,14 @@ export function lightboxFactory(myMedia) {
 }
 
 /**
- * Créer et paramètrer les boutons précédent et suivant
+ * Créer et paramètrer le bouton précédent ou suivant
  * de la lightbox
  *
- * @param {Media} myMedia - un objet de la classe Media
+ * @param {string} strMedia - une chaine de caractère  image ou vidéo
  * @param {number} previousId - l'identifiant du Média ayant l'indice précédent dans le tableau des médias
  * @param {boolean} flag - false pour le bouton précédent ou true pour le bouton suivant
  */
-const getButton = (myMedia, mediaId, flag) => {
+const getButton = (strMedia, mediaId, flag) => {
   /** @type {HTMLButtonElement} - bouton précdent < ou bouton suivant > */
   let button;
 
@@ -102,14 +84,14 @@ const getButton = (myMedia, mediaId, flag) => {
       "lightbox__container__previous",
       "fa-chevron-left",
       "fa-solid",
-      `${myMedia.strMedia} précédente`
+      `${strMedia} précédente`
     );
   } else {
     button = Dom.getButton(
-      "lightbox__container__buttons__next",
+      "lightbox__container__next",
       "fa-chevron-right",
       "fa-solid",
-      `${myMedia.strMedia} suivante`
+      `${strMedia} suivante`
     );
   }
 
