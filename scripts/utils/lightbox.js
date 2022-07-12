@@ -7,7 +7,7 @@ import singletonMediumApi, { MediumApi } from "./../api/mediumApi.js";
  * Apparition de la lightbox
  * Fabriquer un HTML Card et l'afficher dans la lightbox
  *
- * @param {*} event -
+ * @param {*} event
  * @param {HTMLSectionElement} container - La section HTML à afficher ou à masquer contenant la HTML Card lightbox
  * @param {Media} media - L'objet de type Media à afficher dans la lightbox
  * @param {Array<Media>} medium - Un tableau d'objets de type Media
@@ -54,11 +54,44 @@ export function showLightbox(event, container, media, medium) {
 
   // Remplacer le media existant en affichant le nouveau media fabriqué
   container.replaceChildren(cardHtml);
-  //document.querySelector(".lightbox__container__photo").focus();
+  // Pieger le cycle du focus sur les boutons
+  trapFocus(container);
 
   // Afficher la section HTML contenant la lightbox
   container.style.display = "block";
 }
+
+/**
+ * Pieger le focus dans la lightbox
+ *
+ * @param {HTMLSectionElement} container - La section HTML à afficher ou à masquer contenant la HTML Card lightbox
+ */
+const trapFocus = (container) => {
+  // Sélectionne les élements focusables de l'élément passé en argument
+  const elements = container.querySelectorAll("button:not([disabled])");
+  const first = elements[0];
+  const last = elements[elements.length - 1];
+
+  /* Listener de touche appuyée sur l'élément passé en argument */
+  container.addEventListener("keydown", (e) => {
+    // Si tab appuyé
+    if (e.key === "Tab" || e.keyCode === 9) {
+      // Si tab + shift appuyé sur 1 élement -> focus dernier élément
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        }
+        // Si tab est appuyé sur dernier élément -> focus 1er élément
+      } else {
+        if (document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    }
+  });
+};
 
 /**
  * Ajouter soit l'évènement au bouton précédent pour afficher le média précédent
