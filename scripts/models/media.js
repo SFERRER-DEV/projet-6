@@ -78,7 +78,7 @@ export default class Media {
    * @property {string} strMedia obtenir la chaine de caractère pour le  type de ce média
    */
   get strMedia() {
-    return this._media === MEDIUM.VIDEO ? "Vidéo" : "Image";
+    return this._media === MEDIUM.VIDEO ? "vidéo" : "image";
   }
 
   /**

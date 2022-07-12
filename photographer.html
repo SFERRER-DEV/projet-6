@@ -20,7 +20,7 @@
       <img src="assets/images/logo.png" class="logo" alt="Fisheye page d'accueil" class="logo">
     </a>
   </header>
-  <main id="main">
+  <main id="main" aria-hidden="false">
     <div class="photograph-header">
       <button id="btn-modal-open" class="photograph-header__contact contact_button"
         aria-label="Contactez moi">Contactez-moi</button>
@@ -49,7 +49,7 @@
       </p>
     </aside>
   </main>
-  <div id="contact_modal" class="contact-container">
+  <div id="contact_modal" class="contact-container" aria-hidden="true">
     <div class="contact-container__modal">
 
       <header class="contact-container__modal__heading">
@@ -84,7 +84,7 @@
     </div>
   </div>
 
-  <section id="lightbox" class="lightbox" tabindex="0">
+  <section id="lightbox" class="lightbox" tabindex="0" aria-hidden="true">
   </section>
 
   <script type="module" src="scripts/factories/photographer.js"></script>

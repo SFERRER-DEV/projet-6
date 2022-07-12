@@ -62,7 +62,7 @@ export function mediaFactory(myMedia) {
       "card-media__heading__likes__ilike",
       "fa-heart"
     );
-    button.setAttribute("arial-label", "j'aime");
+    button.setAttribute("arial-label", `Aimer une ${myMedia.strMedia}`);
     // Ajouter le bouton j'aime
     divHeading.appendChild(button);
 

@@ -145,17 +145,16 @@ export const getButton = (
     bouton.classList.add(strClass1);
   }
 
+  if (strAriaLabel !== "") {
+    bouton.setAttribute("aria-label", strAriaLabel);
+  }
+
   if (strClass2 !== undefined && strClass2 !== "") {
     /** @type {HTMLElement} - balise de texte pour contenir l'icone coeur */
     const icone = document.createElement("i");
     icone.classList.add(strClass3);
     icone.classList.add(strClass2);
-    if (strAriaLabel !== "") {
-      icone.setAttribute("aria-hidden", true);
-      if (strAriaLabel !== "") {
-        icone.setAttribute("aria-label", strAriaLabel);
-      }
-    }
+    icone.setAttribute("aria-hidden", true);
 
     bouton.append(icone);
   }
@@ -171,14 +170,16 @@ export const getButton = (
  * @param {string} strAriaLabel - le text de l'aria label de l'icône
  * @returns {HTMLAnchorElement} - balise a pointant vers une page photographe.
  */
-export const getLink = (strClass, strRelativeUrl, strAriaLabel) => {
+export const getLink = (strClass, strRelativeUrl, strAriaLabel = "") => {
   /** @type {HTMLAnchorElement} - balise a */
   const link = document.createElement("a");
   if (strClass !== undefined && strClass !== "") {
     link.classList.add(strClass);
   }
   link.setAttribute("href", strRelativeUrl);
-  link.setAttribute("aria-label", strAriaLabel);
+  if (strAriaLabel !== "") {
+    link.setAttribute("aria-label", strAriaLabel);
+  }
 
   return link;
 };

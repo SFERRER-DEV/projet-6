@@ -33,7 +33,11 @@ export function showLightbox(event, container, media, medium) {
   const btnClose = cardHtml.querySelector(".lightbox__container__close");
 
   // Ajouter l'évènement sur la croix pour masquer la section HTML contenant la lightbox
-  btnClose.addEventListener("click", () => (container.style.display = "none"));
+  btnClose.addEventListener("click", () => {
+    container.style.display = "none";
+    document.getElementById("lightbox").setAttribute("aria-hidden", "true");
+    document.querySelector("main").setAttribute("aria-hidden", "false");
+  });
   // Ajouter l'évènement de la touche clavier escape pour fermer la lightbox
   container.addEventListener("keyup", (e) => {
     if (e.key === "Escape") {

@@ -168,6 +168,8 @@ const addEventOpenLightbox = (photoOrVideo, media, medium) => {
 
   // Ajouter l'évènement du click qui ouvre la lightbox pour ce media
   photoOrVideo.addEventListener("click", function (event) {
+    document.getElementById("lightbox").setAttribute("aria-hidden", "false");
+    document.querySelector("main").setAttribute("aria-hidden", "true");
     // Afficher la lightbox
     lbx.showLightbox(event, lightbox, media, medium);
     // Donner le focus pour permettre l'utilisation des raccourcis clavier

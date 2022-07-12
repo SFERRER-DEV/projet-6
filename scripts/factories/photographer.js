@@ -99,8 +99,7 @@ function addUSerCardDOMVertical(parent, myPhotographer) {
   /** @type {HTMLAnchorElement} - lien vers la page du photographe */
   const link = Dom.getLink(
     "card-photograph__link",
-    `./photographer.html?id=${myPhotographer.id}`,
-    ""
+    `./photographer.html?id=${myPhotographer.id}`
   );
   // Ajouter le lien vers la page du photographe dans l'article
   parent.appendChild(link);
