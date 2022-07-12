@@ -27,7 +27,7 @@ export function lightboxFactory(myMedia) {
         ? `${myMedia.strMedia} agrandie`
         : `${myMedia.strMedia} en vue rapprochée`
     );
-
+    article.setAttribute("tabindex", 0);
     /** @type {HTMLButtonElement} - bouton image précédente < */
     const button1 = getButton(myMedia, previousId, false);
     button1.setAttribute("tabindex", 0);

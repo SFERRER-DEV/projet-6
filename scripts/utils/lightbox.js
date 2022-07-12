@@ -52,7 +52,7 @@ export function showLightbox(event, container, media, medium) {
 
   // Remplacer le media existant en affichant le nouveau media fabriqué
   container.replaceChildren(cardHtml);
-  document.querySelector(".lightbox__container__media__photo").focus();
+  document.querySelector(".lightbox__container").focus();
 
   // Afficher la section HTML contenant la lightbox
   container.style.display = "block";

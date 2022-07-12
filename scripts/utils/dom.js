@@ -58,13 +58,9 @@ export const getMedia = (myMedia, strClass1, strClass2, strClass3) => {
   /** @type {string} - chemin complet avec le nom du fichier média: path/filename.ext */
   const filename = myMedia.media_folder + myMedia.filename;
   if (myMedia.media === Media.MEDIUM.VIDEO) {
-    media = getVideo(strClass2, filename, `Une vidéo nommée ${myMedia.title}`);
+    media = getVideo(strClass2, filename, myMedia.title);
   } else {
-    media = getPhoto(
-      strClass3,
-      filename,
-      `Une photograhpie nommée ${myMedia.title}`
-    );
+    media = getPhoto(strClass3, filename, myMedia.title);
   }
   div.appendChild(media);
 
@@ -77,18 +73,22 @@ export const getMedia = (myMedia, strClass1, strClass2, strClass3) => {
  *
  * @param {string} strClass - une classe CSS
  * @param {string} src - le chemin complet du dossier avec le nom de fichier de l'image
- * @param {string} strAlt -le texte alternatif pour l'image
+ * @param {string} title -le titre du média
  * @returns {HTMLImageElement} balise img pour afficher la photographie
  */
-export const getPhoto = (strClass, src, strAlt) => {
+export const getPhoto = (strClass, src, title) => {
   /** @type {HTMLImageElement} - balise img pour le portrait */
   const img = document.createElement("img");
   img.src = src;
-  img.setAttribute("alt", strAlt);
+  img.setAttribute("alt", `Une photographie nommée ${title}`);
   if (strClass !== undefined && strClass !== "") {
     img.classList.add(strClass);
     if (strClass === "lightbox__container__media__photo") {
       img.setAttribute("tabindex", 0);
+      img.setAttribute(
+        "aria-label",
+        `Une photographie en vue rappochée nommée ${title}`
+      );
     }
   }
 
@@ -98,26 +98,31 @@ export const getPhoto = (strClass, src, strAlt) => {
 /**
  * Obtenir une vidéo
  *
+ * @param {string} strClass - une classe CSS
  * @param {string} src - le chemin complet du dossier avec le nom de fichier de la vidéo
+ *  @param {string} title -le titre du média
  * @returns {HTMLVideoElement} img - balise video pour jouer une vidéo
  */
-export const getVideo = (strClass, src, strAlt) => {
+export const getVideo = (strClass, src, title) => {
   /** @type {HTMLImageElement} - balise vidéo pour les medias */
   const video = document.createElement("video");
   video.src = src;
+  video.setAttribute("alt", `Une vidéo nommée ${title}`);
+  video.setAttribute("type", "video/mp4");
   if (strClass !== undefined && strClass !== "") {
     video.classList.add(strClass);
     if (strClass === "lightbox__container__media__video") {
       video.controls = true;
-      video.autoplay = false;
       video.muted = false;
       video.setAttribute("tabindex", 0);
+      video.setAttribute(
+        "aria-label",
+        `Une vidéo en vue rappochée nommée ${title}`
+      );
     } else {
       video.controls = false;
     }
   }
-
-  video.setAttribute("alt", strAlt);
 
   return video;
 };
