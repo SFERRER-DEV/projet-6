@@ -369,3 +369,19 @@ btnContact.addEventListener("click", () => fm.displayModal(photographer.name));
 const btnClose = document.getElementById("btn-modal-close");
 // Ecouter l'action du clic  pour fermer la modale
 btnClose.addEventListener("click", () => fm.closeModal());
+
+// Récupérer le bouton d'envoi du formulaire
+document.getElementById("submit-form").addEventListener("click", function (e) {
+  // Flag résutlat des fonctions de validation de contraintes de champ
+  let valid = true;
+  // Vérifier que l'intégralité des champs sont valides
+  valid = fm.checkValidity();
+  if (valid) {
+    // Afficher la confirmation de la validation du formulaire de contact
+    console.table(fm.arrContact);
+    console.log("Votre message a été envoyé");
+  } else {
+    // Rester sur le formulaire d'inscription en erreur
+    e.preventDefault();
+  }
+});

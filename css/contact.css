@@ -35,7 +35,6 @@
 }
 
 .contact-container__modal__heading {
-  border: 1px blueviolet dotted;
   color: black;
   font-size: 1.5rem;
   font-weight: normal;
@@ -43,15 +42,10 @@
   margin-bottom: 0.2em;
 }
 
-.contact-container__modal__heading__contact__who {
-  border: 1px blueviolet dotted;
-}
-
 .contact-container__modal__heading__close {
   cursor: pointer;
   border: none;
   background-color: transparent;
-  border: 1px blueviolet dotted;
 }
 
 form {
@@ -93,4 +87,34 @@ textarea {
   font-size: 1.2rem;
   padding: 0.5em;
   margin-bottom: 1em;
+}
+
+.formData {
+  width: 100%;
+}
+/*  Monter les erreurs de validation >>> */
+.formData[data-error]::after {
+  content: attr(data-error);
+  color: red;
+  display: block;
+  text-align: right;
+  opacity: 0;
+}
+
+.formData[data-error-visible="true"]::after {
+  opacity: 1;
+}
+
+.formData[data-error-visible="true"] .text-control {
+  color: red;
+}
+.formData[data-error-visible="false"]::after {
+  opacity: 0;
+}
+.formData[data-error-visible="false"] .text-control {
+  border: none;
+}
+input[data-error]::after {
+  content: attr(data-error);
+  color: red;
 }

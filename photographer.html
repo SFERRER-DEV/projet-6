@@ -60,25 +60,34 @@
             <img src="assets/icons/close.svg" alt="" />
           </button>
       </header>
-      <form id="form" class="contact-container__modal__form" action="#">
+      <form id="form" class="contact-container__modal__form" action="./photographer.html">
+        <div class="formData">
+          <label for="firstname" tabindex="0">Prénom</label>
+          <input type="text" name="firstname" id="firstname" minlength="2" maxlength="30" required aria-required="true"
+            autocomplete="true" aria-labelledby="Votre prénom">
+        </div>
 
-        <label for="firstname" tabindex="0">Prénom</label>
-        <input type="text" name="firstname" id="firstname" minlength="2" maxlength="30" required aria-required="true"
-          autocomplete="true" aria-labelledby="prénom">
+        <div class="formData">
+          <label for="lastname" tabindex="0">Nom</label>
+          <input type="text" name="lastname" id="lastname" minlength="2" maxlength="30" required aria-required="true"
+            autocomplete="true" aria-labelledby="Votre nom">
+        </div>
 
-        <label for="lastname" tabindex="0">Nom</label>
-        <input type="text" name="lastname" id="lastname" minlength="2" maxlength="30" required aria-required="true"
-          autocomplete="true" aria-labelledby="nom">
+        <div class="formData">
+          <label for="email" tabindex="0">Email</label>
+          <input type="email" name="email" id="email" pattern="^\w+([\.-]?\w+)*@\w+\.\w+$" required aria-required="true"
+            autocomplete="true" aria-labelledby="Adresse de courriel" placeholder=" Exemple@mail.com">
+        </div>
 
-        <label for="email" tabindex="0">Email</label>
-        <input type="email" name="email" id="email" pattern="^\w+([\.-]?\w+)*@\w+\.\w+$" required aria-required="true"
-          autocomplete="true" aria-labelledby="adresse de courriel">
-
-        <label for="message" tabindex="0">Votre message</label>
-        <textarea name="message" id="message" cols="30" rows="10" minlength="10" maxlength="100" required
-          aria-required="true" aria-labelledby="Votre message"></textarea>
-
-        <input id="submit-form" class="contact_button" type="submit" value="Envoyer" aria-label="Envoyer">
+        <div class="formData">
+          <label for="message" tabindex="0">Votre message</label>
+          <textarea name="message" id="message" cols="30" rows="10" minlength="5" maxlength="100" required
+            aria-required="true" aria-labelledby="Votre message: 5 caractères minimum"
+            placeholder="Votre message: 5 caractères minimum"></textarea>
+        </div>
+        <input id="submit-form" class="contact_button" type="submit" value="Envoyer"
+          aria-label="Soumettre le formulaire">
+        <input type="hidden" name="id" id="photographId">
       </form>
 
     </div>
