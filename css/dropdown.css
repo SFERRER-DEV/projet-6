@@ -1,0 +1,81 @@
+/* Custom dropbox sorted list (liste déroulante pour les tris) */
+section.sorted {
+  width: 100%;
+  max-width: 1200px;
+  margin: 20px 100px 40px 100px;
+}
+
+.sorted__container {
+  display: inline-block;
+  position: relative;
+  top: -30px;
+}
+
+.sorted__container__select {
+  position: absolute;
+  z-index: 99;
+  margin-left: 1em;
+  background-color: #901c1c;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+}
+
+.sorted__text {
+  display: inline-block;
+  font-size: 1.3em;
+  font-weight: 700;
+  color: #312e2e;
+}
+
+.sorted__container__select__toogle {
+  display: flex;
+  justify-content: space-between;
+  border: none;
+  background-color: #901c1c;
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: white;
+  text-align: left;
+  padding: 0.4em 0;
+  cursor: pointer;
+  outline-offset: 20px;
+}
+
+.sorted__container__select__toogle__icon {
+  margin-left: 1.5em;
+}
+
+.sorted__container__select__list {
+  display: none;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sorted__container__select__list__choice {
+  color: white;
+  padding: 0.7em 0;
+  cursor: pointer;
+  font-size: 1.3rem;
+}
+
+.sorted__container__select__list__choice button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  color: white;
+  cursor: pointer;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  font-size: 1.3rem;
+}
+
+.sorted__container__select__list__choice
+  + .sorted__container__select__list__choice {
+  border-top: 1px solid white;
+}
+
+.sorted__container__select__list__choice:last-of-type {
+  padding-bottom: 0.5em;
+}

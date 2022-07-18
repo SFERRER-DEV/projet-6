@@ -5,6 +5,9 @@
   <link href="css/style.css" rel="stylesheet" type="text/css" />
   <link href="css/card-photograph.css" rel="stylesheet" type="text/css" />
   <link href="css/card-media.css" rel="stylesheet" type="text/css" />
+  <link href="css/dropdown.css" rel="stylesheet" type="text/css" />
+  <link href="css/lightbox.css" rel="stylesheet" type="text/css" />
+  <link href="css/contact.css" rel="stylesheet" type="text/css" />
   <meta charset="utf-8">
   <link rel="icon" type="image/png" href="assets/favicon.png">
   <link href="https://fonts.googleapis.com/css?family=DM+Sans&display=swap" rel="stylesheet">
@@ -25,17 +28,32 @@
       <button id="btn-modal-open" class="photograph-header__contact contact_button"
         aria-label="Contactez moi">Contactez-moi</button>
     </div>
-    <!-- filtres -->
+    <!-- tris -->
     <section class="sorted">
-      <form class="sorted__form" action="#" method="POST">
-        <label tabindex="0" for="sorted">Trier par</label>
-        <select name="sorted" id="sorted" class="sorted__form__list" aria-label="tri des médias par catégories"
-          tabindex="0">
-          <option value="popularité" data-sort="popular" class="sorted__form__list__item">Popularité</option>
-          <option value="date" data-sort="date" class="sorted__form__list__item">Date</option>
-          <option value="Titre" data-sort="title" class="sorted__form__list__item">Titre</option>
-        </select>
-      </form>
+      <!-- DROPDOWN  -->
+      <label tabindex="0" id="filter-label" class="sorted__text">Trier par</label>
+      <div class="sorted__container">
+        <div class="sorted__container__select">
+          <button aria-labelledby="filter-label btn-toggle" aria-haspopup="listbox" aria-expanded="false"
+            aria-owns="filter-list" id="btn-toggle" class="sorted__container__select__toogle">Popularité
+            <span class="fas fa-angle-down  sorted__container__select__toogle__icon"></span>
+          </button>
+          <!-- <ul tabindex="-1" aria-activedescendant="filter--popularity" -->
+          <ul tabindex="-1" aria-activedescendant="filter--popularity" aria-labelledby="filter-label" id="filter-list"
+            role="listbox" class="sorted__container__select__list">
+            <!-- filtrers -->
+            <li id="sort-popularity" role="option" aria-selected="true" class="sorted__container__select__list__choice">
+              <!-- filter -->
+              <button>Popularité</button>
+            </li>
+            <li id="sort-date" role="option" aria-selected="false" class="sorted__container__select__list__choice">
+              <button>Date</button>
+            </li>
+            <li id="sort-title" role="option" aria-selected="false" class="sorted__container__select__list__choice">
+              <button>Titre</button>
+            </li>
+          </ul>
+        </div>
     </section>
     <!-- medias -->
     <section id="gallery">
@@ -96,8 +114,8 @@
   <section id="lightbox" class="lightbox" tabindex="0" aria-hidden="true">
   </section>
 
-  <script type="module" src="scripts/factories/photographer.js"></script>
   <script type="module" src="scripts/pages/photographer.js"></script>
+  <script type="module" src="scripts/utils/dropdown.js"></script>
 </body>
 
 </html>

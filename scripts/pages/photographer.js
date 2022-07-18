@@ -9,6 +9,8 @@ import singletonPhotograherApi from "./../api/photographerApi.js";
 import singletonMediumApi, { MediumApi } from "./../api/mediumApi.js";
 // Importer les fonctions de tri
 import * as sort from "../utils/sort.js";
+// Importer les fonctions de liste déroulante de tri
+import * as drp from "../utils/dropdown.js";
 // Importer les fonctions du formulaire de contact
 import * as fm from "../utils/contactForm.js";
 // Importer les fonctions de la lightbox
@@ -120,20 +122,6 @@ async function displayDataMedium(medium) {
   // Remplacer les medias existant en affichant les nouveaux medias fabriqués
   gallery.replaceChildren(cardsHtml);
 }
-
-/**
- * Déterminer quel tri est selectionné dans la dropdownlist
- */
-const getSortOption = () => {
-  /** @type {HTMLSelectElement} - La liste déroulante des différents tris */
-  const sorted = document.querySelector(".sorted__form__list");
-  /** @type {HTMLOptionElement} - L'option sélectionnée dans la liste de tri */
-  const selected = sorted.options[sorted.selectedIndex];
-  /** @type {string} - Le tri à appliquer est écrit dans un attribut data */
-  const sortOption = selected.getAttribute("data-sort");
-
-  return sortOption;
-};
 
 /**
  * Ajouter un évènement click au bouton j'aime d'une HTML Card de média.
@@ -328,16 +316,48 @@ function init(sortOption = undefined, medium = []) {
   // Afficher le nombre de likes du photographe
   displayLikes(medium);
 
-  /** @type {HTMLSelectElement} - La liste déroulante pour choisir un tri différents */
-  const sortList = document.querySelector(".sorted__form__list");
-  // Ecouter l'action de changement de la liste et appeler la bonne fonction de tri
-  sortList.addEventListener("change", function () {
-    /** @type {string} - chaine de caractère du tri sélectionné dans la dropdownlist: popular, date ou title */
-    const sortOption = getSortOption();
-    // Obtenir les données des médias du photographe
-    init(sortOption, medium);
+  // Ecouter liste déroulante pour choisir un tri différent */
+  /** @type {HTMLElement} -  une élément li de la liste des tris */
+  const sortPopularity = document.getElementById("sort-popularity");
+  /** @type {HTMLElement} -  une élément li de la liste des tris */
+  const sortDate = document.getElementById("sort-date");
+  /** @type {HTMLElement} -  une élément li de la liste des tris */
+  const sortTitle = document.getElementById("sort-title");
+
+  // Ajouter les évènements click aux éléments de la liste déroulante pour chaqu'un des tris
+  sortPopularity.addEventListener("click", function () {
+    drp.sortByPopularity();
+    // Obtenir les données des médias triées
+    setTimeout(() => {
+      init("popular", medium);
+    }, 1000);
+  });
+
+  sortDate.addEventListener("click", function () {
+    drp.sortByDate();
+    // Obtenir les données des médias triées
+    setTimeout(() => {
+      init("date", medium);
+    }, 1000);
+  });
+  sortTitle.addEventListener("click", function () {
+    drp.sortByTitle();
+    // Obtenir les données des médias triées
+    setTimeout(() => {
+      init("title", medium);
+    }, 1000);
   });
 }
+
+/** @type {HTMLButtonElement} - Le bouton pour afficher la liste déroulante des tris */
+const btnToogle = document.querySelector(".sorted__container__select__toogle");
+// Ajouter l'évènement click au bouton d'ouverture de la liste déroulante
+btnToogle.addEventListener("click", drp.showSortingList);
+
+/** @type {HTMLElement} -  une élément li de la liste des tris */
+const sortPopularity = document.getElementById("sort-popularity");
+// Masquer dans la list le tri séléctionné par défaut
+sortPopularity.style.display = "none";
 
 // Point d'entrée de la page : Obtenir le photographe, puis obtenir les médias du photographe
 
