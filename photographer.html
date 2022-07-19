@@ -30,7 +30,7 @@
     </div>
     <!-- tris -->
     <section class="sorted">
-      <!-- DROPDOWN  -->
+      <!-- Custon dropdownbox  -->
       <label tabindex="0" id="filter-label" class="sorted__text">Trier par</label>
       <div class="sorted__container">
         <div class="sorted__container__select">
@@ -67,13 +67,13 @@
       </p>
     </aside>
   </main>
-  <div id="contact_modal" class="contact-container" aria-hidden="true">
-    <div class="contact-container__modal">
 
+  <div id="contact_modal" class="contact-container" aria-hidden="true">
+    <div class="contact-container__modal" tabindex="0">
       <header class="contact-container__modal__heading">
         <h2 id="contact-container__modal__heading__contact">Contactez-moi<br /><span
             class="contact-container__modal__heading__contact__who"></span></h1>
-          <button class="contact-container__modal__heading__close" aria-label="Fermle le formulaire de contact"
+          <button class="contact-container__modal__heading__close" aria-label="Fermer le formulaire de contact"
             id="btn-modal-close">
             <img src="assets/icons/close.svg" alt="" />
           </button>
@@ -103,8 +103,9 @@
             aria-required="true" aria-labelledby="Votre message: 5 caractères minimum"
             placeholder="Votre message: 5 caractères minimum"></textarea>
         </div>
-        <input id="submit-form" class="contact_button" type="submit" value="Envoyer"
-          aria-label="Soumettre le formulaire">
+        <button id="btn-submit-form" class="contact_button" aria-label="Soumettre le formulaire de contact">
+          Envoyer
+        </button>
         <input type="hidden" name="id" id="photographId">
       </form>
 

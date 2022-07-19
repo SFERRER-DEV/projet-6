@@ -1,28 +1,51 @@
+// Importer des fonctions utiles
+import * as Dom from "./dom.js";
 /**
+ * Afficher le formulaire de contact.
+ * en piégeant le focus tabulation à l'intérieur
  *
- *
+ * @param {string} name - le nom du photographer à contacter
  */
 export function displayModal(name) {
-  /** @type {*} */
-  const modal = document.getElementById("contact_modal");
-  modal.style.display = "block";
-  /** @type {*} */
+  /** @type {HTMLDivElement} - Conteneur du formulaire de contact*/
+  const container = document.getElementById("contact_modal"); // = ".contact-container"
+  container.style.display = "block";
+  // Accessibilité
+  container.setAttribute("aria-hidden", "false");
+  document.querySelector("main").setAttribute("aria-hidden", "true");
+
+  /** @type {HTMLDivElement} - le contenu de la modale */
+  const modal = container.querySelector(".contact-container__modal");
+  // Pieger le cycle du focus sur les boutons
+  Dom.trapFocus(modal);
+  modal.focus();
+
+  // Raz du formulaire
+  cleanAllFormData();
+
+  // Ajouter l'évènement de la touche clavier escape pour fermer la lightbox
+  modal.addEventListener("keyup", (e) => {
+    if (e.key === "Escape") {
+      closeModal();
+    }
+  });
+
+  /** @type {HTMLSpanElement} - Le nom du photographe */
   const who = document.querySelector(
     ".contact-container__modal__heading__contact__who"
   );
   who.replaceChildren(document.createTextNode(name));
-  modal.setAttribute("aria-hidden", "false");
-  document.querySelector("main").setAttribute("aria-hidden", "true");
+
   /** {URLSearchParams} - paramètres GET de l'URL de la page */
   let params = new URL(document.location).searchParams;
   /** @type {number} - l'identifiant du photographe obtenu en paramètre url */
   const photographerId = parseInt(params.get("id"));
-  // Renseigner le champ caché avec l'identitifiant du photographer pour la redirection
+  // Renseigner le champ caché avec l'identitifiant du photographer pour une bonne redirection
   document.getElementById("photographId").value = photographerId;
 }
 
 /**
- *
+ * Fermer la modale du formulaire de contact
  */
 export function closeModal() {
   const modal = document.getElementById("contact_modal");
@@ -45,7 +68,7 @@ export const checkValidity = () => {
   let ok = true;
   // Mémoriser les champs en erreur
   let fieldsErrorsFocus = [];
-  //
+  // Raz du formulaire
   cleanAllFormData();
   // Parcourir les champs input à contrôler du formulaire
   for (let input of fields) {
@@ -72,8 +95,8 @@ export const checkValidity = () => {
 /**
  * Fonction utile pour afficher les indications après la
  * validation d'un champ
- * @param {Node} field Un champ du formulaire d'inscription
- * @param {string} message Un message de validation pour l'utilisateur
+ * @param {Node} field - Un champ du formulaire d'inscription
+ * @param {string} message - Un message de validation pour l'utilisateur
  */
 const updateMessageValidation = (field, message) => {
   // Récupérer le noeud parent du champ passé à la fonction
@@ -104,7 +127,7 @@ const cleanAllFormData = () => {
 /**
  * Fonction utile pour remettre à la présentation d'un champ
  * à zéro au début d'une validation (RAZ)
- *  @param {Node} field Un champ du formulaire d'inscription
+ *  @param {Node} field - Un champ du formulaire d'inscription
  */
 const resetValidation = (field) => {
   // Récupérer le noeud parent du champ passé à la fonction

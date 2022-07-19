@@ -183,3 +183,36 @@ export const getLink = (strClass, strRelativeUrl, strAriaLabel = "") => {
 
   return link;
 };
+
+/**
+ * Pieger le focus dans un conteneur
+ * pour ne boucler uniquement dedans en utilisant la touche tabulation
+ *
+ * @param {HTMLSectionElement | HTMLDivElement} container - la lightbox ou la modale du formulaire de contact
+ */
+export const trapFocus = (container) => {
+  // Sélectionne les élements focusables de l'élément passé en argument
+  const elements = container.querySelectorAll("button:not([disabled])");
+  const first = elements[0];
+  const last = elements[elements.length - 1];
+
+  /* Listener de touche appuyée sur l'élément passé en argument */
+  container.addEventListener("keydown", (e) => {
+    // Si tab appuyé
+    if (e.key === "Tab" || e.keyCode === 9) {
+      // Si tab + shift appuyé sur 1 élement -> focus dernier élément
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        }
+        // Si tab est appuyé sur dernier élément -> focus 1er élément
+      } else {
+        if (document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    }
+  });
+};

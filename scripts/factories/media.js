@@ -22,7 +22,6 @@ export function mediaFactory(myMedia) {
     // Ce data attribut permet de marquer cette HTML Card pour l'identifier
     article.setAttribute("data-id", id);
     article.setAttribute("role", "dialog");
-    article.setAttribute("tabindex", "0");
     article.setAttribute("aria-label", "i");
 
     /** @type {HTMLImageElement | HTMLVideoElement} - une image ou une vidéo */

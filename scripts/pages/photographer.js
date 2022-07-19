@@ -161,11 +161,12 @@ const addEventOpenLightbox = (photoOrVideo, media, medium) => {
 
     // Afficher la lightbox
     lbx.showLightbox(event, lightbox, media, medium);
-    // Donner le focus pour permettre l'utilisation des raccourcis clavier
-    if (media.media === MEDIUM.VIDEO) {
-      lightbox.querySelector(".lightbox__container__video").focus();
-    } else {
-      lightbox.querySelector(".lightbox__container__photo").focus();
+  });
+
+  // Ajouter l'évènement au clavier pour aussi ouvrir une lightbox
+  photoOrVideo.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.keyCode === 13) {
+      photoOrVideo.click();
     }
   });
 };
@@ -349,16 +350,6 @@ function init(sortOption = undefined, medium = []) {
   });
 }
 
-/** @type {HTMLButtonElement} - Le bouton pour afficher la liste déroulante des tris */
-const btnToogle = document.querySelector(".sorted__container__select__toogle");
-// Ajouter l'évènement click au bouton d'ouverture de la liste déroulante
-btnToogle.addEventListener("click", drp.showSortingList);
-
-/** @type {HTMLElement} -  une élément li de la liste des tris */
-const sortPopularity = document.getElementById("sort-popularity");
-// Masquer dans la list le tri séléctionné par défaut
-sortPopularity.style.display = "none";
-
 // Point d'entrée de la page : Obtenir le photographe, puis obtenir les médias du photographe
 
 /** {URLSearchParams} - paramètres GET de l'URL de la page */
@@ -386,13 +377,16 @@ init();
 const btnContact = document.getElementById("btn-modal-open");
 // Ecouter l'action du clic  pour ouvrir la modale
 btnContact.addEventListener("click", () => fm.displayModal(photographer.name));
-/** @type {HTMLButtonElement} - Le bouton pour contacter le photographe */
+/** @type {HTMLButtonElement} - Le bouton pour fermer la modale */
 const btnClose = document.getElementById("btn-modal-close");
 // Ecouter l'action du clic  pour fermer la modale
 btnClose.addEventListener("click", () => fm.closeModal());
 
-// Récupérer le bouton d'envoi du formulaire
-document.getElementById("submit-form").addEventListener("click", function (e) {
+/** @type {HTMLButtonElement} - Le bouton pour envoyer le formulaire de contact */
+const btnSubmit = document.getElementById("btn-submit-form");
+
+// Récupérer le bouton d'envoi du formulaire btn-submit-form
+btnSubmit.addEventListener("click", function (e) {
   // Flag résutlat des fonctions de validation de contraintes de champ
   let valid = true;
   // Vérifier que l'intégralité des champs sont valides
@@ -406,3 +400,13 @@ document.getElementById("submit-form").addEventListener("click", function (e) {
     e.preventDefault();
   }
 });
+
+/** @type {HTMLButtonElement} - Le bouton pour afficher la liste déroulante de tri */
+const btnToogle = document.querySelector(".sorted__container__select__toogle");
+// Ajouter l'évènement click au bouton d'ouverture de la liste déroulante
+btnToogle.addEventListener("click", drp.showSortingList);
+
+/** @type {HTMLElement} -  une élément li de la liste de tri */
+const sortPopularity = document.getElementById("sort-popularity");
+// Masquer dans la list le tri séléctionné par défaut
+sortPopularity.style.display = "none";

@@ -2,6 +2,8 @@
 import * as facLightbox from "./../factories/lightbox.js";
 // Importer le singleton API
 import singletonMediumApi, { MediumApi } from "./../api/mediumApi.js";
+// Importer des fonctions utiles
+import * as Dom from "./dom.js";
 
 /**
  * Apparition de la lightbox
@@ -41,8 +43,6 @@ export function showLightbox(event, container, media, medium) {
   // Ajouter l'évènement de la touche clavier escape pour fermer la lightbox
   container.addEventListener("keyup", (e) => {
     if (e.key === "Escape") {
-      console.log("Escape");
-      document.querySelector(".lightbox__container__close").focus();
       btnClose.click();
     }
   });
@@ -55,43 +55,15 @@ export function showLightbox(event, container, media, medium) {
   // Remplacer le media existant en affichant le nouveau media fabriqué
   container.replaceChildren(cardHtml);
   // Pieger le cycle du focus sur les boutons
-  trapFocus(container);
+  Dom.trapFocus(container);
 
   // Afficher la section HTML contenant la lightbox
   container.style.display = "block";
+  // Garder le focus sur le media
+  container
+    .querySelector(".lightbox__container img, .lightbox__container video")
+    .focus();
 }
-
-/**
- * Pieger le focus dans la lightbox
- *
- * @param {HTMLSectionElement} container - La section HTML à afficher ou à masquer contenant la HTML Card lightbox
- */
-const trapFocus = (container) => {
-  // Sélectionne les élements focusables de l'élément passé en argument
-  const elements = container.querySelectorAll("button:not([disabled])");
-  const first = elements[0];
-  const last = elements[elements.length - 1];
-
-  /* Listener de touche appuyée sur l'élément passé en argument */
-  container.addEventListener("keydown", (e) => {
-    // Si tab appuyé
-    if (e.key === "Tab" || e.keyCode === 9) {
-      // Si tab + shift appuyé sur 1 élement -> focus dernier élément
-      if (e.shiftKey) {
-        if (document.activeElement === first) {
-          e.preventDefault();
-          last.focus();
-        }
-        // Si tab est appuyé sur dernier élément -> focus 1er élément
-      } else {
-        if (document.activeElement === last) {
-          e.preventDefault();
-          first.focus();
-        }
-      }
-    }
-  });
-};
 
 /**
  * Ajouter soit l'évènement au bouton précédent pour afficher le média précédent
@@ -144,7 +116,6 @@ const addEvent = (
       cardHtml.addEventListener("keyup", (e) => {
         if (e.key === "ArrowLeft") {
           button.click();
-          document.querySelector(".lightbox__container__previous").focus();
         }
       });
     } else {
@@ -152,7 +123,6 @@ const addEvent = (
       cardHtml.addEventListener("keyup", (e) => {
         if (e.key === "ArrowRight") {
           button.click();
-          document.querySelector(".lightbox__container__next").focus();
         }
       });
     }
