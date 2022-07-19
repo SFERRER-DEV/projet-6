@@ -21,7 +21,7 @@ async function getPhotographers() {
  */
 async function displayData(photographers) {
   // Obtenir le conteneur html <div> pour l'affichage de la liste des photographes
-  const parent = document.querySelector(".photographer_section");
+  const parent = document.querySelector(".photographers");
   // Parcourir la liste des photographes
   photographers.forEach((photographer) => {
     // Afficher les data du photographe lu sur la console

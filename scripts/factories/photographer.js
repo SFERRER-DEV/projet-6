@@ -24,7 +24,7 @@ export function photographerFactory(myPhotographer, parent) {
 
   /** @type {number} - La page d'index demande une disposition verticale, alors que la page photographer demande une disposition horizontale.*/
   let disposition;
-  if (parent.classList.contains("photographer_section")) {
+  if (parent.classList.contains("photographers")) {
     // Page index.html
     disposition = DIRECTION.VERTICAL;
   } else if (parent.classList.contains("photograph-header")) {

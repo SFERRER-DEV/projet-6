@@ -1,5 +1,5 @@
 /* Custom dropbox sorted list (liste déroulante pour les tris) */
-section.sorted {
+div.sorted {
   width: 100%;
   max-width: 1200px;
   margin: 20px 100px 40px 100px;
