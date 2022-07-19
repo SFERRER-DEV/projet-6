@@ -355,12 +355,32 @@ function init(sortOption = undefined, medium = []) {
 /** {URLSearchParams} - paramètres GET de l'URL de la page */
 let params = new URL(document.location).searchParams;
 /** @type {number} - l'identifiant du photographe obtenu en paramètre url */
-const photographerId = parseInt(params.get("id"));
+let photographerId;
+try {
+  photographerId = parseInt(params.get("id"));
+  if (Array.from(params).length > 1) {
+    // Afficher sur la console le contenu d'un message envoyé précédement par le formulaire
+    console.table(Array.from(params));
+  } else if (Array.from(params).length === 0 || Number.isNaN(photographerId)) {
+    throw new Error(
+      "Erreur d'identifiant du photographe dans les paramètres url"
+    ); // Lancer une erreur
+  }
+} catch (error) {
+  console.log(error);
+  throw new Error("ERROR"); // Arrêter le chargement du script
+}
 
 /** @type {Object} - l'objet contenant les données du photographe */
-const photographer = await getPhotographer(photographerId);
-// Afficher les données sur la console
-console.table(photographer);
+let photographer;
+try {
+  photographer = await getPhotographer(photographerId);
+  // Afficher les données sur la console
+  console.table(photographer);
+} catch (error) {
+  console.log(error);
+  throw new Error("ERROR"); // Arrêter le chargement du script
+}
 
 // Afficher la HTML Card du photographe dans la page HTML
 displayDataPhotographer(photographer);
@@ -393,7 +413,7 @@ btnSubmit.addEventListener("click", function (e) {
   valid = fm.checkValidity();
   if (valid) {
     // Afficher la confirmation de la validation du formulaire de contact
-    console.table(fm.arrContact);
+    //console.table(fm.arrContact);
     console.log("Votre message a été envoyé");
   } else {
     // Rester sur le formulaire d'inscription en erreur

@@ -1,6 +1,6 @@
 import * as fac from "./../factories/photographer.js";
 import singletonPhotograherApi from "../api/photographerApi.js";
-import Photographer from "./../models/photographer.js";
+//import Photographer from "./../models/photographer.js";
 
 /**
  * Obtenir les données des photographes
@@ -24,10 +24,6 @@ async function displayData(photographers) {
   const parent = document.querySelector(".photographers");
   // Parcourir la liste des photographes
   photographers.forEach((photographer) => {
-    // Afficher les data du photographe lu sur la console
-    // console.table(photographer);
-    // console.log(photographer.toString());
-    // console.log(photographer.medium);
     // Créer une fabrique pour instancier la card html du photographe lu
     const photographerModel = fac.photographerFactory(photographer, parent);
     // Créer une html card d'après le photographe lu en fonction du conteneur html parent
