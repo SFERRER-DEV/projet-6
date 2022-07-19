@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 
 <head>
   <link href="css/style.css" rel="stylesheet" type="text/css" />
@@ -19,8 +19,8 @@
 
 <body>
   <header>
-    <a tabindex="0" href="index.html" alt="Fisheye page d'accueil">
-      <img src="assets/images/logo.png" class="logo" alt="Fisheye page d'accueil" class="logo">
+    <a tabindex="0" href="index.html" aria-label="Naviguer vers la page d'accueil">
+      <img src="assets/images/logo.png" class="logo" alt="Fisheye page d'accueil">
     </a>
   </header>
   <main id="main" aria-hidden="false">
@@ -30,7 +30,7 @@
     </div>
     <!-- tris -->
     <section class="sorted">
-      <!-- Custon dropdownbox  -->
+      <!-- Custom dropdownbox  -->
       <label tabindex="0" id="filter-label" class="sorted__text">Trier par</label>
       <div class="sorted__container">
         <div class="sorted__container__select">
@@ -38,7 +38,6 @@
             aria-owns="filter-list" id="btn-toggle" class="sorted__container__select__toogle">Popularité
             <span class="fas fa-angle-down  sorted__container__select__toogle__icon"></span>
           </button>
-          <!-- <ul tabindex="-1" aria-activedescendant="filter--popularity" -->
           <ul tabindex="-1" aria-activedescendant="filter--popularity" aria-labelledby="filter-label" id="filter-list"
             role="listbox" class="sorted__container__select__list">
             <!-- filtrers -->
@@ -54,6 +53,7 @@
             </li>
           </ul>
         </div>
+      </div>
     </section>
     <!-- medias -->
     <section id="gallery">
@@ -71,36 +71,37 @@
   <div id="contact_modal" class="contact-container" aria-hidden="true">
     <div class="contact-container__modal" tabindex="0">
       <header class="contact-container__modal__heading">
-        <h2 id="contact-container__modal__heading__contact">Contactez-moi<br /><span
-            class="contact-container__modal__heading__contact__who"></span></h1>
-          <button class="contact-container__modal__heading__close" aria-label="Fermer le formulaire de contact"
-            id="btn-modal-close">
-            <img src="assets/icons/close.svg" alt="" />
-          </button>
+        <h2 id="contact-container__modal__heading__contact">Contactez-moi<br />
+          <span class="contact-container__modal__heading__contact__who"></span>
+        </h2>
+        <button class="contact-container__modal__heading__close" aria-label="Fermer le formulaire de contact"
+          id="btn-modal-close">
+          <img src="assets/icons/close.svg" alt="" />
+        </button>
       </header>
       <form id="form" class="contact-container__modal__form" action="./photographer.html">
         <div class="formData">
           <label for="firstname" tabindex="0">Prénom</label>
           <input type="text" name="firstname" id="firstname" minlength="2" maxlength="30" required aria-required="true"
-            autocomplete="true" aria-labelledby="Votre prénom">
+            autocomplete="on" aria-label="Votre prénom">
         </div>
 
         <div class="formData">
           <label for="lastname" tabindex="0">Nom</label>
           <input type="text" name="lastname" id="lastname" minlength="2" maxlength="30" required aria-required="true"
-            autocomplete="true" aria-labelledby="Votre nom">
+            autocomplete="on" aria-label="Votre nom">
         </div>
 
         <div class="formData">
           <label for="email" tabindex="0">Email</label>
           <input type="email" name="email" id="email" pattern="^\w+([\.-]?\w+)*@\w+\.\w+$" required aria-required="true"
-            autocomplete="true" aria-labelledby="Adresse de courriel" placeholder=" Exemple@mail.com">
+            autocomplete="on" aria-label="Adresse de courriel" placeholder=" Exemple@mail.com">
         </div>
 
         <div class="formData">
           <label for="message" tabindex="0">Votre message</label>
           <textarea name="message" id="message" cols="30" rows="10" minlength="5" maxlength="100" required
-            aria-required="true" aria-labelledby="Votre message: 5 caractères minimum"
+            aria-required="true" aria-label="Votre message: 5 caractères minimum"
             placeholder="Votre message: 5 caractères minimum"></textarea>
         </div>
         <button id="btn-submit-form" class="contact_button" aria-label="Soumettre le formulaire de contact">
