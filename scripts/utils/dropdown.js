@@ -90,7 +90,6 @@ export function sortByPopularity() {
   sortPopularity.setAttribute("aria-selected", "true");
   sortDate.setAttribute("aria-selected", "false");
   sortTitle.setAttribute("aria-selected", "false");
-  sortedList.setAttribute("aria-activedescendant", "sort-popularity");
 
   //Fermeture du menu filtres
   closeSortingList();
@@ -125,7 +124,6 @@ export function sortByDate() {
   sortPopularity.setAttribute("aria-selected", "false");
   sortDate.setAttribute("aria-selected", "true");
   sortTitle.setAttribute("aria-selected", "false");
-  sortedList.setAttribute("aria-activedescendant", "sort-date");
 
   //Fermeture du menu filtres
   closeSortingList();
@@ -160,7 +158,6 @@ export function sortByTitle() {
   sortPopularity.setAttribute("aria-selected", "false");
   sortDate.setAttribute("aria-selected", "false");
   sortTitle.setAttribute("aria-selected", "true");
-  sortedList.setAttribute("aria-activedescendant", "sort-title");
 
   //Fermeture du menu filtres
   closeSortingList();
