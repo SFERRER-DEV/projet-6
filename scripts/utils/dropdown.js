@@ -126,44 +126,35 @@ const _setDropDownElements = (strSorting) => {
   /** @type {HTMLElement} -  une élément li de la liste des tris */
   const sortTitle = document.getElementById("sort-title");
 
+  // Affichage
+  sortPopularity.style.display = "block";
+  sortDate.style.display = "block";
+  sortTitle.style.display = "block";
+  // Accessibilité
+  sortDate.setAttribute("aria-selected", "false");
+  sortPopularity.setAttribute("aria-selected", "false");
+  sortTitle.setAttribute("aria-selected", "false");
+
   switch (strSorting) {
     case "popularity":
       // Affichage
       sortPopularity.style.display = "none";
-      //
-      sortDate.style.display = "block";
-      sortTitle.style.display = "block";
       //Accessibilité
       sortPopularity.setAttribute("aria-selected", "true");
-      //
-      sortDate.setAttribute("aria-selected", "false");
-      sortTitle.setAttribute("aria-selected", "false");
       break;
 
     case "date":
       // Affichage
       sortDate.style.display = "none";
-      //
-      sortPopularity.style.display = "block";
-      sortTitle.style.display = "block";
       //Accessibilité
       sortDate.setAttribute("aria-selected", "true");
-      //
-      sortPopularity.setAttribute("aria-selected", "false");
-      sortTitle.setAttribute("aria-selected", "false");
       break;
 
     case "title":
       // Affichage
       sortTitle.style.display = "none";
-      //
-      sortDate.style.display = "block";
-      sortPopularity.style.display = "block";
       //Accessibilité
       sortTitle.setAttribute("aria-selected", "true");
-      //
-      sortDate.setAttribute("aria-selected", "false");
-      sortPopularity.setAttribute("aria-selected", "false");
       break;
   }
   //Fermeture du menu de tri
