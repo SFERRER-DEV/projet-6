@@ -39,10 +39,7 @@ div.sorted {
   padding: 0.4em 0;
   cursor: pointer;
   outline-offset: 20px;
-}
-
-.sorted__container__select__toogle__icon {
-  margin-left: 1.5em;
+  width: 9em;
 }
 
 .sorted__container__select__list {

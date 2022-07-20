@@ -66,33 +66,17 @@ export function closeSortingList() {
  *  Trier par popularité
  */
 export function sortByPopularity() {
-  /** @type {HTMLElement} - la liste ul des tris */
-  const sortedList = document.querySelector(".sorted__container__select__list");
   /** @type {HTMLButtonElement} */
   const btnToogle = document.querySelector(
     ".sorted__container__select__toogle"
   );
-  /** @type {HTMLElement} -  une élément li de la liste des tris */
-  const sortPopularity = document.getElementById("sort-popularity");
-  /** @type {HTMLElement} -  une élément li de la liste des tris */
-  const sortDate = document.getElementById("sort-date");
-  /** @type {HTMLElement} -  une élément li de la liste des tris */
-  const sortTitle = document.getElementById("sort-title");
 
   //Actualisation des éléments du menu filtres
   btnToogle.innerHTML =
-    'Popularité <span class="fas fa-angle-down sorted__container__select__toogle__icon"></span>';
-  sortDate.style.display = "block";
-  sortTitle.style.display = "block";
-  sortPopularity.style.display = "none";
-
-  //Accessibilité
-  sortPopularity.setAttribute("aria-selected", "true");
-  sortDate.setAttribute("aria-selected", "false");
-  sortTitle.setAttribute("aria-selected", "false");
-
-  //Fermeture du menu filtres
-  closeSortingList();
+    'Popularité <span class="fa-solid fa-angle-down sorted__container__select__toogle__icon" aria-hidden="true"></span>';
+  // Gérer l'affichage et l'accesibilité des élément de la custom dropdown
+  _setDropDownElements("popularity");
+  // Enlever ou ajouter la classe qui permet d'ouvrir ou fermer la custom dropdown
   btnToogle.classList.toggle("show-sorted");
 }
 
@@ -100,33 +84,16 @@ export function sortByPopularity() {
  * Trier par date
  */
 export function sortByDate() {
-  /** @type {HTMLElement} - la liste ul des tris */
-  const sortedList = document.querySelector(".sorted__container__select__list");
   /** @type {HTMLButtonElement} */
   const btnToogle = document.querySelector(
     ".sorted__container__select__toogle"
   );
-  /** @type {HTMLElement} -  une élément li de la liste des tris */
-  const sortPopularity = document.getElementById("sort-popularity");
-  /** @type {HTMLElement} -  une élément li de la liste des tris */
-  const sortDate = document.getElementById("sort-date");
-  /** @type {HTMLElement} -  une élément li de la liste des tris */
-  const sortTitle = document.getElementById("sort-title");
-
   //Actualisation des éléments du menu filtres
   btnToogle.innerHTML =
-    'Date <span style="margin-left:4.2em;" class="fas fa-angle-down sorted__container__select__toogle__icon"></span>';
-  sortPopularity.style.display = "block";
-  sortTitle.style.display = "block";
-  sortDate.style.display = "none";
-
-  //Accessibilité
-  sortPopularity.setAttribute("aria-selected", "false");
-  sortDate.setAttribute("aria-selected", "true");
-  sortTitle.setAttribute("aria-selected", "false");
-
-  //Fermeture du menu filtres
-  closeSortingList();
+    'Date <span class="fa-solid fa-angle-down sorted__container__select__toogle__icon" aria-hidden="true"></span>';
+  // Gérer l'affichage et l'accesibilité des élément de la custom dropdown
+  _setDropDownElements("date");
+  // Enlever ou ajouter la classe qui permet d'ouvrir ou fermer la custom dropdown
   btnToogle.classList.toggle("show-sorted");
 }
 
@@ -134,12 +101,24 @@ export function sortByDate() {
  * Trier par titre
  */
 export function sortByTitle() {
-  /** @type {HTMLElement} - la liste ul des tris */
-  const sortedList = document.querySelector(".sorted__container__select__list");
   /** @type {HTMLButtonElement} */
   const btnToogle = document.querySelector(
     ".sorted__container__select__toogle"
   );
+  //Actualisation des éléments du menu filtres
+  btnToogle.innerHTML =
+    'Titre <span class="fa-solid fa-angle-down sorted__container__select__toogle__icon" aria-hidden="true"></span>';
+  // Gérer l'affichage et l'accesibilité des élément de la custom dropdown
+  _setDropDownElements("title");
+  // Enlever ou ajouter la classe qui permet d'ouvrir ou fermer la custom dropdown
+  btnToogle.classList.toggle("show-sorted");
+}
+
+/**
+ *
+ * @param {*} strSorting
+ */
+const _setDropDownElements = (strSorting) => {
   /** @type {HTMLElement} -  une élément li de la liste des tris */
   const sortPopularity = document.getElementById("sort-popularity");
   /** @type {HTMLElement} -  une élément li de la liste des tris */
@@ -147,19 +126,46 @@ export function sortByTitle() {
   /** @type {HTMLElement} -  une élément li de la liste des tris */
   const sortTitle = document.getElementById("sort-title");
 
-  //Actualisation des éléments du menu filtres
-  btnToogle.innerHTML =
-    'Titre <span style="margin-left:4.2em;" class="fas fa-angle-down sorted__container__select__toogle__icon"></span>';
-  sortDate.style.display = "block";
-  sortPopularity.style.display = "block";
-  sortTitle.style.display = "none";
+  switch (strSorting) {
+    case "popularity":
+      // Affichage
+      sortPopularity.style.display = "none";
+      //
+      sortDate.style.display = "block";
+      sortTitle.style.display = "block";
+      //Accessibilité
+      sortPopularity.setAttribute("aria-selected", "true");
+      //
+      sortDate.setAttribute("aria-selected", "false");
+      sortTitle.setAttribute("aria-selected", "false");
+      break;
 
-  //Accessibilité
-  sortPopularity.setAttribute("aria-selected", "false");
-  sortDate.setAttribute("aria-selected", "false");
-  sortTitle.setAttribute("aria-selected", "true");
+    case "date":
+      // Affichage
+      sortDate.style.display = "none";
+      //
+      sortPopularity.style.display = "block";
+      sortTitle.style.display = "block";
+      //Accessibilité
+      sortDate.setAttribute("aria-selected", "true");
+      //
+      sortPopularity.setAttribute("aria-selected", "false");
+      sortTitle.setAttribute("aria-selected", "false");
+      break;
 
-  //Fermeture du menu filtres
+    case "title":
+      // Affichage
+      sortTitle.style.display = "none";
+      //
+      sortDate.style.display = "block";
+      sortPopularity.style.display = "block";
+      //Accessibilité
+      sortTitle.setAttribute("aria-selected", "true");
+      //
+      sortDate.setAttribute("aria-selected", "false");
+      sortPopularity.setAttribute("aria-selected", "false");
+      break;
+  }
+  //Fermeture du menu de tri
   closeSortingList();
-  btnToogle.classList.toggle("show-sorted");
-}
+};
