@@ -57,7 +57,7 @@ export function mediaFactory(myMedia) {
       "fa-solid",
       `Aimer une ${myMedia.strMedia}`
     );
-    // Ajouter un texte au bouton
+    // Ajouter un texte à ce bouton icône pour l'accessibilité mais masquer avec du css
     const buttonText = Dom.getSpan("", `Aimer une ${myMedia.strMedia}`);
     button.appendChild(buttonText);
     // Ajouter le bouton j'aime

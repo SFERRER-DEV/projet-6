@@ -64,59 +64,44 @@ export function closeSortingList() {
 
 /**
  *  Trier par popularité
+ * @param {HTMLButtonElement} bouton - le bouton pour ouvrir ou fermer la custom dropbox
  */
-export function sortByPopularity() {
-  /** @type {HTMLButtonElement} */
-  const btnToogle = document.querySelector(
-    ".sorted__container__select__toogle"
-  );
-
+export function sortByPopularity(bouton) {
   //Actualisation des éléments du menu filtres
-  btnToogle.innerHTML =
+  bouton.innerHTML =
     'Popularité <span class="fa-solid fa-angle-down sorted__container__select__toogle__icon" aria-hidden="true"></span>';
   // Gérer l'affichage et l'accesibilité des élément de la custom dropdown
   _setDropDownElements("popularity");
-  // Enlever ou ajouter la classe qui permet d'ouvrir ou fermer la custom dropdown
-  btnToogle.classList.toggle("show-sorted");
 }
 
 /**
  * Trier par date
+ * @param {HTMLButtonElement} bouton - le bouton pour ouvrir ou fermer la custom dropbox
  */
-export function sortByDate() {
-  /** @type {HTMLButtonElement} */
-  const btnToogle = document.querySelector(
-    ".sorted__container__select__toogle"
-  );
+export function sortByDate(bouton) {
   //Actualisation des éléments du menu filtres
-  btnToogle.innerHTML =
+  bouton.innerHTML =
     'Date <span class="fa-solid fa-angle-down sorted__container__select__toogle__icon" aria-hidden="true"></span>';
   // Gérer l'affichage et l'accesibilité des élément de la custom dropdown
   _setDropDownElements("date");
-  // Enlever ou ajouter la classe qui permet d'ouvrir ou fermer la custom dropdown
-  btnToogle.classList.toggle("show-sorted");
 }
 
 /**
  * Trier par titre
+ * @param {HTMLButtonElement} bouton - le bouton pour ouvrir ou fermer la custom dropbox
  */
-export function sortByTitle() {
-  /** @type {HTMLButtonElement} */
-  const btnToogle = document.querySelector(
-    ".sorted__container__select__toogle"
-  );
+export function sortByTitle(bouton) {
   //Actualisation des éléments du menu filtres
-  btnToogle.innerHTML =
+  bouton.innerHTML =
     'Titre <span class="fa-solid fa-angle-down sorted__container__select__toogle__icon" aria-hidden="true"></span>';
   // Gérer l'affichage et l'accesibilité des élément de la custom dropdown
   _setDropDownElements("title");
-  // Enlever ou ajouter la classe qui permet d'ouvrir ou fermer la custom dropdown
-  btnToogle.classList.toggle("show-sorted");
 }
 
 /**
- *
- * @param {*} strSorting
+ * Régler l'affichage et l'accessibilité des éléments de la
+ * custom dropdown de tri
+ * @param {string} strSorting - une chaine de caractère pour le tri concerné
  */
 const _setDropDownElements = (strSorting) => {
   /** @type {HTMLElement} -  une élément li de la liste des tris */

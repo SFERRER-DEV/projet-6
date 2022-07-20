@@ -324,10 +324,16 @@ function init(sortOption = undefined, medium = []) {
   const sortDate = document.getElementById("sort-date");
   /** @type {HTMLElement} -  une élément li de la liste des tris */
   const sortTitle = document.getElementById("sort-title");
+  /** @type {HTMLButtonElement} - le bouton pour ouvrir la custom dropdown */
+  const btnToogle = document.querySelector(
+    ".sorted__container__select__toogle"
+  );
 
   // Ajouter les évènements click aux éléments de la liste déroulante pour chaqu'un des tris
   sortPopularity.addEventListener("click", function () {
-    drp.sortByPopularity();
+    drp.sortByPopularity(btnToogle);
+    // Enlever ou ajouter la classe qui permet d'ouvrir ou fermer la custom dropdown
+    btnToogle.classList.toggle("show-sorted");
     // Obtenir les données des médias triées
     setTimeout(() => {
       init("popular", medium);
@@ -335,14 +341,18 @@ function init(sortOption = undefined, medium = []) {
   });
 
   sortDate.addEventListener("click", function () {
-    drp.sortByDate();
+    drp.sortByDate(btnToogle);
+    // Enlever ou ajouter la classe qui permet d'ouvrir ou fermer la custom dropdown
+    btnToogle.classList.toggle("show-sorted");
     // Obtenir les données des médias triées
     setTimeout(() => {
       init("date", medium);
     }, 1000);
   });
   sortTitle.addEventListener("click", function () {
-    drp.sortByTitle();
+    drp.sortByTitle(btnToogle);
+    // Enlever ou ajouter la classe qui permet d'ouvrir ou fermer la custom dropdown
+    btnToogle.classList.toggle("show-sorted");
     // Obtenir les données des médias triées
     setTimeout(() => {
       init("title", medium);
