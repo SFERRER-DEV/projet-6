@@ -2,41 +2,81 @@ import { MEDIUM } from "../models/media.js";
 /**
  * Obtenir un div avec sa classe
  *
- * @param {string} strClass - une classe CSS
- * @returns {HTMLDivElement} div balise div conteneur.
+ * @param {string} [strClass=""] - une classe CSS
+ * @returns {HTMLDivElement} balise div conteneur
  */
-export const getDiv = (strClass) => {
+export const getDiv = (strClass = "") => {
   /** @type {HTMLDivElement} - balise div */
   const div = document.createElement("div");
-  if (strClass !== undefined && strClass !== "") {
-    div.classList.add(strClass);
-  }
 
-  return div;
+  return _setBalise(div, strClass);
 };
 
 /**
- * Obtenir un texte contenu dans un titre ou un paragraphe
- * ou présenter du texte inline
- * Exemples: le titre du média, le nom ou les infos du photographe
- *
- * @param {string} strClass - une classe CSS
- * @param {string} balise - une notation pour un type de balise html
- * @param {string} balise - une notation pour un type de balise html
- * @returns {HTMLTitleElement | HTMLParagraphElement | HTMLSpanElement} balise titre h3, h2, h1 ou un paragraphe contenant une chaine de caractères
+ * Obtenir un span avec sa classe
+ * @param {string} [strClass=""] - une classe CSS
+ * @param {string} [strText=""] - une chaine de caractère
+ * @returns {HTMLSpanElement} balise span
  */
-export const getTitle = (strClass, balise, strText, strAriaLabel = "") => {
-  /** @type {HTMLTitleElement |HTMLParagraphElement | HTMLSpanElement} - balise contenant la chaine de caractères */
-  const titre = document.createElement(balise);
-  titre.textContent = strText;
+export const getSpan = (strClass = "", strText = "") => {
+  /** @type {HTMLSpanElement} - balise span */
+  const span = document.createElement("span");
+
+  return _setBalise(span, strClass, strText);
+};
+
+/**
+ * Obtenir un paragraphe avec sa classe
+ * @param {string} [strClass=""] - une classe CSS
+ * @param {string} [strText=""] - une chaine de caractère
+ * @returns {HTMLSpanElement} balise paragraphe
+ */
+export const getPara = (strClass = "", strText = "") => {
+  /** @type {HTMLParagraphElement} - balise p */
+  const para = document.createElement("p");
+
+  return _setBalise(para, strClass, strText);
+};
+
+/**
+ * Paraamétrer une balise contenant du texte
+ *
+ * @param {HTMLParagraphElement | HTMLSpanElement} balise - l'élément HTML à configurer
+ * @param {string} strClass - une classe CSS
+ * @param {string} strText - une chaine de caractère
+ * @returns {HTMLParagraphElement | HTMLSpanElement} span balise span conteneur.
+ */
+const _setBalise = (balise, strClass, strText) => {
   if (strClass !== undefined && strClass !== "") {
-    titre.classList.add(strClass);
+    balise.classList.add(strClass);
   }
-  if (strAriaLabel !== "") {
+  if (strText !== undefined && strText !== "") {
+    /** @type {HTMLElement} - une chaine de caractère */
+    const strNode = document.createTextNode(strText);
+    balise.appendChild(strNode);
+  }
+
+  return balise;
+};
+
+/**
+ * Obtenir un texte contenu dans un titre
+ *
+ * @param {string} balise - une notation pour un type de balise html
+ * @param {string} strText - une chaine de caractère pour le titre
+ * @param {string} [strClass=""] - une classe CSS
+ * @param {string} [strAriaLabel=""] - une chaine de caractère pour l'ARIA
+ * @returns {HTMLTitleElement | HTMLParagraphElement | HTMLSpanElement} balise titre h1 ... h6
+ */
+export const getTitle = (balise, strText, strClass = "", strAriaLabel = "") => {
+  /** @type {HTMLTitleElement } - balise de titre h1 ... h6  */
+  const titre = document.createElement(balise);
+
+  if (strAriaLabel !== undefined && strAriaLabel !== "") {
     titre.setAttribute("aria-label", strAriaLabel);
   }
 
-  return titre;
+  return _setBalise(titre, strClass, strText);
 };
 
 /**
@@ -69,7 +109,7 @@ export const getMedia = (myMedia, strClass1, strClass2) => {
  *
  * @param {string} strClass - une classe CSS
  * @param {string} src - le chemin complet du dossier avec le nom de fichier de l'image
- * @param {string} title -le titre du média
+ * @param {string} title - le titre du média
  * @returns {HTMLImageElement} balise img pour afficher la photographie
  */
 export const getPhoto = (strClass, src, title) => {
@@ -113,7 +153,7 @@ export const getVideo = (strClass, src, title) => {
       video.setAttribute("tabindex", 0);
       video.setAttribute(
         "aria-label",
-        `Une vidéo en vue rappochée nommée ${title}`
+        `Une vidéo agrandie dans le lecteur nommée ${title}`
       );
     } else {
       video.controls = false;
@@ -129,7 +169,7 @@ export const getVideo = (strClass, src, title) => {
  *
  * @param {string} strClass1 - Une classe CSS pour le bouton
  * @param {string} strClass2 - Une classe CSS pour la forme de l'icône
- * @param {string} strClass3 - Une classe CSS pour le style de l'icône
+ * @param {string} [strClass3="fa-solid"] - Une classe CSS pour le style de l'icône
  * @param {string} strAriaLabel - le text de l'aria label de l'icône
  * @returns {HTMLButtonElement} balise bouton avec une icône
  */
@@ -167,7 +207,7 @@ export const getButton = (
  *
  * @param {string} strClass - Une classe CSS pour le lien
  * @param {string} strRelativeUrl - Une classe CSS pour le lien
- * @param {string} strAriaLabel - le text de l'aria label de l'icône
+ * @param {string} [strAriaLabel=""] - le text de l'aria label de l'icône
  * @returns {HTMLAnchorElement} - balise a pointant vers une page photographe.
  */
 export const getLink = (strClass, strRelativeUrl, strAriaLabel = "") => {

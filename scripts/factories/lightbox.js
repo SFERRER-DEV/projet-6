@@ -52,11 +52,7 @@ export function lightboxFactory(myMedia) {
     article.appendChild(button2); // >
 
     /** @type {HTMLParagraphElement} - le titre du média */
-    const title = Dom.getTitle(
-      "lightbox__container__title",
-      "p",
-      myMedia.title
-    );
+    const title = Dom.getPara("lightbox__container__title", myMedia.title);
     title.setAttribute("tabindex", 0);
     // Ajouter le paragraphe pour le titre
     article.appendChild(title);

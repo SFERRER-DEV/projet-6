@@ -31,7 +31,7 @@
 }
 
 /* Nom */
-.card-photograph__container__heading,
+.card-photograph__heading,
 .card-photograph__link__container__heading {
   display: flex;
   justify-content: center;
@@ -46,7 +46,7 @@
 }
 
 /* Nom sur photographer.html */
-.card-photograph__container__heading {
+.card-photograph__heading {
   font-size: 3em;
   flex-basis: 100px;
   width: 70%;
@@ -56,8 +56,7 @@
 }
 
 /* Portait */
-.card-photograph__link__container__portrait,
-.card-photograph__container__portrait {
+.card-photograph__link__container__portrait {
   height: 200px;
   width: 200px;
   object-fit: cover;
@@ -67,9 +66,7 @@
 
 /* Ville, pays */
 .card-photograph__link__container__location,
-.card-photograph__container__location {
-  display: flex;
-  flex-direction: column;
+.card-photograph__location {
   margin: 0;
   font-size: 1.4em;
   font-weight: 400;
@@ -79,24 +76,29 @@
 /* Ville, pays sur index.html */
 .card-photograph__link__container__location {
   align-items: center;
+  margin-top: 0.5em;
 }
 
 /* Ville, pays sur photographer.html */
-.card-photograph__container__location {
-  flex-basis: 75px;
+.card-photograph__location {
   width: 70%;
   justify-content: space-around;
 }
 
 /* Le slogan */
-.card-photograph__link__container__location__slogan,
-.card-photograph__container__location__slogan {
+.card-photograph__slogan--vertical {
   color: black;
-  font-size: 0.7em;
+  font-size: 1em;
+  text-align: center;
+}
+.card-photograph__slogan--horizontal {
+  color: black;
+  font-size: 1em;
+  width: 70%;
 }
 
 /* Le tarif jour */
-.card-photograph__link__container__location__tarif {
+.card-photograph__slogan__tarif {
   color: #525252;
-  font-size: 0.7em;
+  font-size: 0.9em;
 }

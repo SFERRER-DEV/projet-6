@@ -43,6 +43,10 @@ export function photographerFactory(myPhotographer, parent) {
     /** @const {HTMLDivElement} - l'élement html article qui contient la card */
     const article = document.createElement("article");
     article.classList.add("card-photograph");
+    article.setAttribute(
+      "aria-label",
+      `Carte de visite du photographe ${name}`
+    );
 
     if (disposition === DIRECTION.VERTICAL) {
       // index.html
@@ -72,6 +76,15 @@ function addUSerCardDOMHorizontal(parent, myPhotographer) {
   // Ajouter le nom du photographe
   parent.appendChild(name);
 
+  /** @type {HTMLTitleElement} -  Titre contenant la ville et le pays du photographe */
+  const localisation = Dom.getTitle(
+    "h2",
+    myPhotographer.location,
+    "card-photograph__location"
+  );
+  // Ajouter le paragaphe
+  parent.appendChild(localisation);
+
   /** @type {HTMLParagraphElement} -  paragraphe contenant les informations du photographe */
   const para = getInformations(myPhotographer, DIRECTION.HORIZONTAL);
   para.setAttribute("tabindex", "0");
@@ -96,11 +109,14 @@ function addUSerCardDOMHorizontal(parent, myPhotographer) {
  * @param {Photographer} myPhotographer - Un objet de la classe photographe
  */
 function addUSerCardDOMVertical(parent, myPhotographer) {
-  /** @type {HTMLAnchorElement} - lien vers la page du photographe */
+  /** @type {HTMLAnchorElement} - lien vers la page du photographe photographer.html?id=123 */
   const link = Dom.getLink(
     "card-photograph__link",
     `./photographer.html?id=${myPhotographer.id}`
   );
+
+  // le nom du photographe en titre h2 labellise ce lien en utilsant l'id unique du photographe
+  link.setAttribute("aria-labelledby", `photographer-${myPhotographer.id}`);
   // Ajouter le lien vers la page du photographe dans l'article
   parent.appendChild(link);
 
@@ -124,6 +140,15 @@ function addUSerCardDOMVertical(parent, myPhotographer) {
   // Ajouter le nom du photographe dans le lien
   div.appendChild(name);
 
+  /** @type {HTMLTitleElement} -  Titre contenant la ville et le pays du photographe */
+  const localisation = Dom.getTitle(
+    "h3",
+    myPhotographer.location,
+    "card-photograph__link__container__location"
+  );
+  // Ajouter le paragaphe
+  div.appendChild(localisation);
+
   /** @type {HTMLParagraphElement} -  paragraphe contenant les informations du photographe */
   const para = getInformations(myPhotographer, DIRECTION.VERTICAL);
   para.setAttribute("tabindex", 0);
@@ -145,19 +170,21 @@ const getName = (myPhotographer, disposition) => {
   if (disposition === DIRECTION.HORIZONTAL) {
     // photographer.html
     title = Dom.getTitle(
-      "card-photograph__container__heading",
       "h1",
       myPhotographer.name,
+      "card-photograph__heading",
       myPhotographer.name
     );
   } else if (disposition === DIRECTION.VERTICAL) {
     // index.html
     title = Dom.getTitle(
-      "card-photograph__link__container__heading",
       "h2",
       myPhotographer.name,
+      "card-photograph__link__container__heading",
       myPhotographer.name
     );
+    // L'identifiant du titre h2 est lié à l'attribut aria-labelledby du lien de la page photographer.html?id=123
+    title.id = `photographer-${myPhotographer.id}`; // en utilsant l'id unique du photographe
   }
 
   return title;
@@ -169,37 +196,30 @@ const getName = (myPhotographer, disposition) => {
  * @returns
  */
 const getInformations = (myPhotographer, disposition) => {
-  /** @type {HTMLParagraphElement} -  paragraphe contenant les informations du photographe */
-  const para = Dom.getTitle(
-    disposition === DIRECTION.VERTICAL
-      ? "card-photograph__link__container__location"
-      : "card-photograph__container__location",
-    "p",
-    myPhotographer.location
-  );
-
-  /** @type {HTMLSpanElement} - élément en ligne pour afficher le slogan */
-  const span1 = Dom.getTitle(
-    disposition === DIRECTION.VERTICAL
-      ? "card-photograph__link__container__location__slogan"
-      : "card-photograph__container__location__slogan",
-    "span",
-    myPhotographer._tagline
-  );
-
-  // Ajouter l'élément de ligne
-  para.appendChild(span1);
+  /** @type {HTMLParagrahElement} - texte du slogan */
+  let para;
 
   if (disposition === DIRECTION.VERTICAL) {
+    /** @type {HTMLBRElement} - saut de ligne entre le slogan et le tarif */
+    para = Dom.getPara(
+      "card-photograph__slogan--vertical",
+      myPhotographer._tagline
+    );
+    const br = document.createElement("br");
+    para.appendChild(br);
     /** @type {HTMLSpanElement} - élément en ligne pour afficher le tarif jour */
-    const span2 = Dom.getTitle(
-      "card-photograph__link__container__location__tarif",
-      "span",
+    const span = Dom.getSpan(
+      "card-photograph__slogan__tarif",
       myPhotographer.pricePerDay
     );
 
     // Ajouter l'élément de ligne
-    para.appendChild(span2);
+    para.appendChild(span);
+  } else {
+    para = Dom.getPara(
+      "card-photograph__slogan--horizontal",
+      myPhotographer._tagline
+    );
   }
 
   return para;

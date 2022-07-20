@@ -21,8 +21,6 @@ export function mediaFactory(myMedia) {
     article.classList.add("card-media");
     // Ce data attribut permet de marquer cette HTML Card pour l'identifier
     article.setAttribute("data-id", id);
-    article.setAttribute("role", "dialog");
-    article.setAttribute("aria-label", "i");
 
     /** @type {HTMLImageElement | HTMLVideoElement} - une image ou une vidéo */
     let media;
@@ -41,17 +39,13 @@ export function mediaFactory(myMedia) {
     const divHeading = Dom.getDiv("card-media__heading");
 
     /** @type {HTMLParagraphElement} - le titre du média h3 avec le nom de la vidéo ou de la photographie */
-    const title = Dom.getTitle("media__heading__title", "h3", myMedia.title);
+    const title = Dom.getTitle("h3", myMedia.title, "media__heading__title");
     title.setAttribute("tabindex", "0");
     // Ajouter le titre du média
     divHeading.appendChild(title);
 
     /** @type {HTMLSpanElement} - le nombre de likes du média */
-    const likes = Dom.getTitle(
-      "card-media__heading__likes",
-      "span",
-      myMedia.likes
-    );
+    const likes = Dom.getSpan("card-media__heading__likes", myMedia.likes);
 
     // Ajouter le titre du média
     divHeading.appendChild(likes);
@@ -59,9 +53,13 @@ export function mediaFactory(myMedia) {
     /** @type {HTMLButtonElement} - un bouton coeur pour incrémenter le nombre de j'aime */
     const button = Dom.getButton(
       "card-media__heading__likes__ilike",
-      "fa-heart"
+      "fa-heart",
+      "fa-solid",
+      `Aimer une ${myMedia.strMedia}`
     );
-    button.setAttribute("arial-label", `Aimer une ${myMedia.strMedia}`);
+    // Ajouter un texte au bouton
+    const buttonText = Dom.getSpan("", `Aimer une ${myMedia.strMedia}`);
+    button.appendChild(buttonText);
     // Ajouter le bouton j'aime
     divHeading.appendChild(button);
 

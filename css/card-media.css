@@ -57,6 +57,10 @@
   transition-duration: 300ms;
 }
 
+.card-media__heading__likes__ilike > span {
+  display: none;
+}
+
 .card-media__heading__likes__ilike:hover {
   filter: brightness(1.5);
   transform: scale(1.2);

@@ -19,8 +19,8 @@
 
 <body>
   <header>
-    <a tabindex="0" href="index.html" aria-label="Naviguer vers la page d'accueil">
-      <img src="assets/images/logo.png" class="logo" alt="Fisheye page d'accueil">
+    <a href="index.html" aria-label="Naviguer vers la page d'accueil">
+      <img src="assets/images/logo.png" class="logo" alt="Fisheye logo - page d'accueil">
     </a>
   </header>
   <main id="main" aria-hidden="false">
@@ -28,20 +28,19 @@
       <button id="btn-modal-open" class="photograph-header__contact contact_button"
         aria-label="Contactez moi">Contactez-moi</button>
     </div>
-    <!-- tris -->
     <div class="sorted">
-      <!-- Custom dropdownbox  -->
-      <label tabindex="0" id="filter-label" class="sorted__text">Trier par</label>
+      <!-- Tris  -->
+      <label tabindex="0" id="sorting-label" class="sorted__text">Trier par</label>
       <div class="sorted__container">
         <div class="sorted__container__select">
-          <button aria-labelledby="filter-label btn-toggle" aria-haspopup="listbox" aria-expanded="false"
-            aria-owns="filter-list" id="btn-toggle" class="sorted__container__select__toogle">Popularité
-            <span class="fas fa-angle-down  sorted__container__select__toogle__icon"></span>
+          <!-- Custom dropdown  -->
+          <button aria-labelledby="sorting-label" aria-haspopup="listbox" aria-expanded="false" aria-owns="sorting-list"
+            id="btn-toggle" class="sorted__container__select__toogle">Popularité
+            <span class="fas fa-angle-down  sorted__container__select__toogle__icon" aria-hidden="true"></span>
           </button>
-          <ul aria-labelledby="filter-label" id="filter-list" role="listbox" class="sorted__container__select__list">
-            <!-- filtrers -->
+          <ul aria-labelledby="sorting-label" id="sorting-list" role="listbox" class="sorted__container__select__list">
+            <!-- Trier -->
             <li id="sort-popularity" role="option" aria-selected="true" class="sorted__container__select__list__choice">
-              <!-- filter -->
               <button>Popularité</button>
             </li>
             <li id="sort-date" role="option" aria-selected="false" class="sorted__container__select__list__choice">
@@ -67,10 +66,11 @@
     </aside>
   </main>
 
-  <div id="contact_modal" class="contact-container" aria-hidden="true">
+  <section id="contact_modal" class="contact-container" role="dialog" aria-label="Contacter un photographe"
+    aria-hidden="true">
     <div class="contact-container__modal" tabindex="0">
       <header class="contact-container__modal__heading">
-        <h2 id="contact-container__modal__heading__contact">Contactez-moi<br />
+        <h2 id="modal-title">Contactez-moi<br />
           <span class="contact-container__modal__heading__contact__who"></span>
         </h2>
         <button class="contact-container__modal__heading__close" aria-label="Fermer le formulaire de contact"
@@ -84,19 +84,16 @@
           <input type="text" name="firstname" id="firstname" minlength="2" maxlength="30" required aria-required="true"
             autocomplete="on" aria-label="Votre prénom">
         </div>
-
         <div class="formData">
           <label for="lastname" tabindex="0">Nom</label>
           <input type="text" name="lastname" id="lastname" minlength="2" maxlength="30" required aria-required="true"
             autocomplete="on" aria-label="Votre nom">
         </div>
-
         <div class="formData">
           <label for="email" tabindex="0">Email</label>
           <input type="email" name="email" id="email" pattern="^\w+([\.-]?\w+)*@\w+\.\w+$" required aria-required="true"
             autocomplete="on" aria-label="Adresse de courriel" placeholder=" Exemple@mail.com">
         </div>
-
         <div class="formData">
           <label for="message" tabindex="0">Votre message</label>
           <textarea name="message" id="message" cols="30" rows="10" minlength="5" maxlength="100" required
@@ -108,9 +105,8 @@
         </button>
         <input type="hidden" name="id" id="photographId">
       </form>
-
     </div>
-  </div>
+  </section>
 
   <div id="lightbox" class="lightbox" tabindex="0" aria-hidden="true">
   </div>
