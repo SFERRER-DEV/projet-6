@@ -78,6 +78,8 @@ class PhotograherApi {
    *  la liste des photographes au format JSON
    *  Sinon retourner les photographes stockés précédement em mémoire.
    *
+   * TODO: Utilité de fonction à vérifier
+   *
    * @returns {*} une liste d'objets json de photographes
    */
   async get() {
@@ -95,6 +97,8 @@ class PhotograherApi {
   /**
    * Faire appel à l'API pour obtenir les données d'un photographe
    * à partir de son id depuis le fichier JSON.
+   *
+   * TODO: Renommer et prefixer cette fonction par getApi
    *
    * @param {number} targetID l'identifiant d'un photographe
    * @returns {Object} un objet json contenant un photographe

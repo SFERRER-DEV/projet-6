@@ -21,7 +21,7 @@ export function lightboxFactory(myMedia) {
     article.setAttribute("data-id", id);
 
     /** @type {HTMLButtonElement} - bouton image précédente < */
-    const button1 = getButton(myMedia, previousId, false);
+    const button1 = getButton(myMedia.strMedia, previousId, false);
     button1.setAttribute("tabindex", 0);
     // Ajouter le bouton précédent
     article.appendChild(button1); // <
